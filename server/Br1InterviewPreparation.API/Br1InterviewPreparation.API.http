@@ -1,0 +1,6 @@
+@Br1InterviewPreparation.API_HostAddress = http://localhost:5255
+
+GET {{Br1InterviewPreparation.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
