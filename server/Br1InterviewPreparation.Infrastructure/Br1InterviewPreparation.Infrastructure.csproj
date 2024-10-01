@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Br1InterviewPreparation.Application\Br1InterviewPreparation.Application.csproj" />
     <ProjectReference Include="..\Br1InterviewPreparation.Domain\Br1InterviewPreparation.Domain.csproj" />
   </ItemGroup>
 
