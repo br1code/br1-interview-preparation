@@ -45,3 +45,4 @@ Answers:
 - `question_id`: UUID (Foreign key to Questions)
 - `video_filename`: String
 - `created_at`: Timestamp
+- `updated_at`: Timestamp
