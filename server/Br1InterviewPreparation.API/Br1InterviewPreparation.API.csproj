@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Br1InterviewPreparation.Application\Br1InterviewPreparation.Application.csproj" />
     <ProjectReference Include="..\Br1InterviewPreparation.Infrastructure\Br1InterviewPreparation.Infrastructure.csproj" />
   </ItemGroup>
 
