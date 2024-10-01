@@ -46,3 +46,13 @@ Answers:
 - `video_filename`: String
 - `created_at`: Timestamp
 - `updated_at`: Timestamp
+
+## Migrations scripts
+
+Examples:
+
+```bash
+dotnet ef migrations add initialCreate --project Br1InterviewPreparation.Infrastructure --startup-project Br1InterviewPreparation.API
+
+dotnet ef database update --project Br1InterviewPreparation.Infrastructure --startup-project Br1InterviewPreparation.API
+```
