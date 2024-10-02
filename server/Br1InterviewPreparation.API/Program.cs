@@ -1,4 +1,5 @@
 using Br1InterviewPreparation.Application.Extensions;
+using Br1InterviewPreparation.Infrastructure.Data;
 using Br1InterviewPreparation.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,8 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 var app = builder.Build();
+
+await DatabaseInitializer.SeedAsync(app.Services);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
