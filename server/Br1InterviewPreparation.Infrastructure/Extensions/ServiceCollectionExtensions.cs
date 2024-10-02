@@ -23,6 +23,7 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IQuestionRepository, QuestionRepository>();
 
         return services;
     }

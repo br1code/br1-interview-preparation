@@ -13,13 +13,13 @@ public class CategoryRepository : ICategoryRepository
         _context = context;
     }
 
-    public Task<List<Category>> GetAllAsync(CancellationToken cancellationToken = default)
+    public Task<List<Category>> GetCategoriesAsync(CancellationToken cancellationToken = default)
     {
         var query = _context.Categories.AsNoTracking();
         return query.ToListAsync(cancellationToken);
     }
 
-    public Task<Category?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public Task<Category?> GetCategoryByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return _context.Categories
             .AsNoTracking()
