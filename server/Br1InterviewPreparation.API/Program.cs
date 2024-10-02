@@ -1,3 +1,4 @@
+using Br1InterviewPreparation.API.Middlewares;
 using Br1InterviewPreparation.Application.Extensions;
 using Br1InterviewPreparation.Infrastructure.Data;
 using Br1InterviewPreparation.Infrastructure.Extensions;
@@ -24,6 +25,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
