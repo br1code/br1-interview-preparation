@@ -33,4 +33,19 @@ public class QuestionRepository : IQuestionRepository
             .Include(q => q.Answers)
             .FirstOrDefaultAsync(q => q.Id == id, cancellationToken);
     }
+
+    public Task<Question?> GetRandomQuestionAsync(Guid? categoryId = null, CancellationToken cancellationToken = default)
+    {
+        var query = _context.Questions
+            .AsNoTracking();
+
+        if (categoryId != null && categoryId != Guid.Empty)
+        {
+            query = query.Where(c => c.CategoryId == categoryId);
+        }
+
+        return query
+            .OrderBy(k => EF.Functions.Random())
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 }

@@ -67,10 +67,8 @@ public class GetQuestionByIdQueryHandlerTests
 
         var query = new GetQuestionByIdQuery { Id = questionId };
 
-        // Act
+        // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(query, CancellationToken.None));
-
-        // Assert
         _repositoryMock.Verify(repo => repo.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()), Times.Once);
     }
 }

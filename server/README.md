@@ -6,13 +6,13 @@ This project is a .NET 8 backend API that connects to a PostgreSQL database.
 
 Categories:
 
-- `GET /api/categories`: Retrieves all categories.
+- `GET /api/categories`: Retrieves all categories. ✅
 
 Questions:
 
-- `GET /api/questions?categoryId={Guid}`: Retrieve questions, optionally filtered by category.
-- `GET /api/questions/practice?categoryId={Guid}`: Retrieve a random question, optionally filtered by category.
-- `GET /api/questions/{id}`: Get a specific question and its answers.
+- `GET /api/questions?categoryId={Guid}`: Retrieve questions, optionally filtered by category. ✅
+- `GET /api/questions/random?categoryId={Guid}`: Retrieve a random question, optionally filtered by category.
+- `GET /api/questions/{id}`: Get a specific question and its answers. ✅
 - `POST /api/questions`: Add a new question.
 - `PUT /api/questions/{id}`: Update a question.
 - `DELETE /api/questions/{id}`: Delete a question and its answers. (TODO: soft delete?)

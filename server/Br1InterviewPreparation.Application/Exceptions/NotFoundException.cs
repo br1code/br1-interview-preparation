@@ -11,4 +11,8 @@ public class NotFoundException : Exception
         : base($"Entity {name} with Id {id} was not found.")
     {
     }
+
+    public NotFoundException(string message) : base(message)
+    {
+    }
 }
