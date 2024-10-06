@@ -64,5 +64,10 @@ namespace Br1InterviewPreparation.API.Controllers
             var question = await _mediator.Send(query);
             return Ok(question);
         }
+
+        // TODO: create missing endpoints.
+        // `POST /api/questions`: Add a new question.
+        // `PUT /api/questions/{id}`: Update a question.
+        // `DELETE /api/questions/{id}`: Delete a question and its answers.
     }
 }

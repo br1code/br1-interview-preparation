@@ -11,7 +11,7 @@ Categories:
 Questions:
 
 - `GET /api/questions?categoryId={Guid}`: Retrieve questions, optionally filtered by category. ✅
-- `GET /api/questions/random?categoryId={Guid}`: Retrieve a random question, optionally filtered by category.
+- `GET /api/questions/random?categoryId={Guid}`: Retrieve a random question, optionally filtered by category. ✅
 - `GET /api/questions/{id}`: Get a specific question and its answers. ✅
 - `POST /api/questions`: Add a new question.
 - `PUT /api/questions/{id}`: Update a question.
