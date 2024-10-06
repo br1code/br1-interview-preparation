@@ -25,4 +25,12 @@ public class QuestionRepository : IQuestionRepository
 
         return query.ToListAsync(cancellationToken);
     }
+
+    public Task<Question?> GetQuestionByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return _context.Questions
+            .AsNoTracking()
+            .Include(q => q.Answers)
+            .FirstOrDefaultAsync(q => q.Id == id, cancellationToken);
+    }
 }

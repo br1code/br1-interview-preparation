@@ -1,4 +1,5 @@
 ﻿using Br1InterviewPreparation.Application.Features.Questions.Dtos;
+using Br1InterviewPreparation.Application.Features.Questions.Queries.GetQuestionById;
 using Br1InterviewPreparation.Application.Features.Questions.Queries.GetQuestions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,23 @@ namespace Br1InterviewPreparation.API.Controllers
             var query = new GetQuestionsQuery { CategoryId = categoryId };
             var questions = await _mediator.Send(query);
             return Ok(questions);
+        }
+
+        /// <summary>
+        /// Retrieves a question by ID.
+        /// </summary>
+        /// <param name="id">The ID of the question.</param>
+        /// <returns>The question with its answers.</returns>
+        /// <response code="200">Returns the question.</response>
+        /// <response code="404">Question not found.</response>
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(QuestionWithAnswersDto), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetQuestionById(Guid id)
+        {
+            var query = new GetQuestionByIdQuery { Id = id };
+            var question = await _mediator.Send(query);
+            return Ok(question);
         }
     }
 }

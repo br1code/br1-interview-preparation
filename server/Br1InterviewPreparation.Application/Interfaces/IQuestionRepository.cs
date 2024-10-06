@@ -5,4 +5,5 @@ namespace Br1InterviewPreparation.Application.Interfaces;
 public interface IQuestionRepository
 {
     Task<List<Question>> GetQuestionsAsync(Guid? categoryId = null, CancellationToken cancellationToken = default);
+    Task<Question?> GetQuestionByIdAsync(Guid id, CancellationToken cancellationToken = default);
 }
