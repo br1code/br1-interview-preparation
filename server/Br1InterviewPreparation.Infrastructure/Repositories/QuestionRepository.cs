@@ -48,4 +48,10 @@ public class QuestionRepository : IQuestionRepository
             .OrderBy(k => EF.Functions.Random())
             .FirstOrDefaultAsync(cancellationToken);
     }
+
+    public Task AddQuestionAsync(Question question, CancellationToken cancellationToken = default)
+    {
+        _context.Questions.Add(question);
+        return _context.SaveChangesAsync(cancellationToken);
+    }
 }
