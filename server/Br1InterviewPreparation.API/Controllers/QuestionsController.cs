@@ -5,6 +5,7 @@ using Br1InterviewPreparation.Application.Features.Questions.Queries.GetQuestion
 using Br1InterviewPreparation.Application.Features.Questions.Queries.GetQuestions;
 using Br1InterviewPreparation.Application.Features.Questions.Queries.GetRandomQuestion;
 using Br1InterviewPreparation.Application.Features.Questions.Commands.AddQuestion;
+using Br1InterviewPreparation.Application.Features.Questions.Commands.UpdateQuestion;
 
 namespace Br1InterviewPreparation.API.Controllers
 {
@@ -26,7 +27,7 @@ namespace Br1InterviewPreparation.API.Controllers
         /// <returns>A list of questions.</returns>
         /// <response code="200">Returns the list of questions</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<QuestionDto>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<QuestionDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetQuestions([FromQuery] Guid? categoryId = null)
         {
             var query = new GetQuestionsQuery { CategoryId = categoryId };
@@ -42,8 +43,8 @@ namespace Br1InterviewPreparation.API.Controllers
         /// <response code="200">A question.</response>
         /// <response code="404">Question not found.</response>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(QuestionWithAnswersDto), 200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(typeof(QuestionWithAnswersDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetQuestionById(Guid id)
         {
             var query = new GetQuestionByIdQuery { Id = id };
@@ -58,7 +59,7 @@ namespace Br1InterviewPreparation.API.Controllers
         /// <returns>A random question.</returns>
         /// <response code="200">A question.</response>
         [HttpGet("random")]
-        [ProducesResponseType(typeof(QuestionDto), 200)]
+        [ProducesResponseType(typeof(QuestionDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetRandomQuestion([FromQuery] Guid? categoryId = null)
         {
             var query = new GetRandomQuestionQuery { CategoryId = categoryId };
@@ -74,16 +75,41 @@ namespace Br1InterviewPreparation.API.Controllers
         /// <response code="201">Question created successfully.</response>
         /// <response code="400">Validation error occurred.</response>
         [HttpPost]
-        [ProducesResponseType(typeof(Guid), 201)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddQuestion([FromBody] AddQuestionCommand command)
         {
             var questionId = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetQuestionById), new { id = questionId }, questionId);
         }
 
+        /// <summary>
+        /// Updates a question.
+        /// </summary>
+        /// <param name="id">The ID of the question to update.</param>
+        /// <param name="command">The content of the question to update.</param>
+        /// <returns>The updated question.</returns>
+        /// <response code="200">Question updated successfully.</response>
+        /// <response code="400">Validation error occurred.</response>
+        /// <response code="404">Question not found.</response>
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(QuestionDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateQuestion(Guid id, [FromBody] UpdateQuestionCommand command)
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest("Invalid question ID.");
+            }
+
+            command.QuestionId = id;
+
+            var updatedQuestion = await _mediator.Send(command);
+            return Ok(updatedQuestion);
+        }
+
         // TODO: create missing endpoints.
-        // `PUT /api/questions/{id}`: Update a question.
         // `DELETE /api/questions/{id}`: Delete a question and its answers.
     }
 }

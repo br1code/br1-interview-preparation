@@ -54,4 +54,10 @@ public class QuestionRepository : IQuestionRepository
         _context.Questions.Add(question);
         return _context.SaveChangesAsync(cancellationToken);
     }
+
+    public Task UpdateQuestionAsync(Question question, CancellationToken cancellationToken)
+    {
+        _context.Questions.Update(question);
+        return _context.SaveChangesAsync(cancellationToken);
+    }
 }

@@ -38,7 +38,7 @@ public class AddQuestionCommandValidatorTests
     }
 
     [Fact]
-    public async Task Validate_InvalidCommand_ReturnsFailure()
+    public async Task Validate_InvalidCategory_ReturnsFailure()
     {
         // Arrange
         _categoryRepositoryMock
@@ -48,7 +48,7 @@ public class AddQuestionCommandValidatorTests
         var command = new AddQuestionCommand
         {
             CategoryId = Guid.Empty,
-            Content = string.Empty
+            Content = "What is an index?"
         };
 
         // Act
@@ -59,13 +59,36 @@ public class AddQuestionCommandValidatorTests
         Assert.Contains(result.Errors, x => 
             x.PropertyName == nameof(AddQuestionCommand.CategoryId) && 
             x.ErrorMessage == AddQuestionCommandValidator.CATEGORY_EMPTY_ERROR_MESSAGE);
-        Assert.Contains(result.Errors, x => 
-            x.PropertyName == nameof(AddQuestionCommand.Content) 
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    public async Task Validate_InvalidContent_ReturnsFailure(string content)
+    {
+        // Arrange
+        _categoryRepositoryMock
+            .Setup(repo => repo.CategoryExistsAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
+
+        var command = new AddQuestionCommand
+        {
+            CategoryId = Guid.NewGuid(),
+            Content = content
+        };
+
+        // Act
+        var result = await _validator.ValidateAsync(command);
+
+        // Assert
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, x =>
+            x.PropertyName == nameof(AddQuestionCommand.Content)
             && x.ErrorMessage == AddQuestionCommandValidator.CONTENT_EMPTY_ERROR_MESSAGE);
     }
 
     [Fact]
-    public async Task Validate_CategoryNotFound_ReturnsFailure()
+    public async Task Validate_CategoryDoesNotExist_ReturnsFailure()
     {
         // Arrange
         var categoryId = Guid.NewGuid();
