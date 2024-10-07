@@ -20,11 +20,11 @@ public class GetQuestionsQueryHandlerTests
     public async Task Handle_NoCategoryId_ReturnsAllQuestions()
     {
         // Arrange
-        var category = new Category { Name = "Databases" };
+        var categoryId = Guid.NewGuid();
         var questions = new List<Question>
         {
-            new Question { Category = category, Content = "What is an index?" },
-            new Question { Category = category, Content = "What is sharding?" },
+            new Question { CategoryId = categoryId, Content = "What is an index?" },
+            new Question { CategoryId = categoryId, Content = "What is sharding?" },
         };
 
         _repositoryMock
@@ -49,7 +49,7 @@ public class GetQuestionsQueryHandlerTests
         var category = new Category { Id = Guid.NewGuid(), Name = "Databases" };
         var questions = new List<Question>
         {
-            new Question { Category = category, Content = "What is an index?" },
+            new Question { CategoryId = category.Id, Content = "What is an index?" },
         };
 
         _repositoryMock

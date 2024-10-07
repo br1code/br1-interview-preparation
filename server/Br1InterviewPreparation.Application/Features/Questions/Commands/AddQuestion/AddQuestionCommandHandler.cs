@@ -27,7 +27,7 @@ public class AddQuestionCommandHandler : IRequestHandler<AddQuestionCommand, Gui
 
         var question = new Question
         {
-            Category = category,
+            CategoryId = category.Id,
             Content = request.Content,
             Hint = request.Hint,
         };

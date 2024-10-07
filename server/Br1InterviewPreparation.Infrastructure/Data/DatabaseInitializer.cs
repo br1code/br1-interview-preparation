@@ -56,13 +56,13 @@ public static class DatabaseInitializer
         {
             Content = "What is an index?",
             Hint = "Trees, trees everywhere.",
-            Category = category1
+            CategoryId = category1.Id
         };
         var question2 = new Question
         {
             Content = "Which design patterns do you use the most?",
             Hint = "Singleton, Factory, Strategy, Mediator, etc.",
-            Category = category2
+            CategoryId = category2.Id
         };
 
         context.Questions.AddRange(question1, question2);
@@ -71,8 +71,8 @@ public static class DatabaseInitializer
         // Answers
         logger.LogInformation("Seeding the database with Answers ...");
 
-        var answer1 = new Answer { VideoFilename = "1849385.mp4", Question = question1 };
-        var answer2 = new Answer { VideoFilename = "1937423.mp4", Question = question2 };
+        var answer1 = new Answer { VideoFilename = "1849385.mp4", QuestionId = question1.Id };
+        var answer2 = new Answer { VideoFilename = "1937423.mp4", QuestionId = question2.Id };
 
         context.Answers.AddRange(answer1, answer2);
         await context.SaveChangesAsync();

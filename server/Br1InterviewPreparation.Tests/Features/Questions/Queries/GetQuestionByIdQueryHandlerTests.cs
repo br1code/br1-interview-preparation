@@ -25,13 +25,13 @@ public class GetQuestionByIdQueryHandlerTests
         var question = new Question
         {
             Id = Guid.NewGuid(),
-            Category = category,
+            CategoryId = category.Id,
             Content = "What is an index?",
         };
         var answer = new Answer 
         { 
             Id = Guid.NewGuid(), 
-            Question = question, 
+            QuestionId = question.Id, 
             VideoFilename = "123.mp4" 
         };
         question.Answers.Add(answer);

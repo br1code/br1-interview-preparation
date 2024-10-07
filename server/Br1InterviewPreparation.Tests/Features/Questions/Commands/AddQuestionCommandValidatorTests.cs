@@ -43,5 +43,7 @@ public class AddQuestionCommandValidatorTests
 
         // Assert
         Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, x => x.PropertyName == nameof(AddQuestionCommand.CategoryId));
+        Assert.Contains(result.Errors, x => x.PropertyName == nameof(AddQuestionCommand.Content));
     }
 }

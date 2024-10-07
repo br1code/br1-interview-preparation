@@ -4,6 +4,7 @@ using Br1InterviewPreparation.Application.Features.Questions.Dtos;
 using Br1InterviewPreparation.Application.Features.Questions.Queries.GetQuestionById;
 using Br1InterviewPreparation.Application.Features.Questions.Queries.GetQuestions;
 using Br1InterviewPreparation.Application.Features.Questions.Queries.GetRandomQuestion;
+using Br1InterviewPreparation.Application.Features.Questions.Commands.AddQuestion;
 
 namespace Br1InterviewPreparation.API.Controllers
 {
@@ -65,8 +66,25 @@ namespace Br1InterviewPreparation.API.Controllers
             return Ok(question);
         }
 
+        /// <summary>
+        /// Inserts a new question.
+        /// </summary>
+        /// <param name="command">The question to create.</param>
+        /// <returns>The ID of the created question.</returns>
+        /// <response code="201">Question created successfully.</response>
+        /// <response code="400">Validation error occurred.</response>
+        /// <response code="404">Category not found.</response>
+        [HttpPost]
+        [ProducesResponseType(typeof(Guid), 201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> AddQuestion([FromBody] AddQuestionCommand command)
+        {
+            var questionId = await _mediator.Send(command);
+            return CreatedAtAction(nameof(GetQuestionById), new { id = questionId }, questionId);
+        }
+
         // TODO: create missing endpoints.
-        // `POST /api/questions`: Add a new question.
         // `PUT /api/questions/{id}`: Update a question.
         // `DELETE /api/questions/{id}`: Delete a question and its answers.
     }
