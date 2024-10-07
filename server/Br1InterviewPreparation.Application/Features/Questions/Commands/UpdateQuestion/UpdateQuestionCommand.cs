@@ -5,7 +5,7 @@ namespace Br1InterviewPreparation.Application.Features.Questions.Commands.Update
 
 public class UpdateQuestionCommand : IRequest<QuestionDto>
 {
-    public Guid QuestionId { get; set; }
+    public Guid Id { get; set; }
     public required Guid CategoryId { get; set; }
     public required string Content { get; set; }
     public string? Hint {  get; set; } 

@@ -4,7 +4,7 @@ using Br1InterviewPreparation.Application.Interfaces;
 using Br1InterviewPreparation.Domain.Entities;
 using Br1InterviewPreparation.Application.Exceptions;
 
-namespace Br1InterviewPreparation.Tests.Features.Questions.Commands;
+namespace Br1InterviewPreparation.Tests.Features.Questions.Commands.UpdateQuestion;
 
 public class UpdateQuestionCommandHandlerTests
 {
@@ -37,7 +37,7 @@ public class UpdateQuestionCommandHandlerTests
 
         var command = new UpdateQuestionCommand
         {
-            QuestionId = questionId,
+            Id = questionId,
             CategoryId = Guid.NewGuid(),
             Content = "What is sharding?",
             Hint = "Help ..."
@@ -48,7 +48,7 @@ public class UpdateQuestionCommandHandlerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(command.QuestionId, result.Id);
+        Assert.Equal(command.Id, result.Id);
         Assert.Equal(command.CategoryId, result.CategoryId);
         Assert.Equal(command.Content, result.Content);
         Assert.Equal(command.Hint, result.Hint);
@@ -71,7 +71,7 @@ public class UpdateQuestionCommandHandlerTests
 
         var command = new UpdateQuestionCommand
         {
-            QuestionId = questionId,
+            Id = questionId,
             CategoryId = Guid.NewGuid(),
             Content = "What is sharding?",
             Hint = "Help ..."

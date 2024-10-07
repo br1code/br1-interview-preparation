@@ -1,24 +1,17 @@
-﻿using Br1InterviewPreparation.Application.Exceptions;
+﻿using MediatR;
+using Br1InterviewPreparation.Application.Exceptions;
 using Br1InterviewPreparation.Application.Features.Answers;
 using Br1InterviewPreparation.Application.Features.Questions.Dtos;
-using MediatR;
 using Br1InterviewPreparation.Application.Interfaces;
 using Br1InterviewPreparation.Domain.Entities;
 
 namespace Br1InterviewPreparation.Application.Features.Questions.Queries.GetQuestionById;
 
-public class GetQuestionByIdQueryHandler : IRequestHandler<GetQuestionByIdQuery, QuestionWithAnswersDto>
+public class GetQuestionByIdQueryHandler(IQuestionRepository repository) : IRequestHandler<GetQuestionByIdQuery, QuestionWithAnswersDto>
 {
-    private readonly IQuestionRepository _repository;
-
-    public GetQuestionByIdQueryHandler(IQuestionRepository repository)
-    {
-        _repository = repository;
-    }
-
     public async Task<QuestionWithAnswersDto> Handle(GetQuestionByIdQuery request, CancellationToken cancellationToken)
     {
-        var question = await _repository.GetQuestionByIdAsync(request.Id, cancellationToken);
+        var question = await repository.GetQuestionByIdAsync(request.Id, cancellationToken);
 
         if (question is null)
         {

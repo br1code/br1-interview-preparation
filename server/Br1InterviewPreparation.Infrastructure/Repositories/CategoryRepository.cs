@@ -5,30 +5,24 @@ using Br1InterviewPreparation.Application.Interfaces;
 
 namespace Br1InterviewPreparation.Infrastructure.Repositories;
 
-public class CategoryRepository : ICategoryRepository
+public class CategoryRepository(ApplicationDbContext context) : ICategoryRepository
 {
-    private readonly ApplicationDbContext _context;
-    public CategoryRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    }
-
     public Task<List<Category>> GetCategoriesAsync(CancellationToken cancellationToken = default)
     {
-        var query = _context.Categories.AsNoTracking();
+        var query = context.Categories.AsNoTracking();
         return query.ToListAsync(cancellationToken);
     }
 
     public Task<Category?> GetCategoryByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return _context.Categories
+        return context.Categories
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
 
     public Task<bool> CategoryExistsAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return _context.Categories
+        return context.Categories
             .AsNoTracking()
             .AnyAsync(c => c.Id == id, cancellationToken);
     }

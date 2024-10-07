@@ -2,7 +2,7 @@
 using Br1InterviewPreparation.Application.Features.Questions.Commands.AddQuestion;
 using Br1InterviewPreparation.Application.Interfaces;
 
-namespace Br1InterviewPreparation.Tests.Features.Questions.Commands;
+namespace Br1InterviewPreparation.Tests.Features.Questions.Commands.AddQuestion;
 
 public class AddQuestionCommandValidatorTests
 {
@@ -56,8 +56,8 @@ public class AddQuestionCommandValidatorTests
 
         // Assert
         Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, x => 
-            x.PropertyName == nameof(AddQuestionCommand.CategoryId) && 
+        Assert.Contains(result.Errors, x =>
+            x.PropertyName == nameof(AddQuestionCommand.CategoryId) &&
             x.ErrorMessage == AddQuestionCommandValidator.CATEGORY_EMPTY_ERROR_MESSAGE);
     }
 

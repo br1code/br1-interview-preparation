@@ -7,26 +7,19 @@ namespace Br1InterviewPreparation.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController : ControllerBase
+    public class CategoriesController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public CategoriesController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         /// <summary>
         /// Retrieves a list of categories.
         /// </summary>
         /// <returns>A list of categories.</returns>
         /// <response code="200">Returns the list of categories</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<CategoryDto>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<CategoryDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCategories()
         {
             var query = new GetCategoriesQuery();
-            var categories = await _mediator.Send(query);
+            var categories = await mediator.Send(query);
             return Ok(categories);
         }
     }

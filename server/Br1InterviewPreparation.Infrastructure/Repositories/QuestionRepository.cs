@@ -5,18 +5,11 @@ using Br1InterviewPreparation.Infrastructure.Data;
 
 namespace Br1InterviewPreparation.Infrastructure.Repositories;
 
-public class QuestionRepository : IQuestionRepository
+public class QuestionRepository(ApplicationDbContext context) : IQuestionRepository
 {
-    private readonly ApplicationDbContext _context;
-
-    public QuestionRepository(ApplicationDbContext context)
-    {
-        _context = context;
-    }
-
     public Task<List<Question>> GetQuestionsAsync(Guid? categoryId = null, CancellationToken cancellationToken = default)
     {
-        var query = _context.Questions.AsNoTracking();
+        var query = context.Questions.AsNoTracking();
 
         if (categoryId != null && categoryId != Guid.Empty)
         {
@@ -28,7 +21,7 @@ public class QuestionRepository : IQuestionRepository
 
     public Task<Question?> GetQuestionByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return _context.Questions
+        return context.Questions
             .AsNoTracking()
             .Include(q => q.Answers)
             .FirstOrDefaultAsync(q => q.Id == id, cancellationToken);
@@ -36,7 +29,7 @@ public class QuestionRepository : IQuestionRepository
 
     public Task<Question?> GetRandomQuestionAsync(Guid? categoryId = null, CancellationToken cancellationToken = default)
     {
-        var query = _context.Questions
+        var query = context.Questions
             .AsNoTracking();
 
         if (categoryId != null && categoryId != Guid.Empty)
@@ -51,13 +44,19 @@ public class QuestionRepository : IQuestionRepository
 
     public Task AddQuestionAsync(Question question, CancellationToken cancellationToken = default)
     {
-        _context.Questions.Add(question);
-        return _context.SaveChangesAsync(cancellationToken);
+        context.Questions.Add(question);
+        return context.SaveChangesAsync(cancellationToken);
     }
 
     public Task UpdateQuestionAsync(Question question, CancellationToken cancellationToken)
     {
-        _context.Questions.Update(question);
-        return _context.SaveChangesAsync(cancellationToken);
+        context.Questions.Update(question);
+        return context.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task DeleteQuestionAsync(Question question, CancellationToken cancellationToken = default)
+    {
+        context.Questions.Remove(question);
+        return context.SaveChangesAsync(cancellationToken);
     }
 }

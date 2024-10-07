@@ -2,7 +2,7 @@
 using Br1InterviewPreparation.Application.Features.Questions.Commands.UpdateQuestion;
 using Br1InterviewPreparation.Application.Interfaces;
 
-namespace Br1InterviewPreparation.Tests.Features.Questions.Commands;
+namespace Br1InterviewPreparation.Tests.Features.Questions.Commands.UpdateQuestion;
 
 public class UpdateQuestionCommandValidatorTests
 {
@@ -25,7 +25,7 @@ public class UpdateQuestionCommandValidatorTests
 
         var command = new UpdateQuestionCommand
         {
-            QuestionId = Guid.NewGuid(),
+            Id = Guid.NewGuid(),
             CategoryId = Guid.NewGuid(),
             Content = "What is sharding?",
             Hint = "Some help ..."
@@ -44,7 +44,7 @@ public class UpdateQuestionCommandValidatorTests
         // Arrange
         var command = new UpdateQuestionCommand
         {
-            QuestionId = Guid.NewGuid(),
+            Id = Guid.NewGuid(),
             CategoryId = Guid.Empty,
             Content = "What is sharding?",
             Hint = "Some help ..."
@@ -71,7 +71,7 @@ public class UpdateQuestionCommandValidatorTests
 
         var command = new UpdateQuestionCommand
         {
-            QuestionId = Guid.NewGuid(),
+            Id = Guid.NewGuid(),
             CategoryId = categoryId,
             Content = "What is sharding?",
             Hint = "Some help ..."
@@ -94,7 +94,7 @@ public class UpdateQuestionCommandValidatorTests
         // Arrange
         var command = new UpdateQuestionCommand
         {
-            QuestionId = Guid.NewGuid(),
+            Id = Guid.NewGuid(),
             CategoryId = Guid.NewGuid(),
             Content = content
         };

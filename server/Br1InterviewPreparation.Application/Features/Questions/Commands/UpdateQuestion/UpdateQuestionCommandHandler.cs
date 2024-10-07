@@ -6,29 +6,22 @@ using Br1InterviewPreparation.Domain.Entities;
 
 namespace Br1InterviewPreparation.Application.Features.Questions.Commands.UpdateQuestion;
 
-public class UpdateQuestionCommandHandler : IRequestHandler<UpdateQuestionCommand, QuestionDto>
+public class UpdateQuestionCommandHandler(IQuestionRepository questionRepository) : IRequestHandler<UpdateQuestionCommand, QuestionDto>
 {
-    private readonly IQuestionRepository _questionRepository;
-
-    public UpdateQuestionCommandHandler(IQuestionRepository questionRepository)
-    {
-        _questionRepository = questionRepository;
-    }
-
     public async Task<QuestionDto> Handle(UpdateQuestionCommand request, CancellationToken cancellationToken)
     {
-        var question = await _questionRepository.GetQuestionByIdAsync(request.QuestionId, cancellationToken);
+        var question = await questionRepository.GetQuestionByIdAsync(request.Id, cancellationToken);
 
         if (question is null)
         {
-            throw new NotFoundException(nameof(Question), request.QuestionId);
+            throw new NotFoundException(nameof(Question), request.Id);
         }
 
         question.CategoryId = request.CategoryId;
         question.Content = request.Content;
         question.Hint = request.Hint;
 
-        await _questionRepository.UpdateQuestionAsync(question, cancellationToken);
+        await questionRepository.UpdateQuestionAsync(question, cancellationToken);
 
         return new QuestionDto
         {

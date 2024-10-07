@@ -8,5 +8,6 @@ public interface IQuestionRepository
     Task<Question?> GetQuestionByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Question?> GetRandomQuestionAsync(Guid? categoryId = null, CancellationToken cancellationToken = default);
     Task AddQuestionAsync(Question question, CancellationToken cancellationToken = default);
-    Task UpdateQuestionAsync(Question question, CancellationToken cancellationToken);
+    Task UpdateQuestionAsync(Question question, CancellationToken cancellationToken = default);
+    Task DeleteQuestionAsync(Question question, CancellationToken cancellationToken = default);
 }

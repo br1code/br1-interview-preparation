@@ -6,19 +6,14 @@ using Br1InterviewPreparation.Application.Features.Questions.Queries.GetQuestion
 using Br1InterviewPreparation.Application.Features.Questions.Queries.GetRandomQuestion;
 using Br1InterviewPreparation.Application.Features.Questions.Commands.AddQuestion;
 using Br1InterviewPreparation.Application.Features.Questions.Commands.UpdateQuestion;
+using Br1InterviewPreparation.Application.Features.Questions.Commands.DeleteQuestion;
 
 namespace Br1InterviewPreparation.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuestionsController : ControllerBase
+    public class QuestionsController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public QuestionsController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
 
         /// <summary>
         /// Retrieves a list of questions. Optionally filters by category.
@@ -31,7 +26,7 @@ namespace Br1InterviewPreparation.API.Controllers
         public async Task<IActionResult> GetQuestions([FromQuery] Guid? categoryId = null)
         {
             var query = new GetQuestionsQuery { CategoryId = categoryId };
-            var questions = await _mediator.Send(query);
+            var questions = await mediator.Send(query);
             return Ok(questions);
         }
 
@@ -48,7 +43,7 @@ namespace Br1InterviewPreparation.API.Controllers
         public async Task<IActionResult> GetQuestionById(Guid id)
         {
             var query = new GetQuestionByIdQuery { Id = id };
-            var question = await _mediator.Send(query);
+            var question = await mediator.Send(query);
             return Ok(question);
         }
 
@@ -63,7 +58,7 @@ namespace Br1InterviewPreparation.API.Controllers
         public async Task<IActionResult> GetRandomQuestion([FromQuery] Guid? categoryId = null)
         {
             var query = new GetRandomQuestionQuery { CategoryId = categoryId };
-            var question = await _mediator.Send(query);
+            var question = await mediator.Send(query);
             return Ok(question);
         }
 
@@ -79,7 +74,7 @@ namespace Br1InterviewPreparation.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddQuestion([FromBody] AddQuestionCommand command)
         {
-            var questionId = await _mediator.Send(command);
+            var questionId = await mediator.Send(command);
             return CreatedAtAction(nameof(GetQuestionById), new { id = questionId }, questionId);
         }
 
@@ -103,13 +98,27 @@ namespace Br1InterviewPreparation.API.Controllers
                 return BadRequest("Invalid question ID.");
             }
 
-            command.QuestionId = id;
+            command.Id = id;
 
-            var updatedQuestion = await _mediator.Send(command);
+            var updatedQuestion = await mediator.Send(command);
             return Ok(updatedQuestion);
         }
 
-        // TODO: create missing endpoints.
-        // `DELETE /api/questions/{id}`: Delete a question and its answers.
+        /// <summary>
+        /// Deletes a question by ID.
+        /// </summary>
+        /// <param name="id">The ID of the question to delete.</param>
+        /// <returns>No content.</returns>
+        /// <response code="204">Question deleted successfully.</response>
+        /// <response code="404">Question not found.</response>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteQuestion(Guid id)
+        {
+            var command = new DeleteQuestionCommand { Id = id };
+            await mediator.Send(command);
+            return NoContent();
+        }
     }
 }

@@ -3,7 +3,7 @@ using Br1InterviewPreparation.Application.Features.Questions.Commands.AddQuestio
 using Br1InterviewPreparation.Application.Interfaces;
 using Br1InterviewPreparation.Domain.Entities;
 
-namespace Br1InterviewPreparation.Tests.Features.Questions.Commands;
+namespace Br1InterviewPreparation.Tests.Features.Questions.Commands.AddQuestion;
 
 public class AddQuestionCommandHandlerTests
 {
@@ -41,7 +41,7 @@ public class AddQuestionCommandHandlerTests
         Assert.Equal(newQuestionId, result);
         _questionRepositoryMock
             .Verify(repo => repo.AddQuestionAsync(
-                It.Is<Question>(q => q.CategoryId == command.CategoryId && q.Content == command.Content && q.Hint == command.Hint), 
+                It.Is<Question>(q => q.CategoryId == command.CategoryId && q.Content == command.Content && q.Hint == command.Hint),
                 It.IsAny<CancellationToken>())
             , Times.Once);
     }
