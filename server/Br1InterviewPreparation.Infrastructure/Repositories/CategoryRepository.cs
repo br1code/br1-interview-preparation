@@ -25,4 +25,11 @@ public class CategoryRepository : ICategoryRepository
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
+
+    public Task<bool> CategoryExistsAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return _context.Categories
+            .AsNoTracking()
+            .AnyAsync(c => c.Id == id, cancellationToken);
+    }
 }

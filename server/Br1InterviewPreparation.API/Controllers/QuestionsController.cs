@@ -73,11 +73,9 @@ namespace Br1InterviewPreparation.API.Controllers
         /// <returns>The ID of the created question.</returns>
         /// <response code="201">Question created successfully.</response>
         /// <response code="400">Validation error occurred.</response>
-        /// <response code="404">Category not found.</response>
         [HttpPost]
         [ProducesResponseType(typeof(Guid), 201)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
         public async Task<IActionResult> AddQuestion([FromBody] AddQuestionCommand command)
         {
             var questionId = await _mediator.Send(command);
