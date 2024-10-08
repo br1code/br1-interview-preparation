@@ -3,7 +3,7 @@ using Br1InterviewPreparation.Application.Interfaces;
 using Br1InterviewPreparation.Domain.Entities;
 using Moq;
 
-namespace Br1InterviewPreparation.Tests.Features.Categories.Queries;
+namespace Br1InterviewPreparation.Tests.Features.Categories.Queries.GetCategories;
 
 public class GetCategoriesQueryHandlerTests
 {

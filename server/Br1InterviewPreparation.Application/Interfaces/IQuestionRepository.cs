@@ -10,4 +10,5 @@ public interface IQuestionRepository
     Task AddQuestionAsync(Question question, CancellationToken cancellationToken = default);
     Task UpdateQuestionAsync(Question question, CancellationToken cancellationToken = default);
     Task DeleteQuestionAsync(Question question, CancellationToken cancellationToken = default);
+    Task<bool> QuestionExists(Guid id, CancellationToken cancellationToken= default);
 }

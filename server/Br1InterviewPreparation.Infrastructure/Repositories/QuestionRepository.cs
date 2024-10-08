@@ -59,4 +59,11 @@ public class QuestionRepository(ApplicationDbContext context) : IQuestionReposit
         context.Questions.Remove(question);
         return context.SaveChangesAsync(cancellationToken);
     }
+
+    public Task<bool> QuestionExists(Guid id, CancellationToken cancellationToken = default)
+    {
+        return context.Questions
+            .AsNoTracking()
+            .AnyAsync(q => q.Id == id, cancellationToken);
+    }
 }

@@ -1,4 +1,4 @@
-﻿namespace Br1InterviewPreparation.Application.Features.Answers;
+﻿namespace Br1InterviewPreparation.Application.Features.Answers.Dtos;
 
 public class AnswerDto
 {

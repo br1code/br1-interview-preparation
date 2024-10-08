@@ -38,7 +38,7 @@ public class AddQuestionCommandValidatorTests
     }
 
     [Fact]
-    public async Task Validate_InvalidCategory_ReturnsFailure()
+    public async Task Validate_InvalidCategoryId_ReturnsFailure()
     {
         // Arrange
         _categoryRepositoryMock
@@ -59,6 +59,31 @@ public class AddQuestionCommandValidatorTests
         Assert.Contains(result.Errors, x =>
             x.PropertyName == nameof(AddQuestionCommand.CategoryId) &&
             x.ErrorMessage == AddQuestionCommandValidator.CATEGORY_EMPTY_ERROR_MESSAGE);
+    }
+
+    [Fact]
+    public async Task Validate_CategoryDoesNotExist_ReturnsFailure()
+    {
+        // Arrange
+        var categoryId = Guid.NewGuid();
+        _categoryRepositoryMock
+            .Setup(repo => repo.CategoryExistsAsync(categoryId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(false);
+
+        var command = new AddQuestionCommand
+        {
+            CategoryId = categoryId,
+            Content = "What is an index?"
+        };
+
+        // Act
+        var result = await _validator.ValidateAsync(command);
+
+        // Assert
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, x =>
+            x.PropertyName == nameof(AddQuestionCommand.CategoryId) &&
+            x.ErrorMessage == AddQuestionCommandValidator.CATEGORY_NOT_FOUND_ERROR_MESSAGE);
     }
 
     [Theory]
@@ -85,30 +110,5 @@ public class AddQuestionCommandValidatorTests
         Assert.Contains(result.Errors, x =>
             x.PropertyName == nameof(AddQuestionCommand.Content)
             && x.ErrorMessage == AddQuestionCommandValidator.CONTENT_EMPTY_ERROR_MESSAGE);
-    }
-
-    [Fact]
-    public async Task Validate_CategoryDoesNotExist_ReturnsFailure()
-    {
-        // Arrange
-        var categoryId = Guid.NewGuid();
-        _categoryRepositoryMock
-            .Setup(repo => repo.CategoryExistsAsync(categoryId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(false);
-
-        var command = new AddQuestionCommand
-        {
-            CategoryId = categoryId,
-            Content = "What is an index?"
-        };
-
-        // Act
-        var result = await _validator.ValidateAsync(command);
-
-        // Assert
-        Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, x =>
-            x.PropertyName == nameof(AddQuestionCommand.CategoryId) &&
-            x.ErrorMessage == AddQuestionCommandValidator.CATEGORY_NOT_FOUND_ERROR_MESSAGE);
     }
 }
