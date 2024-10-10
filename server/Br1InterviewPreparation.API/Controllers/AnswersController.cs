@@ -48,22 +48,6 @@ namespace Br1InterviewPreparation.API.Controllers
         }
 
         /// <summary>
-        /// Inserts a new answer for a question.
-        /// </summary>
-        /// <param name="command">The answer to create.</param>
-        /// <returns>The ID of the created answer.</returns>
-        /// <response code="201">Answer created successfully.</response>
-        /// <response code="400">Validation error occurred.</response>
-        [HttpPost]
-        [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SubmitAnswer([FromBody] SubmitAnswerCommand command)
-        {
-            var answerId = await mediator.Send(command);
-            return CreatedAtAction(nameof(GetAnswerMetadata), new { id = answerId }, answerId);
-        }
-
-        /// <summary>
         /// Deletes an answer and its associated video file.
         /// </summary>
         /// <param name="id">The ID of the answer to delete.</param>
@@ -78,6 +62,44 @@ namespace Br1InterviewPreparation.API.Controllers
             var command = new DeleteAnswerCommand { Id = id };
             await mediator.Send(command);
             return NoContent();
+        }
+
+        /// <summary>
+        /// Inserts a new answer for a question.
+        /// </summary>
+        /// <param name="questionId">The ID of the question.</param>
+        /// <param name="videoFile">The Video file.</param>
+        /// <returns>The ID of the created answer.</returns>
+        /// <response code="201">Answer created successfully.</response>
+        /// <response code="400">Validation error occurred.</response>
+        [HttpPost]
+        [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [RequestSizeLimit(52428800)] // 50MB
+        public async Task<IActionResult> SubmitAnswer([FromForm] Guid questionId, [FromForm] IFormFile videoFile)
+        {
+            var fileUploadDto = new FileUploadDto
+            {
+                FileName = videoFile.FileName,
+                ContentType = videoFile.ContentType,
+                Content = await GetFileBytesAsync(videoFile)
+            };
+
+            var command = new SubmitAnswerCommand
+            {
+                QuestionId = questionId,
+                VideoFile = fileUploadDto
+            };
+
+            var answerId = await mediator.Send(command);
+            return CreatedAtAction(nameof(GetAnswerMetadata), new { id = answerId }, answerId);
+        }
+
+        private static async Task<byte[]> GetFileBytesAsync(IFormFile file)
+        {
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+            return memoryStream.ToArray();
         }
     }
 }

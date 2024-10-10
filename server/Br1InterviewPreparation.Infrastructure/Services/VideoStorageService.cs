@@ -6,7 +6,6 @@ namespace Br1InterviewPreparation.Infrastructure.Services;
 // TODO: create new IVideoStorageService implementation using third-party service for file storage
 public class VideoStorageService : IVideoStorageService
 {
-    private const string VIDEO_CONTENT_TYPE = "video/webm";
     private readonly string _videoStorageFilePath;
 
     public VideoStorageService(IConfiguration configuration)
@@ -19,10 +18,17 @@ public class VideoStorageService : IVideoStorageService
         }
     }
 
-    // TODO: get content type based on file format
     public string GetContentType(string fileName)
     {
-        return VIDEO_CONTENT_TYPE;
+        var extension = Path.GetExtension(fileName).ToLowerInvariant();
+
+        return extension switch
+        {
+            ".webm" => "video/webm",
+            ".mp4" => "video/mp4",
+            ".avi" => "video/x-msvideo",
+            _ => "application/octet-stream", // default content type
+        };
     }
 
     public string GetVideoFilePath(string fileName)
@@ -47,5 +53,20 @@ public class VideoStorageService : IVideoStorageService
         }
 
         File.Delete(filePath);
+    }
+
+    public async Task<string> SaveVideoFileAsync(string fileName, string contentType, byte[] content, CancellationToken cancellationToken = default)
+    {
+        if (!contentType.StartsWith("video/"))
+        {
+            throw new ArgumentException("Invalid file type. Only video files are allowed.");
+        }
+
+        var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(fileName)}";
+        var filePath = Path.Combine(_videoStorageFilePath, uniqueFileName);
+
+        await File.WriteAllBytesAsync(filePath, content, cancellationToken);
+
+        return uniqueFileName;
     }
 }
