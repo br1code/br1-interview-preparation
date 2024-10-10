@@ -33,7 +33,7 @@ public class DeleteAnswerCommandHandlerTests
         };
 
         _answerRepositoryMock
-            .Setup(repo => repo.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(answer);
 
         var command = new DeleteAnswerCommand { Id = answerId };
@@ -54,7 +54,7 @@ public class DeleteAnswerCommandHandlerTests
         var answerId = Guid.NewGuid();
 
         _answerRepositoryMock
-            .Setup(repo => repo.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(value: null);
 
         var command = new DeleteAnswerCommand { Id = answerId };

@@ -24,7 +24,7 @@ public class GetRandomQuestionQueryHandlerTests
         var question = new Question { Id = Guid.NewGuid(), CategoryId = Guid.NewGuid(), Content = "What is an index?" };
 
         _repositoryMock
-            .Setup(repo => repo.GetRandomQuestionAsync(null, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetRandomQuestionAsync(null, It.IsAny<CancellationToken>()))
             .ReturnsAsync(question);
 
         var query = new GetRandomQuestionQuery { CategoryId = null };
@@ -36,7 +36,7 @@ public class GetRandomQuestionQueryHandlerTests
         Assert.NotNull(result);
         Assert.Equal(question.Id, result.Id);
         Assert.Equal(question.Content, result.Content);
-        _repositoryMock.Verify(repo => repo.GetRandomQuestionAsync(null, It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(r => r.GetRandomQuestionAsync(null, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public class GetRandomQuestionQueryHandlerTests
         var question = new Question { CategoryId = categoryId, Content = "What is an index?" };
 
         _repositoryMock
-            .Setup(repo => repo.GetRandomQuestionAsync(categoryId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetRandomQuestionAsync(categoryId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(question);
 
         var query = new GetRandomQuestionQuery { CategoryId = categoryId };
@@ -60,7 +60,7 @@ public class GetRandomQuestionQueryHandlerTests
         Assert.Equal(question.Id, result.Id);
         Assert.Equal(question.Content, result.Content);
         Assert.Equal(question.CategoryId, result.CategoryId);
-        _repositoryMock.Verify(repo => repo.GetRandomQuestionAsync(categoryId, It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(r => r.GetRandomQuestionAsync(categoryId, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -68,13 +68,13 @@ public class GetRandomQuestionQueryHandlerTests
     {
         // Arrange
         _repositoryMock
-            .Setup(repo => repo.GetRandomQuestionAsync(null, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetRandomQuestionAsync(null, It.IsAny<CancellationToken>()))
             .ReturnsAsync(value: null);
 
         var query = new GetRandomQuestionQuery { CategoryId = null };
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(query, CancellationToken.None));
-        _repositoryMock.Verify(repo => repo.GetRandomQuestionAsync(null, It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(r => r.GetRandomQuestionAsync(null, It.IsAny<CancellationToken>()), Times.Once);
     }
 }

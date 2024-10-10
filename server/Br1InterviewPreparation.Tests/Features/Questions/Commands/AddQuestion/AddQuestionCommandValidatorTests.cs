@@ -21,7 +21,7 @@ public class AddQuestionCommandValidatorTests
         // Arrange
         var categoryId = Guid.NewGuid();
         _categoryRepositoryMock
-            .Setup(repo => repo.CategoryExistsAsync(categoryId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.CategoryExistsAsync(categoryId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         var command = new AddQuestionCommand
@@ -42,7 +42,7 @@ public class AddQuestionCommandValidatorTests
     {
         // Arrange
         _categoryRepositoryMock
-            .Setup(repo => repo.CategoryExistsAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .Setup(r => r.CategoryExistsAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         var command = new AddQuestionCommand
@@ -67,7 +67,7 @@ public class AddQuestionCommandValidatorTests
         // Arrange
         var categoryId = Guid.NewGuid();
         _categoryRepositoryMock
-            .Setup(repo => repo.CategoryExistsAsync(categoryId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.CategoryExistsAsync(categoryId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
 
         var command = new AddQuestionCommand
@@ -93,7 +93,7 @@ public class AddQuestionCommandValidatorTests
     {
         // Arrange
         _categoryRepositoryMock
-            .Setup(repo => repo.CategoryExistsAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .Setup(r => r.CategoryExistsAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         var command = new AddQuestionCommand

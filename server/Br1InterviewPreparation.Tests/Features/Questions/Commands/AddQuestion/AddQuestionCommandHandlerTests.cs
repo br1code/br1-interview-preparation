@@ -23,7 +23,7 @@ public class AddQuestionCommandHandlerTests
         var newQuestionId = Guid.NewGuid();
 
         _questionRepositoryMock
-            .Setup(repo => repo.AddQuestionAsync(It.IsAny<Question>(), It.IsAny<CancellationToken>()))
+            .Setup(r => r.AddQuestionAsync(It.IsAny<Question>(), It.IsAny<CancellationToken>()))
             .Callback<Question, CancellationToken>((q, ct) => q.Id = newQuestionId)
             .Returns(Task.CompletedTask);
 
@@ -40,7 +40,7 @@ public class AddQuestionCommandHandlerTests
         // Assert
         Assert.Equal(newQuestionId, result);
         _questionRepositoryMock
-            .Verify(repo => repo.AddQuestionAsync(
+            .Verify(r => r.AddQuestionAsync(
                 It.Is<Question>(q => q.CategoryId == command.CategoryId && q.Content == command.Content && q.Hint == command.Hint),
                 It.IsAny<CancellationToken>())
             , Times.Once);

@@ -27,7 +27,7 @@ public class GetCategoriesQueryHandlerTests
         };
 
         _repositoryMock
-            .Setup(repo => repo.GetCategoriesAsync(It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetCategoriesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(categories);
 
         var query = new GetCategoriesQuery();
@@ -38,6 +38,6 @@ public class GetCategoriesQueryHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Equal(2, result.Count());
-        _repositoryMock.Verify(repo => repo.GetCategoriesAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(r => r.GetCategoriesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 }

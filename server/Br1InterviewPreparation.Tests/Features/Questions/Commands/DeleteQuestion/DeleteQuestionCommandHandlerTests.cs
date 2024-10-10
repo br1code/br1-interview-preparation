@@ -32,7 +32,7 @@ public class DeleteQuestionCommandHandlerTests
         };
 
         _questionRepository
-            .Setup(repo => repo.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(question);
 
         var command = new DeleteQuestionCommand { Id = questionId };
@@ -42,8 +42,8 @@ public class DeleteQuestionCommandHandlerTests
 
         // Assert
         Assert.Equal(Unit.Value, result);
-        _questionRepository.Verify(repo => repo.GetQuestionByIdAsync(command.Id, It.IsAny<CancellationToken>()), Times.Once);
-        _questionRepository.Verify(repo => repo.DeleteQuestionAsync(question, It.IsAny<CancellationToken>()), Times.Once);
+        _questionRepository.Verify(r => r.GetQuestionByIdAsync(command.Id, It.IsAny<CancellationToken>()), Times.Once);
+        _questionRepository.Verify(r => r.DeleteQuestionAsync(question, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public class DeleteQuestionCommandHandlerTests
         var questionId = Guid.NewGuid();
 
         _questionRepository
-            .Setup(repo => repo.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(value: null);
 
         var command = new DeleteQuestionCommand
@@ -63,6 +63,6 @@ public class DeleteQuestionCommandHandlerTests
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
-        _questionRepository.Verify(repo => repo.DeleteQuestionAsync(It.IsAny<Question>(), It.IsAny<CancellationToken>()), Times.Never);
+        _questionRepository.Verify(r => r.DeleteQuestionAsync(It.IsAny<Question>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 }

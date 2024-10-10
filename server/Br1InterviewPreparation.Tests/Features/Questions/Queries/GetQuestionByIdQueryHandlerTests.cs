@@ -37,7 +37,7 @@ public class GetQuestionByIdQueryHandlerTests
         question.Answers.Add(answer);
 
         _repositoryMock
-            .Setup(repo => repo.GetQuestionByIdAsync(question.Id, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetQuestionByIdAsync(question.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(question);
 
         var query = new GetQuestionByIdQuery { Id = question.Id };
@@ -52,7 +52,7 @@ public class GetQuestionByIdQueryHandlerTests
         Assert.Equal(question.CategoryId, result.CategoryId);
         Assert.Single(question.Answers);
         Assert.Equal(answer.Id, question.Answers.First().Id);
-        _repositoryMock.Verify(repo => repo.GetQuestionByIdAsync(question.Id, It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(r => r.GetQuestionByIdAsync(question.Id, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -62,13 +62,13 @@ public class GetQuestionByIdQueryHandlerTests
         var questionId = Guid.NewGuid();
 
         _repositoryMock
-            .Setup(repo => repo.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(value: null);
 
         var query = new GetQuestionByIdQuery { Id = questionId };
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(query, CancellationToken.None));
-        _repositoryMock.Verify(repo => repo.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(r => r.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()), Times.Once);
     }
 }

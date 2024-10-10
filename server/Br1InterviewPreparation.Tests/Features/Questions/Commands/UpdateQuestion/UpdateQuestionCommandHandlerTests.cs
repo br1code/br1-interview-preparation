@@ -32,7 +32,7 @@ public class UpdateQuestionCommandHandlerTests
         };
 
         _questionRepositoryMock
-            .Setup(repo => repo.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(question);
 
         var command = new UpdateQuestionCommand
@@ -53,7 +53,7 @@ public class UpdateQuestionCommandHandlerTests
         Assert.Equal(command.Content, result.Content);
         Assert.Equal(command.Hint, result.Hint);
         _questionRepositoryMock
-            .Verify(repo => repo.UpdateQuestionAsync(
+            .Verify(r => r.UpdateQuestionAsync(
                 It.Is<Question>(q => q.Id == questionId),
                 It.IsAny<CancellationToken>()),
             Times.Once);
@@ -66,7 +66,7 @@ public class UpdateQuestionCommandHandlerTests
         var questionId = Guid.NewGuid();
 
         _questionRepositoryMock
-            .Setup(repo => repo.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(value: null);
 
         var command = new UpdateQuestionCommand
@@ -81,7 +81,7 @@ public class UpdateQuestionCommandHandlerTests
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
 
         _questionRepositoryMock
-            .Verify(repo => repo.UpdateQuestionAsync(
+            .Verify(r => r.UpdateQuestionAsync(
                 It.Is<Question>(q => q.Id == questionId),
                 It.IsAny<CancellationToken>()),
             Times.Never);

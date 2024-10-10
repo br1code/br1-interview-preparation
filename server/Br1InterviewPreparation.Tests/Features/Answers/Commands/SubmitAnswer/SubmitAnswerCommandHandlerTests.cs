@@ -23,7 +23,7 @@ public class SubmitAnswerCommandHandlerTests
         var newAnswerId = Guid.NewGuid();
 
         _answerRepositoryMock
-            .Setup(repo => repo.AddAnswerAsync(It.IsAny<Answer>(), It.IsAny<CancellationToken>()))
+            .Setup(r => r.AddAnswerAsync(It.IsAny<Answer>(), It.IsAny<CancellationToken>()))
             .Callback<Answer, CancellationToken>((a, ct) => a.Id = newAnswerId)
             .Returns(Task.CompletedTask);
 
@@ -39,7 +39,7 @@ public class SubmitAnswerCommandHandlerTests
         // Assert
         Assert.Equal(newAnswerId, result);
         _answerRepositoryMock
-            .Verify(repo => repo.AddAnswerAsync(
+            .Verify(r => r.AddAnswerAsync(
                 It.Is<Answer>(a => a.QuestionId == command.QuestionId && a.VideoFilename == command.VideoFilename),
                 It.IsAny<CancellationToken>())
             , Times.Once);

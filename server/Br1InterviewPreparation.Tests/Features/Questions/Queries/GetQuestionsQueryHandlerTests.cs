@@ -28,7 +28,7 @@ public class GetQuestionsQueryHandlerTests
         };
 
         _repositoryMock
-            .Setup(repo => repo.GetQuestionsAsync(null, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetQuestionsAsync(null, It.IsAny<CancellationToken>()))
             .ReturnsAsync(questions);
 
         var query = new GetQuestionsQuery { CategoryId = null };
@@ -39,7 +39,7 @@ public class GetQuestionsQueryHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Equal(2, result.Count());
-        _repositoryMock.Verify(repo => repo.GetQuestionsAsync(null, It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(r => r.GetQuestionsAsync(null, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -53,7 +53,7 @@ public class GetQuestionsQueryHandlerTests
         };
 
         _repositoryMock
-            .Setup(repo => repo.GetQuestionsAsync(category.Id, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetQuestionsAsync(category.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(questions);
 
         var query = new GetQuestionsQuery { CategoryId = category.Id };
@@ -65,7 +65,7 @@ public class GetQuestionsQueryHandlerTests
         Assert.NotNull(result);
         Assert.Single(result);
         Assert.Equal("What is an index?", result.First().Content);
-        _repositoryMock.Verify(repo => repo.GetQuestionsAsync(category.Id, It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(r => r.GetQuestionsAsync(category.Id, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -74,7 +74,7 @@ public class GetQuestionsQueryHandlerTests
         // Arrange
         var categoryId = Guid.NewGuid();
         _repositoryMock
-            .Setup(repo => repo.GetQuestionsAsync(categoryId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetQuestionsAsync(categoryId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Question>());
 
         var query = new GetQuestionsQuery { CategoryId = categoryId };
@@ -85,6 +85,6 @@ public class GetQuestionsQueryHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Empty(result);
-        _repositoryMock.Verify(repo => repo.GetQuestionsAsync(categoryId, It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(r => r.GetQuestionsAsync(categoryId, It.IsAny<CancellationToken>()), Times.Once);
     }
 }

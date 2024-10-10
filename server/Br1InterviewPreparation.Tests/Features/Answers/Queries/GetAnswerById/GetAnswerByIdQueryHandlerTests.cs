@@ -31,7 +31,7 @@ public class GetAnswerByIdQueryHandlerTests
         };
 
         _answerRepositoryMock
-            .Setup(repo => repo.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(answer);
 
         var query = new GetAnswerByIdQuery { Id  = answerId };
@@ -45,7 +45,7 @@ public class GetAnswerByIdQueryHandlerTests
         Assert.Equal(questionId, result.QuestionId);
         Assert.Equal("123.mp4", result.VideoFilename);
         _answerRepositoryMock
-            .Verify(repo => repo.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()), Times.Once);
+            .Verify(r => r.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -55,13 +55,13 @@ public class GetAnswerByIdQueryHandlerTests
         var answerId = Guid.NewGuid();
 
         _answerRepositoryMock
-            .Setup(repo => repo.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(value: null);
 
         var query = new GetAnswerByIdQuery { Id = answerId };
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(query, CancellationToken.None));
-        _answerRepositoryMock.Verify(repo => repo.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()), Times.Once);
+        _answerRepositoryMock.Verify(r => r.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()), Times.Once);
     }
 }

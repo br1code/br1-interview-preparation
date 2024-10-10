@@ -21,7 +21,7 @@ public class SubmitAnswerCommandValidatorTests
         // Arrange
         var questionId = Guid.NewGuid();
         _questionRepositoryMock
-            .Setup(repo => repo.QuestionExists(questionId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.QuestionExists(questionId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         var command = new SubmitAnswerCommand
@@ -42,7 +42,7 @@ public class SubmitAnswerCommandValidatorTests
     {
         // Arrange
         _questionRepositoryMock
-            .Setup(repo => repo.QuestionExists(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .Setup(r => r.QuestionExists(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         var command = new SubmitAnswerCommand
@@ -67,7 +67,7 @@ public class SubmitAnswerCommandValidatorTests
         // Arrange
         var questionId = Guid.NewGuid();
         _questionRepositoryMock
-            .Setup(repo => repo.QuestionExists(questionId, It.IsAny<CancellationToken>()))
+            .Setup(r => r.QuestionExists(questionId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
 
         var command = new SubmitAnswerCommand
@@ -93,7 +93,7 @@ public class SubmitAnswerCommandValidatorTests
     {
         // Arrange
         _questionRepositoryMock
-            .Setup(repo => repo.QuestionExists(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .Setup(r => r.QuestionExists(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
         var command = new SubmitAnswerCommand
