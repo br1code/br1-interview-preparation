@@ -67,7 +67,6 @@ Retrieves all categories.
         "id": "uuid",
         "name": "Design Patterns"
       }
-      // ... more categories
     ]
     ```
 
@@ -94,10 +93,8 @@ Retrieves questions and its answers, optionally filtered by category.
         "id": "uuid",
         "categoryId": "uuid",
         "content": "Question content",
-        "hint": "Optional hint",
-        ]
+        "hint": "Optional hint"
       }
-      // ... more questions
     ]
     ```
 
@@ -150,7 +147,6 @@ Gets a specific question and its answers.
           "questionId": "uuid",
           "videoFileName": "123.webm"
         }
-        // ... more answers
       ]
     }
     ```
@@ -369,7 +365,6 @@ Deletes an answer and its associated video file.
      "VideoStorage": {
        "FilePath": "/videos/"
      }
-     // Other settings...
    }
    ```
 
