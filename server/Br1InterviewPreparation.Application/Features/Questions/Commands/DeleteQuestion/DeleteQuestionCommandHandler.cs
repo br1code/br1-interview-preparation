@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Br1InterviewPreparation.Application.Interfaces;
 using Br1InterviewPreparation.Application.Exceptions;
+using Br1InterviewPreparation.Domain.Entities;
 
 namespace Br1InterviewPreparation.Application.Features.Questions.Commands.DeleteQuestion;
 
@@ -12,7 +13,7 @@ public class DeleteQuestionCommandHandler(IQuestionRepository questionRepository
 
         if (question is null)
         {
-            throw new NotFoundException(nameof(question), request.Id);
+            throw new NotFoundException(nameof(Question), request.Id);
         }
 
         await questionRepository.DeleteQuestionAsync(question, cancellationToken);

@@ -19,4 +19,10 @@ public class AnswerRepository(ApplicationDbContext context) : IAnswerRepository
         context.Answers.Add(answer);
         return context.SaveChangesAsync(cancellationToken);
     }
+
+    public Task DeleteAnswerAsync(Answer answer, CancellationToken cancellationToken = default)
+    {
+        context.Answers.Remove(answer);
+        return context.SaveChangesAsync(cancellationToken);
+    }
 }

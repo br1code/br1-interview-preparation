@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Br1InterviewPreparation.Application.Features.Answers.Commands.DeleteAnswer;
 using Br1InterviewPreparation.Application.Features.Answers.Commands.SubmitAnswer;
 using Br1InterviewPreparation.Application.Features.Answers.Dtos;
 using Br1InterviewPreparation.Application.Features.Answers.Queries.GetAnswerById;
@@ -60,6 +61,23 @@ namespace Br1InterviewPreparation.API.Controllers
         {
             var answerId = await mediator.Send(command);
             return CreatedAtAction(nameof(GetAnswerMetadata), new { id = answerId }, answerId);
+        }
+
+        /// <summary>
+        /// Deletes an answer and its associated video file.
+        /// </summary>
+        /// <param name="id">The ID of the answer to delete.</param>
+        /// <returns>No content.</returns>
+        /// <response code="204">Answer deleted successfully.</response>
+        /// <response code="404">Answer not found.</response>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteAnswer(Guid id)
+        {
+            var command = new DeleteAnswerCommand { Id = id };
+            await mediator.Send(command);
+            return NoContent();
         }
     }
 }

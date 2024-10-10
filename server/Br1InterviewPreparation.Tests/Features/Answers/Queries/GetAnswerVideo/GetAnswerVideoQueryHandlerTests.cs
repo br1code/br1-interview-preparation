@@ -9,16 +9,18 @@ namespace Br1InterviewPreparation.Tests.Features.Answers.Queries.GetAnswerVideo;
 public class GetAnswerVideoQueryHandlerTests
 {
     private readonly Mock<IAnswerRepository> _answerRepositoryMock;
+    private readonly Mock<IVideoStorageService> _videoStorageServiceMock;
     private readonly GetAnswerVideoQueryHandler _handler;
 
     public GetAnswerVideoQueryHandlerTests()
     {
         _answerRepositoryMock = new Mock<IAnswerRepository>();
-        _handler = new GetAnswerVideoQueryHandler(_answerRepositoryMock.Object);
+        _videoStorageServiceMock = new Mock<IVideoStorageService>();
+        _handler = new GetAnswerVideoQueryHandler(_answerRepositoryMock.Object, _videoStorageServiceMock.Object);
     }
 
     [Fact]
-    public async Task Handle_AnswerExists_ReturnsFilePath()
+    public async Task Handle_AnswerExists_ReturnsFileMetadata()
     {
         // Arrange
         var answerId = Guid.NewGuid();
@@ -33,6 +35,16 @@ public class GetAnswerVideoQueryHandlerTests
             .Setup(repo => repo.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(answer);
 
+        var expectedFilePath = $"/videos/{answer.VideoFilename}";
+        _videoStorageServiceMock
+            .Setup(service => service.GetVideoFilePath(answer.VideoFilename))
+            .Returns(expectedFilePath);
+
+        var expectedContentType = "video/webm";
+        _videoStorageServiceMock
+            .Setup(service => service.GetContentType(answer.VideoFilename))
+            .Returns(expectedContentType);
+
         var query = new GetAnswerVideoQuery { Id = answerId };
 
         // Act
@@ -40,14 +52,11 @@ public class GetAnswerVideoQueryHandlerTests
 
         // Assert
         Assert.NotNull(result);
-
-        var expectedFilePath = $"/videos/{answer.VideoFilename}";
-        var expectedContentType = "video/webm";
         Assert.Equal(expectedFilePath, result.FilePath);
         Assert.Equal(expectedContentType, result.ContentType);
-
-        _answerRepositoryMock
-            .Verify(repo => repo.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()), Times.Once);
+        _answerRepositoryMock.Verify(repo => repo.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()), Times.Once);
+        _videoStorageServiceMock.Verify(service => service.GetVideoFilePath(answer.VideoFilename), Times.Once);
+        _videoStorageServiceMock.Verify(service => service.GetContentType(answer.VideoFilename), Times.Once);
     }
 
     [Fact]
@@ -63,5 +72,7 @@ public class GetAnswerVideoQueryHandlerTests
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(query, CancellationToken.None));
+        _videoStorageServiceMock.Verify(service => service.GetVideoFilePath(It.IsAny<string>()), Times.Never);
+        _videoStorageServiceMock.Verify(service => service.GetContentType(It.IsAny<string>()), Times.Never);
     }
 }

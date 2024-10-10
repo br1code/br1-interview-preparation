@@ -4,5 +4,5 @@ namespace Br1InterviewPreparation.Application.Features.Questions.Commands.Delete
 
 public class DeleteQuestionCommand : IRequest<Unit>
 {
-    public Guid Id { get; set; }
+    public required Guid Id { get; set; }
 }

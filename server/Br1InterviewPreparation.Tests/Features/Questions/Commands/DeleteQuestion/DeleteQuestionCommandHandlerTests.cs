@@ -9,8 +9,8 @@ namespace Br1InterviewPreparation.Tests.Features.Questions.Commands.DeleteQuesti
 
 public class DeleteQuestionCommandHandlerTests
 {
-    private Mock<IQuestionRepository> _questionRepository;
-    private DeleteQuestionCommandHandler _handler;
+    private readonly Mock<IQuestionRepository> _questionRepository;
+    private readonly DeleteQuestionCommandHandler _handler;
 
     public DeleteQuestionCommandHandlerTests()
     {
@@ -35,10 +35,7 @@ public class DeleteQuestionCommandHandlerTests
             .Setup(repo => repo.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(question);
 
-        var command = new DeleteQuestionCommand
-        {
-            Id = questionId
-        };
+        var command = new DeleteQuestionCommand { Id = questionId };
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
