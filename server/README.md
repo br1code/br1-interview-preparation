@@ -19,8 +19,9 @@ Questions:
 
 Answers:
 
-- `POST /api/answers`: Upload a new answer video for a question.
-- `GET /api/answers/{id}`: Stream the video associated with the specific answer ID.
+- `POST /api/answers`: Upload a new answer video for a question. 🔨 (TODO: we are not storing the video files yet)
+- `GET /api/answers/{id}`: Stream the video associated with the specific answer ID. ✅
+- `GET /api/answers/{id}/metadata`: Stream the video associated with the specific answer ID. ✅
 - `DELETE /api/answers/{id}`: Delete an answer and its associated video file. (TODO: soft delete?)
 
 ## Database Entities
