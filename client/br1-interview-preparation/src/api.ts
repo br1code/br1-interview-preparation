@@ -1,25 +1,22 @@
-import { ZodSchema } from 'zod';
+import { fetchData } from './http';
+import {
+  categoriesSchema,
+  Category,
+  Question,
+  questionSchema,
+  questionsSchema,
+} from './types';
 
-const API_URL =
-  typeof window === 'undefined'
-    ? process.env.API_URL // Server-side
-    : process.env.NEXT_PUBLIC_API_URL; // Client-side
+export const fetchCategories = (): Promise<Category[]> => {
+  return fetchData('categories', categoriesSchema);
+};
 
-export async function fetchData<T>(
-  url: string,
-  schema: ZodSchema<T>
-): Promise<T> {
-  try {
-    const response = await fetch(`${API_URL}/${url}`);
+export const fetchQuestions = (categoryId?: string): Promise<Question[]> => {
+  const searchQuery = categoryId ? `?categoryId=${categoryId}` : '';
+  return fetchData(`questions${searchQuery}`, questionsSchema);
+};
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch data');
-    }
-
-    const data = await response.json();
-    return schema.parse(data);
-  } catch (error) {
-    console.log(error);
-    throw new Error(`Failed to fetch data: ${(error as Error).message}`);
-  }
-}
+export const fetchRandomQuestion = (categoryId?: string): Promise<Question> => {
+  const searchQuery = categoryId ? `?categoryId=${categoryId}` : '';
+  return fetchData(`questions/random${searchQuery}`, questionSchema);
+};

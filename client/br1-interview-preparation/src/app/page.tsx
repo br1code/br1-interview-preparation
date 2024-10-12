@@ -1,5 +1,5 @@
 import StartPractice from '@/components/StartPractice';
-import { fetchCategories } from '@/http';
+import { fetchCategories } from '@/api';
 import { toDropdownOptions } from '@/utils';
 
 export default async function Home() {
