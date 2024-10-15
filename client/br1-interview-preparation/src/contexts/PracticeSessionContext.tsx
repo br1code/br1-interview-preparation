@@ -12,6 +12,7 @@ import { Question } from '@/types';
 import { fetchRandomQuestion } from '@/api';
 
 interface PracticeSessionState {
+  sessionStarted: boolean;
   currentQuestion: Question | null;
   loadingQuestion: boolean;
   showHint: boolean;
@@ -21,6 +22,8 @@ interface PracticeSessionState {
 }
 
 type PracticeSessionAction =
+  | { type: 'START_SESSION' }
+  | { type: 'END_SESSION' }
   | { type: 'SET_CURRENT_QUESTION'; payload: Question | null }
   | { type: 'SET_LOADING_QUESTION'; payload: boolean }
   | { type: 'SET_SHOW_HINT'; payload: boolean }
@@ -31,6 +34,8 @@ type PracticeSessionAction =
 
 interface PracticeSessionContextProps {
   state: PracticeSessionState;
+  startSession: () => void;
+  endSession: () => void;
   setCurrentQuestion: (question: Question | null) => void;
   setLoadingQuestion: (isLoading: boolean) => void;
   setShowHint: (show: boolean) => void;
@@ -42,6 +47,7 @@ interface PracticeSessionContextProps {
 }
 
 const initialState: PracticeSessionState = {
+  sessionStarted: false,
   currentQuestion: null,
   loadingQuestion: false,
   isRecording: false,
@@ -55,20 +61,39 @@ const reducer = (
   action: PracticeSessionAction
 ): PracticeSessionState => {
   switch (action.type) {
+    case 'START_SESSION':
+      return { ...state, sessionStarted: true, error: null, showHint: false };
+
+    case 'END_SESSION':
+      return {
+        ...state,
+        sessionStarted: false,
+        currentQuestion: null,
+        error: null,
+        showHint: false,
+      };
+
     case 'SET_CURRENT_QUESTION':
       return { ...state, currentQuestion: action.payload };
+
     case 'SET_LOADING_QUESTION':
       return { ...state, loadingQuestion: action.payload };
+
     case 'SET_SHOW_HINT':
       return { ...state, showHint: action.payload };
+
     case 'SET_CATEGORY_ID':
       return { ...state, categoryId: action.payload };
+
     case 'START_RECORDING':
       return { ...state, isRecording: true };
+
     case 'STOP_RECORDING':
       return { ...state, isRecording: false };
+
     case 'SET_ERROR':
       return { ...state, error: action.payload };
+
     default:
       return state;
   }
@@ -87,48 +112,41 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const setCurrentQuestion = useCallback(
-    (question: Question | null) => {
-      dispatch({ type: 'SET_CURRENT_QUESTION', payload: question });
-    },
-    [dispatch]
-  );
+  const startSession = useCallback(() => {
+    dispatch({ type: 'START_SESSION' });
+  }, []);
 
-  const setLoadingQuestion = useCallback(
-    (isLoading: boolean) => {
-      dispatch({ type: 'SET_LOADING_QUESTION', payload: isLoading });
-    },
-    [dispatch]
-  );
+  const endSession = useCallback(() => {
+    dispatch({ type: 'END_SESSION' });
+  }, []);
 
-  const setShowHint = useCallback(
-    (show: boolean) => {
-      dispatch({ type: 'SET_SHOW_HINT', payload: show });
-    },
-    [dispatch]
-  );
+  const setCurrentQuestion = useCallback((question: Question | null) => {
+    dispatch({ type: 'SET_CURRENT_QUESTION', payload: question });
+  }, []);
 
-  const setCategoryId = useCallback(
-    (categoryId: string | null) => {
-      dispatch({ type: 'SET_CATEGORY_ID', payload: categoryId });
-    },
-    [dispatch]
-  );
+  const setLoadingQuestion = useCallback((isLoading: boolean) => {
+    dispatch({ type: 'SET_LOADING_QUESTION', payload: isLoading });
+  }, []);
+
+  const setShowHint = useCallback((show: boolean) => {
+    dispatch({ type: 'SET_SHOW_HINT', payload: show });
+  }, []);
+
+  const setCategoryId = useCallback((categoryId: string | null) => {
+    dispatch({ type: 'SET_CATEGORY_ID', payload: categoryId });
+  }, []);
 
   const startRecording = useCallback(() => {
     dispatch({ type: 'START_RECORDING' });
-  }, [dispatch]);
+  }, []);
 
   const stopRecording = useCallback(() => {
     dispatch({ type: 'STOP_RECORDING' });
-  }, [dispatch]);
+  }, []);
 
-  const setError = useCallback(
-    (errorMessage: string | null) => {
-      dispatch({ type: 'SET_ERROR', payload: errorMessage });
-    },
-    [dispatch]
-  );
+  const setError = useCallback((errorMessage: string | null) => {
+    dispatch({ type: 'SET_ERROR', payload: errorMessage });
+  }, []);
 
   const fetchNextQuestion = useCallback(async () => {
     try {
@@ -157,16 +175,18 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
     setShowHint,
   ]);
 
-  // Fetch the initial question when categoryId changes
+  // Fetch initial question when session started and category was set
   useEffect(() => {
-    if (state.categoryId !== undefined) {
+    if (state.sessionStarted && state.categoryId !== undefined) {
       fetchNextQuestion();
     }
-  }, [state.categoryId, fetchNextQuestion]);
+  }, [state.sessionStarted, state.categoryId, fetchNextQuestion]);
 
   const contextValue: PracticeSessionContextProps = useMemo(
     () => ({
       state,
+      startSession,
+      endSession,
       setCurrentQuestion,
       setLoadingQuestion,
       setShowHint,
@@ -178,6 +198,8 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
     }),
     [
       state,
+      startSession,
+      endSession,
       setCurrentQuestion,
       setLoadingQuestion,
       setShowHint,
