@@ -16,7 +16,9 @@ export const fetchQuestions = (categoryId?: string): Promise<Question[]> => {
   return fetchData(`questions${searchQuery}`, questionsSchema);
 };
 
-export const fetchRandomQuestion = (categoryId?: string): Promise<Question> => {
+export const fetchRandomQuestion = (
+  categoryId?: string | null
+): Promise<Question> => {
   const searchQuery = categoryId ? `?categoryId=${categoryId}` : '';
   return fetchData(`questions/random${searchQuery}`, questionSchema);
 };
