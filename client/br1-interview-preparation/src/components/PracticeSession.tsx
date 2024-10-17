@@ -1,9 +1,11 @@
 'use client';
 
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { usePracticeSession } from '@/contexts/PracticeSessionContext';
 import { useSearchParams } from 'next/navigation';
 import useFetchCategory from '@/hooks/useFetchCategory';
+import useMediaRecorder from '@/hooks/useMediaRecorder';
+import { submitAnswer } from '@/api';
 
 const PracticeSession: FC = () => {
   const searchParams = useSearchParams();
@@ -27,24 +29,76 @@ const PracticeSession: FC = () => {
     setCategory(category);
   }, [category, setCategory]);
 
-  // TODO: Implement the logic to submit the recorded video
-  const submitVideo = async () => {
-    return new Promise<void>((resolve) => {
-      console.log('Submitting video');
-      setTimeout(() => {
-        console.log('Video submitted');
-        resolve();
-      }, 1000);
-    });
-  };
+  const {
+    recordedChunksRef,
+    permissionError,
+    startRecording: startMediaRecording,
+    stopRecording: stopMediaRecording,
+    resetRecordedChunks,
+  } = useMediaRecorder();
 
-  const onSubmitAnswerClick = async () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Start or stop media recording based on `state.isRecording`
+  useEffect(() => {
+    if (state.isRecording && videoRef.current) {
+      startMediaRecording(videoRef.current);
+    } else if (!state.isRecording) {
+      cleanupMediaRecording();
+    }
+
+    return () => {
+      cleanupMediaRecording();
+    };
+  }, [state.isRecording, startMediaRecording]);
+
+  // TODO: split into methods
+  const handleSubmitAnswer = async () => {
     stopRecording();
-    await submitVideo();
-    console.log('Done!, next question');
+    await stopMediaRecording();
+
+    const recordedChunksData = recordedChunksRef.current;
+    const videoBlob = new Blob(recordedChunksData, { type: 'video/webm' });
+
+    if (videoBlob.size === 0) {
+      console.error('Video blob is empty.');
+      // TODO: Optionally inform the user and prevent submission
+      return;
+    }
+
+    const questionId = state.currentQuestion?.id;
+    if (!questionId) {
+      console.error('Question ID is missing or invalid.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('videoFile', videoBlob, 'answer.webm');
+    formData.append('questionId', state.currentQuestion?.id || '');
+
+    await submitAnswer(formData);
+    console.log('The answer was submitted.');
+
+    resetRecordedChunks();
     fetchNextQuestion();
   };
 
+  const cleanupMediaRecording = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.srcObject = null;
+    }
+  };
+
+  const handleEndSession = async () => {
+    endSession();
+    stopRecording();
+    await stopMediaRecording();
+    resetRecordedChunks();
+    cleanupMediaRecording();
+  };
+
+  // TODO: create components
   if (!state.sessionStarted) {
     return (
       <section>
@@ -90,12 +144,16 @@ const PracticeSession: FC = () => {
 
           {state.isCountingDown && <p>Starting in: {state.countdownValue}</p>}
 
-          {state.isRecording && (
+          {state.isRecording && !permissionError && (
             <div>
-              <p>Recording...</p>
-              {/* Add a video preview if desired */}
+              <video
+                ref={videoRef}
+                style={{ width: '100%', maxWidth: '500px' }}
+                muted
+                autoPlay
+              />
               <button
-                onClick={onSubmitAnswerClick}
+                onClick={handleSubmitAnswer}
                 className="bg-green-600 text-white px-4 py-2 rounded-md"
               >
                 Submit Answer
@@ -103,15 +161,16 @@ const PracticeSession: FC = () => {
             </div>
           )}
 
+          {permissionError && <p className="text-red-500">{permissionError}</p>}
+
           {!state.isCountingDown && !state.isRecording && (
             <p>Preparing next question...</p>
           )}
         </>
       )}
 
-      {/* Include other components like HintButton, RecordingControls, etc. */}
       <button
-        onClick={endSession}
+        onClick={handleEndSession}
         className="bg-red-600 text-white px-4 py-2 rounded-md"
       >
         End Session

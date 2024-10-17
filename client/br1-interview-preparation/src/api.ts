@@ -1,4 +1,4 @@
-import { fetchData } from './http';
+import { fetchData, postData } from './http';
 import {
   categoriesSchema,
   Category,
@@ -6,6 +6,7 @@ import {
   Question,
   questionSchema,
   questionsSchema,
+  submittedAnswerIdSchema,
 } from './types';
 
 export const fetchCategories = (): Promise<Category[]> => {
@@ -26,4 +27,8 @@ export const fetchRandomQuestion = (
 ): Promise<Question> => {
   const searchQuery = categoryId ? `?categoryId=${categoryId}` : '';
   return fetchData(`questions/random${searchQuery}`, questionSchema);
+};
+
+export const submitAnswer = (data: FormData): Promise<string> => {
+  return postData('answers', submittedAnswerIdSchema, data);
 };

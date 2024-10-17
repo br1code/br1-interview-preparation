@@ -23,3 +23,28 @@ export async function fetchData<T>(
     throw new Error(`Failed to fetch data: ${(error as Error).message}`);
   }
 }
+
+export async function postData<T, U>(
+  url: string,
+  schema: ZodSchema<T>,
+  data: U | FormData
+): Promise<T> {
+  try {
+    const isFormData = data instanceof FormData;
+
+    const response = await fetch(`${API_URL}/${url}`, {
+      method: 'POST',
+      headers: isFormData ? undefined : { 'Content-Type': 'application/json' },
+      body: isFormData ? data : JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to submit data');
+    }
+
+    const responseData = await response.json();
+    return schema.parse(responseData);
+  } catch (error) {
+    throw new Error(`Failed to submit data: ${(error as Error).message}`);
+  }
+}

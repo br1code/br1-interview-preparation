@@ -20,6 +20,8 @@ export const questionsSchema = z.array(questionSchema);
 
 export type Question = z.infer<typeof questionSchema>;
 
+export const submittedAnswerIdSchema = z.string(); // TODO: don't like this
+
 export interface DropdownOption {
   value: string;
   label: string;
