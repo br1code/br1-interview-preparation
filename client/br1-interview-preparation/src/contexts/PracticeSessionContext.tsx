@@ -19,6 +19,8 @@ interface PracticeSessionState {
   isRecording: boolean;
   category?: Category | null;
   error: string | null;
+  countdownValue: number;
+  isCountingDown: boolean;
 }
 
 type PracticeSessionAction =
@@ -30,7 +32,10 @@ type PracticeSessionAction =
   | { type: 'SET_CATEGORY'; payload: Category | null }
   | { type: 'START_RECORDING' }
   | { type: 'STOP_RECORDING' }
-  | { type: 'SET_ERROR'; payload: string | null };
+  | { type: 'SET_ERROR'; payload: string | null }
+  | { type: 'START_COUNTDOWN' }
+  | { type: 'DECREMENT_COUNTDOWN' }
+  | { type: 'RESET_COUNTDOWN' };
 
 interface PracticeSessionContextProps {
   state: PracticeSessionState;
@@ -44,16 +49,24 @@ interface PracticeSessionContextProps {
   stopRecording: () => void;
   setError: (errorMessage: string | null) => void;
   fetchNextQuestion: () => void;
+  startCountdown: () => void;
+  decrementCountdown: () => void;
+  resetCountdown: () => void;
 }
+
+const INITIAL_COUNTDOWN_VALUE = 5;
+const COUNTDOWN_TIMER_DECREMENT_INTERVAL = 1000;
 
 const initialState: PracticeSessionState = {
   sessionStarted: false,
   currentQuestion: null,
   loadingQuestion: false,
+  showHint: false,
   isRecording: false,
   category: undefined,
   error: null,
-  showHint: false,
+  countdownValue: INITIAL_COUNTDOWN_VALUE,
+  isCountingDown: false,
 };
 
 const reducer = (
@@ -93,6 +106,15 @@ const reducer = (
 
     case 'SET_ERROR':
       return { ...state, error: action.payload };
+
+    case 'START_COUNTDOWN':
+      return { ...state, isCountingDown: true };
+
+    case 'DECREMENT_COUNTDOWN':
+      return { ...state, countdownValue: state.countdownValue - 1 };
+
+    case 'RESET_COUNTDOWN':
+      return { ...state, countdownValue: 5, isCountingDown: false };
 
     default:
       return state;
@@ -148,6 +170,18 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
     dispatch({ type: 'SET_ERROR', payload: errorMessage });
   }, []);
 
+  const startCountdown = useCallback(() => {
+    dispatch({ type: 'START_COUNTDOWN' });
+  }, []);
+
+  const decrementCountdown = useCallback(() => {
+    dispatch({ type: 'DECREMENT_COUNTDOWN' });
+  }, []);
+
+  const resetCountdown = useCallback(() => {
+    dispatch({ type: 'RESET_COUNTDOWN' });
+  }, []);
+
   const fetchNextQuestion = useCallback(async () => {
     try {
       setLoadingQuestion(true);
@@ -157,7 +191,7 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
       const question = await fetchRandomQuestion(state.category?.id);
 
       setCurrentQuestion(question);
-      console.log('Question fetched', question);
+      startCountdown();
     } catch (error) {
       console.error('Error fetching question:', error);
       setError(
@@ -170,6 +204,7 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
   }, [
     state.category,
     setCurrentQuestion,
+    startCountdown,
     setError,
     setLoadingQuestion,
     setShowHint,
@@ -181,6 +216,35 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
       fetchNextQuestion();
     }
   }, [state.sessionStarted, state.category, fetchNextQuestion]);
+
+  // Manage countdown timer
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (state.isCountingDown) {
+      if (state.countdownValue > 0) {
+        timer = setTimeout(
+          () => decrementCountdown(),
+          COUNTDOWN_TIMER_DECREMENT_INTERVAL
+        );
+      } else if (state.countdownValue === 0) {
+        resetCountdown();
+        startRecording();
+      }
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [
+    state.isCountingDown,
+    state.countdownValue,
+    decrementCountdown,
+    resetCountdown,
+    startRecording,
+  ]);
 
   const contextValue: PracticeSessionContextProps = useMemo(
     () => ({
@@ -195,6 +259,9 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
       stopRecording,
       setError,
       fetchNextQuestion,
+      startCountdown,
+      decrementCountdown,
+      resetCountdown,
     }),
     [
       state,
@@ -208,6 +275,9 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
       stopRecording,
       setError,
       fetchNextQuestion,
+      startCountdown,
+      decrementCountdown,
+      resetCountdown,
     ]
   );
 

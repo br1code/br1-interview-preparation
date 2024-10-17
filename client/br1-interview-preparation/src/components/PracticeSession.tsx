@@ -8,7 +8,14 @@ import useFetchCategory from '@/hooks/useFetchCategory';
 const PracticeSession: FC = () => {
   const searchParams = useSearchParams();
   const categoryId = searchParams.get('categoryId');
-  const { state, setCategory, startSession, endSession } = usePracticeSession();
+  const {
+    state,
+    setCategory,
+    startSession,
+    endSession,
+    stopRecording,
+    fetchNextQuestion,
+  } = usePracticeSession();
 
   const {
     category,
@@ -19,6 +26,24 @@ const PracticeSession: FC = () => {
   useEffect(() => {
     setCategory(category);
   }, [category, setCategory]);
+
+  // TODO: Implement the logic to submit the recorded video
+  const submitVideo = async () => {
+    return new Promise<void>((resolve) => {
+      console.log('Submitting video');
+      setTimeout(() => {
+        console.log('Video submitted');
+        resolve();
+      }, 1000);
+    });
+  };
+
+  const onSubmitAnswerClick = async () => {
+    stopRecording();
+    await submitVideo();
+    console.log('Done!, next question');
+    fetchNextQuestion();
+  };
 
   if (!state.sessionStarted) {
     return (
@@ -54,13 +79,34 @@ const PracticeSession: FC = () => {
         <p>Loading question...</p>
       ) : state.error ? (
         <p className="text-red-500">{state.error}</p>
-      ) : state.currentQuestion ? (
-        <div>
-          <h2>Question:</h2>
-          <p>{state.currentQuestion.content}</p>
-        </div>
       ) : (
-        <p>No question available.</p>
+        <>
+          {state.currentQuestion && (
+            <div>
+              <h2>Question:</h2>
+              <p>{state.currentQuestion.content}</p>
+            </div>
+          )}
+
+          {state.isCountingDown && <p>Starting in: {state.countdownValue}</p>}
+
+          {state.isRecording && (
+            <div>
+              <p>Recording...</p>
+              {/* Add a video preview if desired */}
+              <button
+                onClick={onSubmitAnswerClick}
+                className="bg-green-600 text-white px-4 py-2 rounded-md"
+              >
+                Submit Answer
+              </button>
+            </div>
+          )}
+
+          {!state.isCountingDown && !state.isRecording && (
+            <p>Preparing next question...</p>
+          )}
+        </>
       )}
 
       {/* Include other components like HintButton, RecordingControls, etc. */}
