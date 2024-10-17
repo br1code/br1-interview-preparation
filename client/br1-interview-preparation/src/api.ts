@@ -2,6 +2,7 @@ import { fetchData } from './http';
 import {
   categoriesSchema,
   Category,
+  categorySchema,
   Question,
   questionSchema,
   questionsSchema,
@@ -9,6 +10,10 @@ import {
 
 export const fetchCategories = (): Promise<Category[]> => {
   return fetchData('categories', categoriesSchema);
+};
+
+export const fetchCategory = (categoryId: string): Promise<Category> => {
+  return fetchData(`categories/${categoryId}`, categorySchema);
 };
 
 export const fetchQuestions = (categoryId?: string): Promise<Question[]> => {

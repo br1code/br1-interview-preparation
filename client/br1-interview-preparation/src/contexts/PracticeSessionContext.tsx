@@ -8,7 +8,7 @@ import {
   useMemo,
   useReducer,
 } from 'react';
-import { Question } from '@/types';
+import { Category, Question } from '@/types';
 import { fetchRandomQuestion } from '@/api';
 
 interface PracticeSessionState {
@@ -17,7 +17,7 @@ interface PracticeSessionState {
   loadingQuestion: boolean;
   showHint: boolean;
   isRecording: boolean;
-  categoryId?: string | null;
+  category?: Category | null;
   error: string | null;
 }
 
@@ -27,7 +27,7 @@ type PracticeSessionAction =
   | { type: 'SET_CURRENT_QUESTION'; payload: Question | null }
   | { type: 'SET_LOADING_QUESTION'; payload: boolean }
   | { type: 'SET_SHOW_HINT'; payload: boolean }
-  | { type: 'SET_CATEGORY_ID'; payload: string | null }
+  | { type: 'SET_CATEGORY'; payload: Category | null }
   | { type: 'START_RECORDING' }
   | { type: 'STOP_RECORDING' }
   | { type: 'SET_ERROR'; payload: string | null };
@@ -39,7 +39,7 @@ interface PracticeSessionContextProps {
   setCurrentQuestion: (question: Question | null) => void;
   setLoadingQuestion: (isLoading: boolean) => void;
   setShowHint: (show: boolean) => void;
-  setCategoryId: (categoryId: string | null) => void;
+  setCategory: (category: Category | null) => void;
   startRecording: () => void;
   stopRecording: () => void;
   setError: (errorMessage: string | null) => void;
@@ -51,7 +51,7 @@ const initialState: PracticeSessionState = {
   currentQuestion: null,
   loadingQuestion: false,
   isRecording: false,
-  categoryId: undefined,
+  category: undefined,
   error: null,
   showHint: false,
 };
@@ -82,8 +82,8 @@ const reducer = (
     case 'SET_SHOW_HINT':
       return { ...state, showHint: action.payload };
 
-    case 'SET_CATEGORY_ID':
-      return { ...state, categoryId: action.payload };
+    case 'SET_CATEGORY':
+      return { ...state, category: action.payload };
 
     case 'START_RECORDING':
       return { ...state, isRecording: true };
@@ -132,8 +132,8 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
     dispatch({ type: 'SET_SHOW_HINT', payload: show });
   }, []);
 
-  const setCategoryId = useCallback((categoryId: string | null) => {
-    dispatch({ type: 'SET_CATEGORY_ID', payload: categoryId });
+  const setCategory = useCallback((category: Category | null) => {
+    dispatch({ type: 'SET_CATEGORY', payload: category });
   }, []);
 
   const startRecording = useCallback(() => {
@@ -154,7 +154,7 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
       setError(null);
       setShowHint(false);
 
-      const question = await fetchRandomQuestion(state.categoryId);
+      const question = await fetchRandomQuestion(state.category?.id);
 
       setCurrentQuestion(question);
       console.log('Question fetched', question);
@@ -168,7 +168,7 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
       setLoadingQuestion(false);
     }
   }, [
-    state.categoryId,
+    state.category,
     setCurrentQuestion,
     setError,
     setLoadingQuestion,
@@ -177,10 +177,10 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
 
   // Fetch initial question when session started and category was set
   useEffect(() => {
-    if (state.sessionStarted && state.categoryId !== undefined) {
+    if (state.sessionStarted && state.category !== undefined) {
       fetchNextQuestion();
     }
-  }, [state.sessionStarted, state.categoryId, fetchNextQuestion]);
+  }, [state.sessionStarted, state.category, fetchNextQuestion]);
 
   const contextValue: PracticeSessionContextProps = useMemo(
     () => ({
@@ -190,7 +190,7 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
       setCurrentQuestion,
       setLoadingQuestion,
       setShowHint,
-      setCategoryId,
+      setCategory,
       startRecording,
       stopRecording,
       setError,
@@ -203,7 +203,7 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
       setCurrentQuestion,
       setLoadingQuestion,
       setShowHint,
-      setCategoryId,
+      setCategory,
       startRecording,
       stopRecording,
       setError,

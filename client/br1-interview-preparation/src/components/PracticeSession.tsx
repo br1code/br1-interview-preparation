@@ -3,32 +3,41 @@
 import { FC, useEffect } from 'react';
 import { usePracticeSession } from '@/contexts/PracticeSessionContext';
 import { useSearchParams } from 'next/navigation';
+import useFetchCategory from '@/hooks/useFetchCategory';
 
 const PracticeSession: FC = () => {
   const searchParams = useSearchParams();
   const categoryId = searchParams.get('categoryId');
-  const { state, setCategoryId, startSession, endSession } =
-    usePracticeSession();
+  const { state, setCategory, startSession, endSession } = usePracticeSession();
+
+  const {
+    category,
+    loading: loadingCategory,
+    error: categoryError,
+  } = useFetchCategory(categoryId);
 
   useEffect(() => {
-    if (categoryId !== state.categoryId) {
-      setCategoryId(categoryId);
-    }
-  }, [categoryId, state.categoryId, setCategoryId]);
+    setCategory(category);
+  }, [category, setCategory]);
 
   if (!state.sessionStarted) {
     return (
       <section>
         <h1 className="text-2xl font-bold">Practice</h1>
         <p>How it works: TODO - explain all the rules</p>
-        {state.categoryId ? (
-          <p>Selected Category ID: {state.categoryId}</p>
+        {loadingCategory ? (
+          <p>Loading category...</p>
+        ) : categoryError ? (
+          <p className="text-red-500">{categoryError}</p>
+        ) : category ? (
+          <p>Selected Category: {category.name}</p>
         ) : (
           <p>All Categories selected</p>
         )}
         <button
           onClick={startSession}
           className="bg-blue-600 text-white px-4 py-2 rounded-md"
+          disabled={loadingCategory || !!categoryError}
         >
           Start Session
         </button>
@@ -40,6 +49,7 @@ const PracticeSession: FC = () => {
   return (
     <section>
       <h1 className="text-2xl font-bold">Practice Session</h1>
+      {category ? <p>Selected Category: {category.name}</p> : ''}
       {state.loadingQuestion ? (
         <p>Loading question...</p>
       ) : state.error ? (

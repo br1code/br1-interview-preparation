@@ -22,37 +22,38 @@ public class GetQuestionByIdQueryHandlerTests
     {
         // Arrange
         var category = new Category { Name = "Databases" };
+        var questionId = Guid.NewGuid();
         var question = new Question
         {
-            Id = Guid.NewGuid(),
+            Id = questionId,
             CategoryId = category.Id,
             Content = "What is an index?",
         };
         var answer = new Answer 
         { 
             Id = Guid.NewGuid(), 
-            QuestionId = question.Id, 
+            QuestionId = questionId, 
             VideoFilename = "123.mp4" 
         };
         question.Answers.Add(answer);
 
         _repositoryMock
-            .Setup(r => r.GetQuestionByIdAsync(question.Id, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(question);
 
-        var query = new GetQuestionByIdQuery { Id = question.Id };
+        var query = new GetQuestionByIdQuery { Id = questionId };
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(question.Id, result.Id);
+        Assert.Equal(questionId, result.Id);
         Assert.Equal(question.Content, result.Content);
         Assert.Equal(question.CategoryId, result.CategoryId);
         Assert.Single(question.Answers);
         Assert.Equal(answer.Id, question.Answers.First().Id);
-        _repositoryMock.Verify(r => r.GetQuestionByIdAsync(question.Id, It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(r => r.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
