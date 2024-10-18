@@ -17,6 +17,7 @@ const PracticeSession: FC = () => {
     endSession,
     stopRecording,
     fetchNextQuestion,
+    toggleShowHint,
   } = usePracticeSession();
 
   const {
@@ -139,10 +140,19 @@ const PracticeSession: FC = () => {
             <div>
               <h2>Question:</h2>
               <p>{state.currentQuestion.content}</p>
+              {state.showHint && (
+                <p>Hint: {state.currentQuestion.hint || 'No Hint ...'}</p>
+              )}
+              <button
+                onClick={toggleShowHint}
+                className="bg-blue-600 text-white px-4 py-2 rounded-md"
+              >
+                Toggle Hint
+              </button>
             </div>
           )}
 
-          {state.isCountingDown && <p>Starting in: {state.countdownValue}</p>}
+          {state.isCountingDown && <p>Recording in: {state.countdownValue}</p>}
 
           {state.isRecording && !permissionError && (
             <div>

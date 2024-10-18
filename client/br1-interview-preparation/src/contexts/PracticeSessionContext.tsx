@@ -29,6 +29,7 @@ type PracticeSessionAction =
   | { type: 'SET_CURRENT_QUESTION'; payload: Question | null }
   | { type: 'SET_LOADING_QUESTION'; payload: boolean }
   | { type: 'SET_SHOW_HINT'; payload: boolean }
+  | { type: 'TOGGLE_SHOW_HINT' }
   | { type: 'SET_CATEGORY'; payload: Category | null }
   | { type: 'START_RECORDING' }
   | { type: 'STOP_RECORDING' }
@@ -44,6 +45,7 @@ interface PracticeSessionContextProps {
   setCurrentQuestion: (question: Question | null) => void;
   setLoadingQuestion: (isLoading: boolean) => void;
   setShowHint: (show: boolean) => void;
+  toggleShowHint: () => void;
   setCategory: (category: Category | null) => void;
   startRecording: () => void;
   stopRecording: () => void;
@@ -94,6 +96,9 @@ const reducer = (
 
     case 'SET_SHOW_HINT':
       return { ...state, showHint: action.payload };
+
+    case 'TOGGLE_SHOW_HINT':
+      return { ...state, showHint: !state.showHint };
 
     case 'SET_CATEGORY':
       return { ...state, category: action.payload };
@@ -152,6 +157,10 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
 
   const setShowHint = useCallback((show: boolean) => {
     dispatch({ type: 'SET_SHOW_HINT', payload: show });
+  }, []);
+
+  const toggleShowHint = useCallback(() => {
+    dispatch({ type: 'TOGGLE_SHOW_HINT' });
   }, []);
 
   const setCategory = useCallback((category: Category | null) => {
@@ -254,6 +263,7 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
       setCurrentQuestion,
       setLoadingQuestion,
       setShowHint,
+      toggleShowHint,
       setCategory,
       startRecording,
       stopRecording,
@@ -270,6 +280,7 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
       setCurrentQuestion,
       setLoadingQuestion,
       setShowHint,
+      toggleShowHint,
       setCategory,
       startRecording,
       stopRecording,

@@ -42,7 +42,7 @@ This page allows users to practice answering questions and record their response
   - **Note:** The hint cannot be toggled during recording.
 - **Recording Interface**
   - Automatically starts recording the user's camera and microphone after the countdown.
-  - Displays a "Stop" button to end the recording.
+  - Displays a "Submit Answer" button to end the recording.
   - Upon stopping, the video is uploaded to the backend as a new answer.
     - **Endpoint:** `POST /api/answers`
 - **Skip Button**
