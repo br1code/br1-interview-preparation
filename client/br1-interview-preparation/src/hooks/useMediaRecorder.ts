@@ -42,12 +42,10 @@ const useMediaRecorder = (): UseMediaRecorderResult => {
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
           recordedChunksRef.current.push(event.data);
-          console.log('Chunk added, size:', event.data.size);
         }
       };
 
       mediaRecorder.start();
-      console.log('MediaRecorder started', mediaRecorder);
     } catch (error) {
       console.error('Error accessing media devices:', error);
       setPermissionError(
@@ -62,7 +60,6 @@ const useMediaRecorder = (): UseMediaRecorderResult => {
         const recorder = mediaRecorderRef.current;
 
         const handleStop = () => {
-          console.log('MediaRecorder stopped');
           // Stop all media tracks
           mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
           resolve();

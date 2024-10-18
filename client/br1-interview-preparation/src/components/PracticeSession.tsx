@@ -40,16 +40,16 @@ const PracticeSession: FC = () => {
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Start or stop media recording based on `state.isRecording`
+  // Start media recording
   useEffect(() => {
     if (state.isRecording && videoRef.current) {
       startMediaRecording(videoRef.current);
     } else if (!state.isRecording) {
-      cleanupMediaRecording();
+      cleanupVideoPreview();
     }
 
     return () => {
-      cleanupMediaRecording();
+      cleanupVideoPreview();
     };
   }, [state.isRecording, startMediaRecording]);
 
@@ -84,19 +84,29 @@ const PracticeSession: FC = () => {
     fetchNextQuestion();
   };
 
-  const cleanupMediaRecording = () => {
+  const cleanupVideoPreview = () => {
     if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.srcObject = null;
     }
   };
 
+  // TODO: review
+  const handleSkipQuestion = async () => {
+    stopRecording();
+    await stopMediaRecording();
+    resetRecordedChunks();
+    cleanupVideoPreview();
+    fetchNextQuestion();
+  };
+
+  // TODO: review
   const handleEndSession = async () => {
     endSession();
     stopRecording();
     await stopMediaRecording();
     resetRecordedChunks();
-    cleanupMediaRecording();
+    cleanupVideoPreview();
   };
 
   // TODO: create components
@@ -140,14 +150,23 @@ const PracticeSession: FC = () => {
             <div>
               <h2>Question:</h2>
               <p>{state.currentQuestion.content}</p>
+
               {state.showHint && (
                 <p>Hint: {state.currentQuestion.hint || 'No Hint ...'}</p>
               )}
+
               <button
                 onClick={toggleShowHint}
                 className="bg-blue-600 text-white px-4 py-2 rounded-md"
               >
                 Toggle Hint
+              </button>
+
+              <button
+                onClick={handleSkipQuestion}
+                className="bg-yellow-600 text-white px-4 py-2 rounded-md"
+              >
+                Skip Question
               </button>
             </div>
           )}
