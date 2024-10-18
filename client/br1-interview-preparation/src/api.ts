@@ -6,6 +6,8 @@ import {
   Question,
   questionSchema,
   questionsSchema,
+  QuestionWithAnswers,
+  questionWithAnswersSchema,
   submittedAnswerIdSchema,
 } from './types';
 
@@ -20,6 +22,12 @@ export const fetchCategory = (categoryId: string): Promise<Category> => {
 export const fetchQuestions = (categoryId?: string): Promise<Question[]> => {
   const searchQuery = categoryId ? `?categoryId=${categoryId}` : '';
   return fetchData(`questions${searchQuery}`, questionsSchema);
+};
+
+export const fetchQuestion = (
+  questionId: string
+): Promise<QuestionWithAnswers> => {
+  return fetchData(`questions/${questionId}`, questionWithAnswersSchema);
 };
 
 export const fetchRandomQuestion = (

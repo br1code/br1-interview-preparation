@@ -3,6 +3,7 @@
 import { FC, useEffect, useRef } from 'react';
 import { usePracticeSession } from '@/contexts/PracticeSessionContext';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import useFetchCategory from '@/hooks/useFetchCategory';
 import useMediaRecorder from '@/hooks/useMediaRecorder';
 import { submitAnswer } from '@/api';
@@ -18,6 +19,8 @@ const PracticeSession: FC = () => {
     stopRecording,
     fetchNextQuestion,
     toggleShowHint,
+    addAnsweredQuestion,
+    addSkippedQuestion,
   } = usePracticeSession();
 
   const {
@@ -67,19 +70,20 @@ const PracticeSession: FC = () => {
       return;
     }
 
-    const questionId = state.currentQuestion?.id;
-    if (!questionId) {
-      console.error('Question ID is missing or invalid.');
+    const question = state.currentQuestion;
+    if (!question) {
+      console.error('Current question is missing or invalid.');
       return;
     }
 
     const formData = new FormData();
     formData.append('videoFile', videoBlob, 'answer.webm');
-    formData.append('questionId', state.currentQuestion?.id || '');
+    formData.append('questionId', question.id);
 
     await submitAnswer(formData);
     console.log('The answer was submitted.');
 
+    addAnsweredQuestion(question);
     resetRecordedChunks();
     fetchNextQuestion();
   };
@@ -97,6 +101,12 @@ const PracticeSession: FC = () => {
     await stopMediaRecording();
     resetRecordedChunks();
     cleanupVideoPreview();
+
+    const question = state.currentQuestion;
+    if (question) {
+      addSkippedQuestion(question);
+    }
+
     fetchNextQuestion();
   };
 
@@ -109,7 +119,72 @@ const PracticeSession: FC = () => {
     cleanupVideoPreview();
   };
 
-  // TODO: create components
+  // TODO: split into components
+  if (!state.sessionStarted && state.sessionEndTime) {
+    console.log(state);
+    const totalTimeSpent =
+      state.sessionEndTime - (state.sessionStartTime || state.sessionEndTime);
+    console.log(totalTimeSpent);
+    const totalTimeSpentSeconds = Math.floor(totalTimeSpent / 1000);
+    const minutes = Math.floor(totalTimeSpentSeconds / 60);
+    const seconds = totalTimeSpentSeconds % 60;
+
+    return (
+      <section>
+        <h1 className="text-2xl font-bold">Session Summary</h1>
+        <p>
+          Total time spent: {minutes} minutes {seconds} seconds
+        </p>
+
+        <h2 className="text-xl font-bold">Questions Answered</h2>
+        {state.answeredQuestions.length > 0 ? (
+          <ul>
+            {state.answeredQuestions.map((question, index) => (
+              <li key={index}>
+                <Link
+                  href={`/questions/${question.id}`}
+                  className="text-blue-600 underline"
+                >
+                  {question.content}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No questions answered.</p>
+        )}
+
+        <h2 className="text-xl font-bold">Questions Skipped</h2>
+        {state.skippedQuestions.length > 0 ? (
+          <ul>
+            {state.skippedQuestions.map((question, index) => (
+              <li key={index}>
+                <Link
+                  href={`/questions/${question.id}`}
+                  className="text-blue-600 underline"
+                >
+                  {question.content}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No questions skipped.</p>
+        )}
+
+        <button
+          onClick={() => {
+            startSession();
+          }}
+          className="bg-blue-600 text-white px-4 py-2 rounded-md"
+        >
+          Start New Session
+        </button>
+      </section>
+    );
+  }
+
+  // TODO: split into components
   if (!state.sessionStarted) {
     return (
       <section>
@@ -135,7 +210,7 @@ const PracticeSession: FC = () => {
     );
   }
 
-  // TODO: create components
+  // TODO: split into components
   return (
     <section>
       <h1 className="text-2xl font-bold">Practice Session</h1>

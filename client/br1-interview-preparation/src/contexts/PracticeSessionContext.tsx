@@ -21,6 +21,10 @@ interface PracticeSessionState {
   error: string | null;
   countdownValue: number;
   isCountingDown: boolean;
+  answeredQuestions: Question[];
+  skippedQuestions: Question[];
+  sessionStartTime: number | null;
+  sessionEndTime: number | null;
 }
 
 type PracticeSessionAction =
@@ -36,7 +40,12 @@ type PracticeSessionAction =
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'START_COUNTDOWN' }
   | { type: 'DECREMENT_COUNTDOWN' }
-  | { type: 'RESET_COUNTDOWN' };
+  | { type: 'RESET_COUNTDOWN' }
+  | { type: 'ADD_ANSWERED_QUESTION'; payload: Question }
+  | { type: 'ADD_SKIPPED_QUESTION'; payload: Question }
+  | { type: 'SET_SESSION_START_TIME'; payload: number }
+  | { type: 'SET_SESSION_END_TIME'; payload: number }
+  | { type: 'RESET_SESSION_STATISTICS' };
 
 interface PracticeSessionContextProps {
   state: PracticeSessionState;
@@ -54,6 +63,11 @@ interface PracticeSessionContextProps {
   startCountdown: () => void;
   decrementCountdown: () => void;
   resetCountdown: () => void;
+  addAnsweredQuestion: (question: Question) => void;
+  addSkippedQuestion: (question: Question) => void;
+  setSessionStartTime: (timestamp: number) => void;
+  setSessionEndTime: (timestamp: number) => void;
+  resetSessionStatistics: () => void;
 }
 
 const INITIAL_COUNTDOWN_VALUE = 5;
@@ -69,6 +83,10 @@ const initialState: PracticeSessionState = {
   error: null,
   countdownValue: INITIAL_COUNTDOWN_VALUE,
   isCountingDown: false,
+  answeredQuestions: [],
+  skippedQuestions: [],
+  sessionStartTime: null,
+  sessionEndTime: null,
 };
 
 const reducer = (
@@ -121,6 +139,33 @@ const reducer = (
     case 'RESET_COUNTDOWN':
       return { ...state, countdownValue: 5, isCountingDown: false };
 
+    case 'ADD_ANSWERED_QUESTION':
+      return {
+        ...state,
+        answeredQuestions: [...state.answeredQuestions, action.payload],
+      };
+
+    case 'ADD_SKIPPED_QUESTION':
+      return {
+        ...state,
+        skippedQuestions: [...state.skippedQuestions, action.payload],
+      };
+
+    case 'SET_SESSION_START_TIME':
+      return { ...state, sessionStartTime: action.payload };
+
+    case 'SET_SESSION_END_TIME':
+      return { ...state, sessionEndTime: action.payload };
+
+    case 'RESET_SESSION_STATISTICS':
+      return {
+        ...state,
+        answeredQuestions: [],
+        skippedQuestions: [],
+        sessionStartTime: null,
+        sessionEndTime: null,
+      };
+
     default:
       return state;
   }
@@ -138,14 +183,6 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  const startSession = useCallback(() => {
-    dispatch({ type: 'START_SESSION' });
-  }, []);
-
-  const endSession = useCallback(() => {
-    dispatch({ type: 'END_SESSION' });
-  }, []);
 
   const setCurrentQuestion = useCallback((question: Question | null) => {
     dispatch({ type: 'SET_CURRENT_QUESTION', payload: question });
@@ -191,11 +228,44 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
     dispatch({ type: 'RESET_COUNTDOWN' });
   }, []);
 
+  const addAnsweredQuestion = useCallback((question: Question) => {
+    dispatch({ type: 'ADD_ANSWERED_QUESTION', payload: question });
+  }, []);
+
+  const addSkippedQuestion = useCallback((question: Question) => {
+    dispatch({ type: 'ADD_SKIPPED_QUESTION', payload: question });
+  }, []);
+
+  const setSessionStartTime = useCallback((timestamp: number) => {
+    dispatch({ type: 'SET_SESSION_START_TIME', payload: timestamp });
+  }, []);
+
+  const setSessionEndTime = useCallback((timestamp: number) => {
+    dispatch({ type: 'SET_SESSION_END_TIME', payload: timestamp });
+  }, []);
+
+  const resetSessionStatistics = useCallback(() => {
+    dispatch({ type: 'RESET_SESSION_STATISTICS' });
+  }, []);
+
+  const startSession = useCallback(() => {
+    dispatch({ type: 'START_SESSION' });
+    resetSessionStatistics();
+    setSessionStartTime(Date.now());
+  }, [setSessionStartTime, resetSessionStatistics]);
+
+  const endSession = useCallback(() => {
+    dispatch({ type: 'END_SESSION' });
+    setSessionEndTime(Date.now());
+  }, [setSessionEndTime]);
+
   const fetchNextQuestion = useCallback(async () => {
     try {
       setLoadingQuestion(true);
+      setCurrentQuestion(null);
       setError(null);
       setShowHint(false);
+      resetCountdown();
 
       const question = await fetchRandomQuestion(state.category?.id);
 
@@ -217,6 +287,7 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
     setError,
     setLoadingQuestion,
     setShowHint,
+    resetCountdown,
   ]);
 
   // Fetch initial question when session started and category was set
@@ -272,6 +343,11 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
       startCountdown,
       decrementCountdown,
       resetCountdown,
+      addAnsweredQuestion,
+      addSkippedQuestion,
+      setSessionStartTime,
+      setSessionEndTime,
+      resetSessionStatistics,
     }),
     [
       state,
@@ -289,6 +365,11 @@ const PracticeSessionProvider: FC<PracticeSessionProviderProps> = ({
       startCountdown,
       decrementCountdown,
       resetCountdown,
+      addAnsweredQuestion,
+      addSkippedQuestion,
+      setSessionStartTime,
+      setSessionEndTime,
+      resetSessionStatistics,
     ]
   );
 
