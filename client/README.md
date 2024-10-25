@@ -39,7 +39,6 @@ This page allows users to practice answering questions and record their response
   - A 5-second countdown before the recording starts, giving users time to prepare.
 - **Hint Button**
   - Allows users to show or hide a hint associated with the question.
-  - **Note:** The hint cannot be toggled during recording.
 - **Recording Interface**
   - Automatically starts recording the user's camera and microphone after the countdown.
   - Displays a "Submit Answer" button to end the recording.

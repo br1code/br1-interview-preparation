@@ -34,8 +34,12 @@ const StartPractice: FC<StartPracticeProps> = ({ categoriesOptions }) => {
   };
 
   return (
-    <section>
-      <select value={selectedCategory?.value} onChange={onSelectCategory}>
+    <section className="flex flex-col items-center">
+      <select
+        value={selectedCategory?.value}
+        onChange={onSelectCategory}
+        className="mb-4 px-4 py-2 border border-gray-300 rounded-md w-full"
+      >
         <option value="">All Categories</option>
         {categoriesOptions.map((category) => (
           <option key={category.value} value={category.value}>
@@ -43,7 +47,12 @@ const StartPractice: FC<StartPracticeProps> = ({ categoriesOptions }) => {
           </option>
         ))}
       </select>
-      <button onClick={onStartPractice}>Start Practice</button>
+      <button
+        onClick={onStartPractice}
+        className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition"
+      >
+        Start Practice
+      </button>
     </section>
   );
 };
