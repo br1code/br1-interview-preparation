@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { DropdownOption, Answer } from '@/types';
 import useFetchQuestion from '@/hooks/useFetchQuestion';
-import { updateQuestion, deleteAnswer, deleteQuestion } from '@/api';
+import { updateQuestion, deleteQuestion } from '@/api';
 
 interface QuestionDetailsProps {
   questionId: string;
@@ -19,6 +19,7 @@ interface FormValues {
   categoryId: string;
 }
 
+// TODO: try to split into multiple components
 const QuestionDetails: FC<QuestionDetailsProps> = ({
   questionId,
   categoriesOptions,
@@ -46,17 +47,6 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     await updateQuestion(questionId, data);
     alert('Question updated successfully');
-  };
-
-  // TODO: stop using `confirm`
-  const handleDeleteAnswer = async (answerId: string) => {
-    if (confirm('Are you sure you want to delete this answer?')) {
-      await deleteAnswer(answerId);
-      setAnswers((prevAnswers) =>
-        prevAnswers.filter((answer) => answer.id !== answerId)
-      );
-      alert('Answer deleted successfully');
-    }
   };
 
   // TODO: stop using `confirm`
@@ -150,19 +140,14 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({
       {answers.length > 0 ? (
         <ul className="mb-4">
           {answers.map((answer) => (
-            <li key={answer.id} className="mb-4">
+            <li key={answer.id} className="mb-4 list-disc">
               <Link
                 href={`/answers/${answer.id}`}
                 className="text-blue-600 underline mb-2 block"
+                target="_blank"
               >
                 {new Date(answer.createdAt).toLocaleString()}
               </Link>
-              <button
-                onClick={() => handleDeleteAnswer(answer.id)}
-                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
-              >
-                Delete Answer
-              </button>
             </li>
           ))}
         </ul>
@@ -171,9 +156,11 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({
       )}
 
       {/* Return to Homepage */}
-      <Link href="/" className="text-blue-600 underline hover:text-blue-800">
-        Return to Homepage
-      </Link>
+      <div className="text-center">
+        <Link href="/" className="text-blue-600 underline hover:text-blue-800">
+          Return to Homepage
+        </Link>
+      </div>
     </div>
   );
 };

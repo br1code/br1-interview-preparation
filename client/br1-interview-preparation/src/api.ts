@@ -1,5 +1,7 @@
 import { deleteData, fetchData, postData, putData } from './http';
 import {
+  Answer,
+  answerSchema,
   categoriesSchema,
   Category,
   categorySchema,
@@ -50,6 +52,10 @@ export const updateQuestion = (
 
 export const deleteQuestion = (questionId: string): Promise<void> => {
   return deleteData(`questions/${questionId}`);
+};
+
+export const fetchAnswerMetadata = (answerId: string): Promise<Answer> => {
+  return fetchData(`answers/${answerId}/metadata`, answerSchema);
 };
 
 export const deleteAnswer = (answerId: string): Promise<void> => {

@@ -9,6 +9,7 @@ This project is a **Next.js** application that serves as the frontend for the in
     - [Questions List Page (`/questions`)](#questions-list-page-questions)
     - [Add Question Page (`/questions/add`)](#add-question-page-questionsadd)
     - [Question Detail Page (`/questions/{id}`)](#question-detail-page-questionsid)
+    - [Answer Detail Page (`/answers/{id}`)](#answer-detail-page-answersid)
   - [API Endpoints](#api-endpoints)
   - [Getting Started](#getting-started)
   - [Contributing](#contributing)
@@ -103,14 +104,24 @@ Provides detailed information about a specific question and its submitted answer
 - **Update Question Button**
   - Saves any changes made to the question content, hint, or category.
     - **Endpoint:** `PUT /api/questions/{id}`
+- **Delete Question Button**
+  - Displays a confirmation modal before deleting the question. The users gets redirected to the homepage.
+    - **Endpoint:** `DELETE /api/questions/{id}`
 - **Submitted Answers**
   - Lists all video recordings submitted for this question, sorted by creation date.
   - Each answer includes:
     - A link to play back the video. The text of the link displays the creation date.
       - **Endpoint:** `GET /api/answers/{id}`
-    - A "Delete" button to remove the answer and its associated video file.
-      - Displays a confirmation modal before deletion.
-      - **Endpoint:** `DELETE /api/answers/{id}`
+
+### Answer Detail Page (`/answers/{id}`)
+
+Displays a video player with the recorded answer. Allows users to delete the answer.
+
+- Displays the submission date (createdAt).
+- A "Delete" button to remove the answer and its associated video file.
+  - Displays a confirmation modal before deletion.
+  - **Endpoint:** `DELETE /api/answers/{id}`
+- A link to the Question Details page.
 
 ## API Endpoints
 
