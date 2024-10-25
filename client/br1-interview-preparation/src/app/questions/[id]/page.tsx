@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import Link from 'next/link';
-import { fetchQuestion } from '@/api';
+import { fetchCategories } from '@/api';
+import QuestionDetails from '@/components/questions/QuestionDetails';
+import { toDropdownOptions } from '@/utils';
 
 interface QuestionProps {
   params: {
@@ -10,25 +11,19 @@ interface QuestionProps {
 
 const Question: FC<QuestionProps> = async ({ params }) => {
   const { id } = params;
-
-  const question = await fetchQuestion(id);
+  const categories = await fetchCategories();
 
   return (
-    <main>
-      <h1 className="text-4xl">{question.content}</h1>
-      <h3 className="text-2xl">Answers</h3>
-      <ul>
-        {question.answers?.map((answer) => (
-          <li key={answer.id}>
-            <Link
-              href={`/answers/${answer.id}`}
-              className="text-blue-600 underline"
-            >
-              {answer.videoFilename}
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <main className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+      <div className="w-full max-w-3xl bg-white p-8 shadow-md rounded-lg">
+        <h1 className="text-4xl font-bold mb-6 text-center">
+          Question Details
+        </h1>
+        <QuestionDetails
+          questionId={id}
+          categoriesOptions={toDropdownOptions(categories)}
+        />
+      </div>
     </main>
   );
 };

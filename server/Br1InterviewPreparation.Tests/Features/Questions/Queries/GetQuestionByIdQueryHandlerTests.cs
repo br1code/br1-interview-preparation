@@ -33,7 +33,8 @@ public class GetQuestionByIdQueryHandlerTests
         { 
             Id = Guid.NewGuid(), 
             QuestionId = questionId, 
-            VideoFilename = "123.mp4" 
+            VideoFilename = "123.mp4",
+            CreatedAt = DateTime.Now,
         };
         question.Answers.Add(answer);
 

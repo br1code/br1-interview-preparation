@@ -21,7 +21,8 @@ public class GetAnswerByIdQueryHandler(IAnswerRepository repository) : IRequestH
         {
             Id = answer.Id,
             QuestionId = answer.QuestionId,
-            VideoFilename = answer.VideoFilename
+            VideoFilename = answer.VideoFilename,
+            CreatedAt = answer.CreatedAt,
         };
     }
 }

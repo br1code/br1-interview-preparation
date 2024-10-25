@@ -29,6 +29,7 @@ public class GetQuestionByIdQueryHandler(IQuestionRepository repository) : IRequ
                 Id = a.Id,
                 QuestionId = a.Id,
                 VideoFilename = a.VideoFilename,
+                CreatedAt = a.CreatedAt
             })
         };
     }

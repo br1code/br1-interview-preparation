@@ -24,7 +24,10 @@ export const answerSchema = z.object({
   id: z.string(),
   questionId: z.string(),
   videoFilename: z.string(),
+  createdAt: z.string(),
 });
+
+export type Answer = z.infer<typeof answerSchema>;
 
 export const questionWithAnswersSchema = z.object({
   id: z.string(),

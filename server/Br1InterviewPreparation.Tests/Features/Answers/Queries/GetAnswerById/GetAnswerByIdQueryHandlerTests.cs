@@ -27,7 +27,8 @@ public class GetAnswerByIdQueryHandlerTests
         {
             Id = answerId,
             QuestionId = questionId,
-            VideoFilename = "123.mp4"
+            VideoFilename = "123.mp4",
+            CreatedAt = DateTime.Now,
         };
 
         _answerRepositoryMock
@@ -43,7 +44,8 @@ public class GetAnswerByIdQueryHandlerTests
         Assert.NotNull(result);
         Assert.Equal(answerId, result.Id);
         Assert.Equal(questionId, result.QuestionId);
-        Assert.Equal("123.mp4", result.VideoFilename);
+        Assert.Equal(answer.VideoFilename, result.VideoFilename);
+        Assert.Equal(answer.CreatedAt, result.CreatedAt);
         _answerRepositoryMock
             .Verify(r => r.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()), Times.Once);
     }

@@ -48,3 +48,44 @@ export async function postData<T, U>(
     throw new Error(`Failed to submit data: ${(error as Error).message}`);
   }
 }
+
+export async function putData<T, U>(url: string, data: U): Promise<T> {
+  try {
+    const response = await fetch(`${API_URL}/${url}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('Resource not found');
+      } else if (response.status === 400) {
+        throw new Error('Validation error occurred');
+      }
+      throw new Error('Failed to update data');
+    }
+
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw new Error(`Failed to update data: ${(error as Error).message}`);
+  }
+}
+
+export async function deleteData(url: string): Promise<void> {
+  try {
+    const response = await fetch(`${API_URL}/${url}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('Resource not found');
+      }
+      throw new Error('Failed to delete data');
+    }
+  } catch (error) {
+    throw new Error(`Failed to delete data: ${(error as Error).message}`);
+  }
+}

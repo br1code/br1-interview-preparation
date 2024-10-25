@@ -1,4 +1,4 @@
-import { fetchData, postData } from './http';
+import { deleteData, fetchData, postData, putData } from './http';
 import {
   categoriesSchema,
   Category,
@@ -39,4 +39,19 @@ export const fetchRandomQuestion = (
 
 export const submitAnswer = (data: FormData): Promise<string> => {
   return postData('answers', submittedAnswerIdSchema, data);
+};
+
+export const updateQuestion = (
+  questionId: string,
+  data: Omit<Question, 'id'>
+): Promise<Question> => {
+  return putData(`questions/${questionId}`, data);
+};
+
+export const deleteQuestion = (questionId: string): Promise<void> => {
+  return deleteData(`questions/${questionId}`);
+};
+
+export const deleteAnswer = (answerId: string): Promise<void> => {
+  return deleteData(`answers/${answerId}`);
 };

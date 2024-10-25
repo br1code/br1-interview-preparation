@@ -106,7 +106,7 @@ Provides detailed information about a specific question and its submitted answer
 - **Submitted Answers**
   - Lists all video recordings submitted for this question, sorted by creation date.
   - Each answer includes:
-    - A link to play back the video.
+    - A link to play back the video. The text of the link displays the creation date.
       - **Endpoint:** `GET /api/answers/{id}`
     - A "Delete" button to remove the answer and its associated video file.
       - Displays a confirmation modal before deletion.
