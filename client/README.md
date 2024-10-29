@@ -10,7 +10,6 @@ This project is a **Next.js** application that serves as the frontend for the in
     - [Add Question Page (`/questions/add`)](#add-question-page-questionsadd)
     - [Question Detail Page (`/questions/{id}`) ✅](#question-detail-page-questionsid-)
     - [Answer Detail Page (`/answers/{id}`) ✅](#answer-detail-page-answersid-)
-  - [API Endpoints](#api-endpoints)
   - [Getting Started](#getting-started)
   - [Contributing](#contributing)
   - [License](#license)
@@ -126,24 +125,6 @@ Displays a video player with the recorded answer. Allows users to delete the ans
   - Displays a confirmation modal before deletion.
   - **Endpoint:** `DELETE /api/answers/{id}`
 - A link to the Question Details page. ✅
-
-## API Endpoints
-
-For reference, here are the key API endpoints used by the client application:
-
-- **Categories**
-  - `GET /api/categories`: Retrieves all categories.
-- **Questions**
-  - `GET /api/questions?categoryId={Guid}`: Retrieves questions, optionally filtered by category.
-  - `GET /api/questions/random?categoryId={Guid}`: Retrieves a random question, optionally filtered by category.
-  - `GET /api/questions/{id}`: Gets a specific question and its answers.
-  - `POST /api/questions`: Adds a new question.
-  - `PUT /api/questions/{id}`: Updates a question.
-  - `DELETE /api/questions/{id}`: Deletes a question and its answers.
-- **Answers**
-  - `POST /api/answers`: Uploads a new answer video for a question.
-  - `GET /api/answers/{id}`: Streams the video associated with the specific answer ID.
-  - `DELETE /api/answers/{id}`: Deletes an answer and its associated video file.
 
 ## Getting Started
 
