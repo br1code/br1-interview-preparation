@@ -66,7 +66,6 @@ const PracticeQuestion: FC = () => {
     formData.append('questionId', question.id);
 
     await submitAnswer(formData);
-    console.log('The answer was submitted.');
 
     addAnsweredQuestion(question);
     resetRecordedChunks();

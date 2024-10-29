@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { usePracticeSession } from '@/contexts/PracticeSessionContext';
+import { getUniqueItemsWithCount } from '@/utils';
 
 const SessionSummary: FC = () => {
   const { state, startSession } = usePracticeSession();
@@ -12,6 +13,15 @@ const SessionSummary: FC = () => {
   const minutes = Math.floor(totalTimeSpentSeconds / 60);
   const seconds = totalTimeSpentSeconds % 60;
 
+  const answeredQuestionsWithCount = getUniqueItemsWithCount(
+    state.answeredQuestions,
+    'id'
+  );
+  const skippedQuestionsWithCount = getUniqueItemsWithCount(
+    state.skippedQuestions,
+    'id'
+  );
+
   return (
     <section className="text-center">
       <h1 className="text-3xl font-bold mb-4">Session Summary</h1>
@@ -19,17 +29,20 @@ const SessionSummary: FC = () => {
         Total time spent: {minutes} minutes {seconds} seconds
       </p>
 
-      <h2 className="text-2xl font-semibold mb-2">Questions Answered</h2>
-      {state.answeredQuestions.length > 0 ? (
+      <h2 className="text-2xl font-semibold mb-2">
+        Questions Answered: {state.answeredQuestions.length}
+      </h2>
+      {answeredQuestionsWithCount.length > 0 ? (
         <ul className="list-disc list-inside mb-4">
-          {state.answeredQuestions.map((question, index) => (
+          {answeredQuestionsWithCount.map(({ item, count }, index) => (
             <li key={index}>
               <Link
-                href={`/questions/${question.id}`}
+                href={`/questions/${item.id}`}
                 className="text-blue-600 underline"
               >
-                {question.content}
-              </Link>
+                {item.content}
+              </Link>{' '}
+              {count > 1 ? `(answered ${count} times)` : `(answered once)`}
             </li>
           ))}
         </ul>
@@ -37,17 +50,20 @@ const SessionSummary: FC = () => {
         <p className="mb-4">No questions answered.</p>
       )}
 
-      <h2 className="text-2xl font-semibold mb-2">Questions Skipped</h2>
-      {state.skippedQuestions.length > 0 ? (
+      <h2 className="text-2xl font-semibold mb-2">
+        Questions Skipped: {state.skippedQuestions.length}
+      </h2>
+      {skippedQuestionsWithCount.length > 0 ? (
         <ul className="list-disc list-inside mb-6">
-          {state.skippedQuestions.map((question, index) => (
+          {skippedQuestionsWithCount.map(({ item, count }, index) => (
             <li key={index}>
               <Link
-                href={`/questions/${question.id}`}
+                href={`/questions/${item.id}`}
                 className="text-blue-600 underline"
               >
-                {question.content}
-              </Link>
+                {item.content}
+              </Link>{' '}
+              {count > 1 ? `(skipped ${count} times)` : `(skipped once)`}
             </li>
           ))}
         </ul>

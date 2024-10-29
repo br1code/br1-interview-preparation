@@ -4,12 +4,12 @@ This project is a **Next.js** application that serves as the frontend for the in
 
 - [Client](#client)
   - [Pages Overview](#pages-overview)
-    - [Homepage (`/`)](#homepage-)
+    - [Homepage (`/`) ✅](#homepage--)
     - [Practice Session Page (`/practice`)](#practice-session-page-practice)
     - [Questions List Page (`/questions`)](#questions-list-page-questions)
     - [Add Question Page (`/questions/add`)](#add-question-page-questionsadd)
-    - [Question Detail Page (`/questions/{id}`)](#question-detail-page-questionsid)
-    - [Answer Detail Page (`/answers/{id}`)](#answer-detail-page-answersid)
+    - [Question Detail Page (`/questions/{id}`) ✅](#question-detail-page-questionsid-)
+    - [Answer Detail Page (`/answers/{id}`) ✅](#answer-detail-page-answersid-)
   - [API Endpoints](#api-endpoints)
   - [Getting Started](#getting-started)
   - [Contributing](#contributing)
@@ -17,15 +17,15 @@ This project is a **Next.js** application that serves as the frontend for the in
 
 ## Pages Overview
 
-### Homepage (`/`)
+### Homepage (`/`) ✅
 
 The homepage serves as the starting point for users to begin practicing interview questions.
 
-- **Category Selection Dropdown**
+- **Category Selection Dropdown** ✅
   - Fetches categories from the backend and displays them in a dropdown menu.
     - **Endpoint:** `GET /api/categories`
   - Users can select a specific category or choose "All Categories" to include questions from all categories.
-- **Start Button**
+- **Start Button** ✅
   - Begins the practice session with questions from the selected category.
   - Redirects the user to the `/practice` route.
 
@@ -33,29 +33,33 @@ The homepage serves as the starting point for users to begin practicing intervie
 
 This page allows users to practice answering questions and record their responses.
 
-- **Question Display**
+- **Introduction Screen** ✅
+  - Explains how the Practice Session works. Displays the selected category (if any).
+- **Start Session Button** ✅
+  - Starts the Practice Session using the selected category (if any).
+- **Question Display** ✅
   - Shows a random question from the selected category.
     - **Endpoint:** `GET /api/questions/random?categoryId={Guid}`
-- **Countdown Timer**
+- **Countdown Timer** ✅
   - A 5-second countdown before the recording starts, giving users time to prepare.
-- **Hint Button**
+- **Hint Button** ✅
   - Allows users to show or hide a hint associated with the question.
-- **Recording Interface**
+- **Recording Interface** ✅
   - Automatically starts recording the user's camera and microphone after the countdown.
   - Displays a "Submit Answer" button to end the recording.
   - Upon stopping, the video is uploaded to the backend as a new answer.
     - **Endpoint:** `POST /api/answers`
-- **Skip Button**
+- **Skip Question Button** ✅
   - Allows users to skip the current question and receive another random question.
-- **Loop Mechanism**
+- **Loop Mechanism** ✅
   - After each recording or skipped question, a new random question appears.
   - The session continues indefinitely until the user decides to stop.
-- **End Screen**
+- **End Screen** ✅
   - Displays session statistics such as:
-    - Number of questions answered
-    - Number of questions skipped
-    - Total time spent
-  - Provides an option to review recorded answers or return to the homepage.
+    - Number of questions answered (with links to each Question)
+    - Number of questions skipped (with links to each Question)
+    - Total time spent (minutes, seconds)
+  - Provides buttons to start a new session or return to the homepage.
 
 ### Questions List Page (`/questions`)
 
@@ -88,40 +92,40 @@ Allows users to add new questions to the platform.
     - Adds the new question to the database.
     - **Endpoint:** `POST /api/questions`
 
-### Question Detail Page (`/questions/{id}`)
+### Question Detail Page (`/questions/{id}`) ✅
 
 Provides detailed information about a specific question and its submitted answers.
 
-- **Fetch Question and Answers**
+- **Fetch Question and Answers** ✅
   - Retrieves the question details and associated answers.
     - **Endpoint:** `GET /api/questions/{id}`
-- **Question Content and Hint**
+- **Question Content and Hint** ✅
   - Displays the question content and hint in editable text areas.
   - Users can update these fields as needed.
-- **Category Selection Dropdown**
+- **Category Selection Dropdown** ✅
   - Allows users to change the category of the question.
     - **Endpoint:** `GET /api/categories`
-- **Update Question Button**
+- **Update Question Button** ✅
   - Saves any changes made to the question content, hint, or category.
     - **Endpoint:** `PUT /api/questions/{id}`
-- **Delete Question Button**
+- **Delete Question Button** ✅
   - Displays a confirmation modal before deleting the question. The users gets redirected to the homepage.
     - **Endpoint:** `DELETE /api/questions/{id}`
-- **Submitted Answers**
+- **Submitted Answers** ✅
   - Lists all video recordings submitted for this question, sorted by creation date.
   - Each answer includes:
     - A link to play back the video. The text of the link displays the creation date.
       - **Endpoint:** `GET /api/answers/{id}`
 
-### Answer Detail Page (`/answers/{id}`)
+### Answer Detail Page (`/answers/{id}`) ✅
 
 Displays a video player with the recorded answer. Allows users to delete the answer.
 
-- Displays the submission date (createdAt).
-- A "Delete" button to remove the answer and its associated video file.
+- Displays the submission date (createdAt). ✅
+- A "Delete" button to remove the answer and its associated video file. ✅
   - Displays a confirmation modal before deletion.
   - **Endpoint:** `DELETE /api/answers/{id}`
-- A link to the Question Details page.
+- A link to the Question Details page. ✅
 
 ## API Endpoints
 
