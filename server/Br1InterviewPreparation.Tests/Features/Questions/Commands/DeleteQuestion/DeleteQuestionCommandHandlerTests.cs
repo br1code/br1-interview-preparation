@@ -74,5 +74,6 @@ public class DeleteQuestionCommandHandlerTests
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
         _questionRepositoryMock.Verify(r => r.DeleteQuestionAsync(It.IsAny<Question>(), It.IsAny<CancellationToken>()), Times.Never);
+        _videoStorageServiceMock.Verify(s => s.DeleteVideoFile(It.IsAny<string>()), Times.Never);
     }
 }
