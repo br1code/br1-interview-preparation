@@ -148,8 +148,6 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({
               <Link
                 href={`/answers/${answer.id}`}
                 className="text-blue-600 underline mb-2 block"
-                target="_blank"
-                rel="noopener noreferrer"
               >
                 {new Date(answer.createdAt).toLocaleString()}
               </Link>

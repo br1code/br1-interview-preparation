@@ -25,6 +25,7 @@ const useFetchCategory = (
       }
 
       try {
+        setLoading(true);
         setError(null);
         const fetchedCategory = await fetchCategory(categoryId);
         setCategory(fetchedCategory);

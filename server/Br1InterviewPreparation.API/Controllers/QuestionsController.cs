@@ -22,7 +22,7 @@ namespace Br1InterviewPreparation.API.Controllers
         /// <returns>A list of questions.</returns>
         /// <response code="200">Returns the list of questions</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<QuestionDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<QuestionSummaryDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetQuestions([FromQuery] Guid? categoryId = null)
         {
             var query = new GetQuestionsQuery { CategoryId = categoryId };
@@ -37,7 +37,7 @@ namespace Br1InterviewPreparation.API.Controllers
         /// <returns>The question with its answers.</returns>
         /// <response code="200">A question.</response>
         /// <response code="404">Question not found.</response>
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(QuestionWithAnswersDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetQuestionById(Guid id)
@@ -87,7 +87,7 @@ namespace Br1InterviewPreparation.API.Controllers
         /// <response code="200">Question updated successfully.</response>
         /// <response code="400">Validation error occurred.</response>
         /// <response code="404">Question not found.</response>
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(QuestionDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -111,7 +111,7 @@ namespace Br1InterviewPreparation.API.Controllers
         /// <returns>No content.</returns>
         /// <response code="204">Question deleted successfully.</response>
         /// <response code="404">Question not found.</response>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteQuestion(Guid id)

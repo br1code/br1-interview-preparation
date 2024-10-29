@@ -7,11 +7,12 @@ import {
   categorySchema,
   Question,
   questionSchema,
-  questionsSchema,
   QuestionWithAnswers,
   questionWithAnswersSchema,
   createdEntityIdSchema,
   AddQuestion,
+  QuestionSummary,
+  questionSummariesSchema,
 } from './types';
 
 // Categories
@@ -26,9 +27,11 @@ export const fetchCategory = (categoryId: string): Promise<Category> => {
 
 // Questions
 
-export const fetchQuestions = (categoryId?: string): Promise<Question[]> => {
+export const fetchQuestions = (
+  categoryId?: string | null
+): Promise<QuestionSummary[]> => {
   const searchQuery = categoryId ? `?categoryId=${categoryId}` : '';
-  return fetchData(`questions${searchQuery}`, questionsSchema);
+  return fetchData(`questions${searchQuery}`, questionSummariesSchema);
 };
 
 export const fetchQuestion = (

@@ -6,7 +6,7 @@ This project is a **Next.js** application that serves as the frontend for the in
   - [Pages Overview](#pages-overview)
     - [Homepage (`/`) ✅](#homepage--)
     - [Practice Session Page (`/practice`) ✅](#practice-session-page-practice-)
-    - [Questions List Page (`/questions`)](#questions-list-page-questions)
+    - [Questions List Page (`/questions`) ✅](#questions-list-page-questions-)
     - [Add Question Page (`/questions/add`) ✅](#add-question-page-questionsadd-)
     - [Question Detail Page (`/questions/{id}`) ✅](#question-detail-page-questionsid-)
     - [Answer Detail Page (`/answers/{id}`) ✅](#answer-detail-page-answersid-)
@@ -62,22 +62,22 @@ This page allows users to practice answering questions and record their response
     - Total time spent (minutes, seconds)
   - Provides buttons to start a new session or return to the homepage. ✅
 
-### Questions List Page (`/questions`)
+### Questions List Page (`/questions`) ✅
 
 This page lists all available questions and allows for management actions.
 
 - **Add Question Button** ✅
   - Redirects the user to the `/questions/add` route.
-- **Category Filter**
+- **Category Filter** ✅
   - Users can filter the questions by category using a dropdown.
     - **Endpoint:** `GET /api/categories`
-- **Question List**
-  - Displays all questions, optionally filtered by the selected category.
+- **Question List** ✅
+  - Displays all questions (Content, Category), optionally filtered by the selected category.
     - **Endpoint:** `GET /api/questions?categoryId={Guid}`
-  - Shows the number of submitted answers for each question.
+  - Shows the number of submitted answers for each question. ✅
   - Each question includes:
-    - A link to its detail page.
-    - A "Delete" button to remove the question and its associated answers.
+    - A link to its detail page. ✅
+    - A "Delete" button to remove the question and its associated answers. ✅
       - Displays a confirmation modal before deletion.
       - **Endpoint:** `DELETE /api/questions/{id}`
 

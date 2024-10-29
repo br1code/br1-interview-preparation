@@ -23,8 +23,8 @@ public class GetQuestionsQueryHandlerTests
         var categoryId = Guid.NewGuid();
         var questions = new List<Question>
         {
-            new Question { CategoryId = categoryId, Content = "What is an index?" },
-            new Question { CategoryId = categoryId, Content = "What is sharding?" },
+            new() { CategoryId = categoryId, Content = "What is an index?" },
+            new() { CategoryId = categoryId, Content = "What is sharding?" },
         };
 
         _repositoryMock
@@ -46,17 +46,17 @@ public class GetQuestionsQueryHandlerTests
     public async Task Handle_WithCategoryId_ReturnsFilteredQuestions()
     {
         // Arrange
-        var category = new Category { Id = Guid.NewGuid(), Name = "Databases" };
+        var categoryId = Guid.NewGuid();
         var questions = new List<Question>
         {
-            new Question { CategoryId = category.Id, Content = "What is an index?" },
+            new() { CategoryId = categoryId, Content = "What is an index?" },
         };
 
         _repositoryMock
-            .Setup(r => r.GetQuestionsAsync(category.Id, It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetQuestionsAsync(categoryId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(questions);
 
-        var query = new GetQuestionsQuery { CategoryId = category.Id };
+        var query = new GetQuestionsQuery { CategoryId = categoryId };
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);
@@ -65,7 +65,7 @@ public class GetQuestionsQueryHandlerTests
         Assert.NotNull(result);
         Assert.Single(result);
         Assert.Equal("What is an index?", result.First().Content);
-        _repositoryMock.Verify(r => r.GetQuestionsAsync(category.Id, It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(r => r.GetQuestionsAsync(categoryId, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]

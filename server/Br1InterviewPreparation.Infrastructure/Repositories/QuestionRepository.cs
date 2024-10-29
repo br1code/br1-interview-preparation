@@ -9,7 +9,9 @@ public class QuestionRepository(ApplicationDbContext context) : IQuestionReposit
 {
     public Task<List<Question>> GetQuestionsAsync(Guid? categoryId = null, CancellationToken cancellationToken = default)
     {
-        var query = context.Questions.AsNoTracking();
+        var query = context.Questions
+            .Include(q => q.Answers)
+            .AsNoTracking();
 
         if (categoryId != null && categoryId != Guid.Empty)
         {
@@ -22,15 +24,14 @@ public class QuestionRepository(ApplicationDbContext context) : IQuestionReposit
     public Task<Question?> GetQuestionByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return context.Questions
-            .AsNoTracking()
             .Include(q => q.Answers)
+            .AsNoTracking()
             .FirstOrDefaultAsync(q => q.Id == id, cancellationToken);
     }
 
     public Task<Question?> GetRandomQuestionAsync(Guid? categoryId = null, CancellationToken cancellationToken = default)
     {
-        var query = context.Questions
-            .AsNoTracking();
+        var query = context.Questions.AsNoTracking();
 
         if (categoryId != null && categoryId != Guid.Empty)
         {

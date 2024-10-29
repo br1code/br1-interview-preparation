@@ -16,6 +16,7 @@ const useFetchQuestion = (questionId: string): UseFetchQuestionResult => {
   useEffect(() => {
     const fetchAndSetQuestion = async () => {
       try {
+        setLoading(true);
         setError(null);
         const fetchedQuestion = await fetchQuestion(questionId);
         setQuestion(fetchedQuestion);

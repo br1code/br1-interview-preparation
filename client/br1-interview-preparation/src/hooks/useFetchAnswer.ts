@@ -16,6 +16,7 @@ const useFetchAnswer = (answerId: string): UseFetchAnswerResult => {
   useEffect(() => {
     const fetchAndSetAnswer = async () => {
       try {
+        setLoading(true);
         setError(null);
         const fetchedAnswer = await fetchAnswerMetadata(answerId);
         setAnswer(fetchedAnswer);
