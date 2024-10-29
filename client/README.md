@@ -5,7 +5,7 @@ This project is a **Next.js** application that serves as the frontend for the in
 - [Client](#client)
   - [Pages Overview](#pages-overview)
     - [Homepage (`/`) ✅](#homepage--)
-    - [Practice Session Page (`/practice`)](#practice-session-page-practice)
+    - [Practice Session Page (`/practice`) ✅](#practice-session-page-practice-)
     - [Questions List Page (`/questions`)](#questions-list-page-questions)
     - [Add Question Page (`/questions/add`)](#add-question-page-questionsadd)
     - [Question Detail Page (`/questions/{id}`) ✅](#question-detail-page-questionsid-)
@@ -29,7 +29,7 @@ The homepage serves as the starting point for users to begin practicing intervie
   - Begins the practice session with questions from the selected category.
   - Redirects the user to the `/practice` route.
 
-### Practice Session Page (`/practice`)
+### Practice Session Page (`/practice`) ✅
 
 This page allows users to practice answering questions and record their responses.
 

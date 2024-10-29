@@ -9,19 +9,20 @@ This project is a .NET 8 backend API that connects to a PostgreSQL database. It 
   - [Overview](#overview)
   - [API Endpoints](#api-endpoints)
     - [Categories](#categories)
-      - [`GET /api/categories`](#get-apicategories)
+      - [`GET /api/categories` ✅](#get-apicategories-)
+      - [`GET /api/categories/{id}` ✅](#get-apicategoriesid-)
     - [Questions](#questions)
-      - [`GET /api/questions?categoryId={Guid}`](#get-apiquestionscategoryidguid)
-      - [`GET /api/questions/random?categoryId={Guid}`](#get-apiquestionsrandomcategoryidguid)
-      - [`GET /api/questions/{id}`](#get-apiquestionsid)
-      - [`POST /api/questions`](#post-apiquestions)
-      - [`PUT /api/questions/{id}`](#put-apiquestionsid)
-      - [`DELETE /api/questions/{id}`](#delete-apiquestionsid)
+      - [`GET /api/questions?categoryId={Guid}` ✅](#get-apiquestionscategoryidguid-)
+      - [`GET /api/questions/random?categoryId={Guid}` ✅](#get-apiquestionsrandomcategoryidguid-)
+      - [`GET /api/questions/{id}` ✅](#get-apiquestionsid-)
+      - [`POST /api/questions` ✅](#post-apiquestions-)
+      - [`PUT /api/questions/{id}` ✅](#put-apiquestionsid-)
+      - [`DELETE /api/questions/{id}` ✅](#delete-apiquestionsid-)
     - [Answers](#answers)
-      - [`POST /api/answers`](#post-apianswers)
-      - [`GET /api/answers/{id}`](#get-apianswersid)
-      - [`GET /api/answers/{id}/metadata`](#get-apianswersidmetadata)
-      - [`DELETE /api/answers/{id}`](#delete-apianswersid)
+      - [`POST /api/answers` ✅](#post-apianswers-)
+      - [`GET /api/answers/{id}` ✅](#get-apianswersid-)
+      - [`GET /api/answers/{id}/metadata` ✅](#get-apianswersidmetadata-)
+      - [`DELETE /api/answers/{id}` ✅](#delete-apianswersid-)
   - [Database Entities](#database-entities)
     - [Categories](#categories-1)
     - [Questions](#questions-1)
@@ -48,7 +49,7 @@ The server application provides a RESTful API for:
 
 ### Categories
 
-#### `GET /api/categories`
+#### `GET /api/categories` ✅
 
 Retrieves all categories.
 
@@ -70,11 +71,27 @@ Retrieves all categories.
     ]
     ```
 
+#### `GET /api/categories/{id}` ✅
+
+Retrieves a specific category.
+
+- **Response:**
+
+  - **Status:** `200 OK`
+  - **Body:**
+
+    ```json
+    {
+      "id": "uuid",
+      "name": "Databases"
+    }
+    ```
+
 ---
 
 ### Questions
 
-#### `GET /api/questions?categoryId={Guid}`
+#### `GET /api/questions?categoryId={Guid}` ✅
 
 Retrieves questions and its answers, optionally filtered by category.
 
@@ -98,7 +115,7 @@ Retrieves questions and its answers, optionally filtered by category.
     ]
     ```
 
-#### `GET /api/questions/random?categoryId={Guid}`
+#### `GET /api/questions/random?categoryId={Guid}` ✅
 
 Retrieves a random question, optionally filtered by category.
 
@@ -120,7 +137,7 @@ Retrieves a random question, optionally filtered by category.
     }
     ```
 
-#### `GET /api/questions/{id}`
+#### `GET /api/questions/{id}` ✅
 
 Gets a specific question and its answers.
 
@@ -151,7 +168,7 @@ Gets a specific question and its answers.
     }
     ```
 
-#### `POST /api/questions`
+#### `POST /api/questions` ✅
 
 Adds a new question.
 
@@ -180,7 +197,7 @@ Adds a new question.
     "uuid"
     ```
 
-#### `PUT /api/questions/{id}`
+#### `PUT /api/questions/{id}` ✅
 
 Updates an existing question.
 
@@ -218,7 +235,7 @@ Updates an existing question.
     }
     ```
 
-#### `DELETE /api/questions/{id}`
+#### `DELETE /api/questions/{id}` ✅
 
 Deletes a question and its associated answers.
 
@@ -234,7 +251,7 @@ Deletes a question and its associated answers.
 
 ### Answers
 
-#### `POST /api/answers`
+#### `POST /api/answers` ✅
 
 Uploads a new answer video for a question.
 
@@ -258,7 +275,7 @@ Uploads a new answer video for a question.
     "uuid"
     ```
 
-#### `GET /api/answers/{id}`
+#### `GET /api/answers/{id}` ✅
 
 Streams the video associated with the specific answer ID.
 
@@ -279,7 +296,7 @@ Streams the video associated with the specific answer ID.
 
 - **Note:** This endpoint supports video streaming with byte-range requests.
 
-#### `GET /api/answers/{id}/metadata`
+#### `GET /api/answers/{id}/metadata` ✅
 
 Gets an answer and its metadata.
 
@@ -300,7 +317,7 @@ Gets an answer and its metadata.
     }
     ```
 
-#### `DELETE /api/answers/{id}`
+#### `DELETE /api/answers/{id}` ✅
 
 Deletes an answer and its associated video file.
 
