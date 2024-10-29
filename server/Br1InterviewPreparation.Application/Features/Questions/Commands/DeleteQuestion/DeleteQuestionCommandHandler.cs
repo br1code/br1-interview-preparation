@@ -5,7 +5,7 @@ using Br1InterviewPreparation.Domain.Entities;
 
 namespace Br1InterviewPreparation.Application.Features.Questions.Commands.DeleteQuestion;
 
-public class DeleteQuestionCommandHandler(IQuestionRepository questionRepository) : IRequestHandler<DeleteQuestionCommand, Unit>
+public class DeleteQuestionCommandHandler(IQuestionRepository questionRepository, IVideoStorageService videoStorageService) : IRequestHandler<DeleteQuestionCommand, Unit>
 {
     public async Task<Unit> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
     {
@@ -16,10 +16,12 @@ public class DeleteQuestionCommandHandler(IQuestionRepository questionRepository
             throw new NotFoundException(nameof(Question), request.Id);
         }
 
-        await questionRepository.DeleteQuestionAsync(question, cancellationToken);
+        foreach (var answer in question.Answers)
+        {
+            videoStorageService.DeleteVideoFile(answer.VideoFilename);
+        }
 
-        // TODO: Delete video files of related Answers when implemented.
-        // (we already delete Answer records from DB, we configured the model using Cascade delete behavior)
+        await questionRepository.DeleteQuestionAsync(question, cancellationToken);
 
         return Unit.Value;
     }

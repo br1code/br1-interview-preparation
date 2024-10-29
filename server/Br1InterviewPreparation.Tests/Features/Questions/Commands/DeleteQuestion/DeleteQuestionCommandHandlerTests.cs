@@ -9,13 +9,15 @@ namespace Br1InterviewPreparation.Tests.Features.Questions.Commands.DeleteQuesti
 
 public class DeleteQuestionCommandHandlerTests
 {
-    private readonly Mock<IQuestionRepository> _questionRepository;
+    private readonly Mock<IQuestionRepository> _questionRepositoryMock;
+    private readonly Mock<IVideoStorageService> _videoStorageServiceMock;
     private readonly DeleteQuestionCommandHandler _handler;
 
     public DeleteQuestionCommandHandlerTests()
     {
-        _questionRepository = new Mock<IQuestionRepository>();
-        _handler = new DeleteQuestionCommandHandler(_questionRepository.Object);
+        _questionRepositoryMock = new Mock<IQuestionRepository>();
+        _videoStorageServiceMock = new Mock<IVideoStorageService>();
+        _handler = new DeleteQuestionCommandHandler(_questionRepositoryMock.Object, _videoStorageServiceMock.Object);
     }
 
     [Fact]
@@ -24,14 +26,21 @@ public class DeleteQuestionCommandHandlerTests
         // Arrange
         var questionId = Guid.NewGuid();
 
+        var answers = new List<Answer>
+        {
+            new() { QuestionId = questionId, VideoFilename = "video.webm" },
+            new() { QuestionId = questionId, VideoFilename = "video.webm" },
+        };
+        
         var question = new Question
         {
             Id = questionId,
             CategoryId = Guid.NewGuid(),
-            Content = "What is an index?"
+            Content = "What is an index?",
+            Answers = answers, 
         };
 
-        _questionRepository
+        _questionRepositoryMock
             .Setup(r => r.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(question);
 
@@ -42,8 +51,9 @@ public class DeleteQuestionCommandHandlerTests
 
         // Assert
         Assert.Equal(Unit.Value, result);
-        _questionRepository.Verify(r => r.GetQuestionByIdAsync(command.Id, It.IsAny<CancellationToken>()), Times.Once);
-        _questionRepository.Verify(r => r.DeleteQuestionAsync(question, It.IsAny<CancellationToken>()), Times.Once);
+        _questionRepositoryMock.Verify(r => r.GetQuestionByIdAsync(command.Id, It.IsAny<CancellationToken>()), Times.Once);
+        _questionRepositoryMock.Verify(r => r.DeleteQuestionAsync(question, It.IsAny<CancellationToken>()), Times.Once);
+        _videoStorageServiceMock.Verify((s => s.DeleteVideoFile(It.IsAny<string>())), Times.Exactly(answers.Count));
     }
 
     [Fact]
@@ -52,7 +62,7 @@ public class DeleteQuestionCommandHandlerTests
         // Arrange
         var questionId = Guid.NewGuid();
 
-        _questionRepository
+        _questionRepositoryMock
             .Setup(r => r.GetQuestionByIdAsync(questionId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(value: null);
 
@@ -63,6 +73,6 @@ public class DeleteQuestionCommandHandlerTests
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
-        _questionRepository.Verify(r => r.DeleteQuestionAsync(It.IsAny<Question>(), It.IsAny<CancellationToken>()), Times.Never);
+        _questionRepositoryMock.Verify(r => r.DeleteQuestionAsync(It.IsAny<Question>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 }
