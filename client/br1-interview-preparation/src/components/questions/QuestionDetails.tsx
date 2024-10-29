@@ -13,7 +13,7 @@ interface QuestionDetailsProps {
   categoriesOptions: DropdownOption[];
 }
 
-interface FormValues {
+interface QuestionFormValues {
   content: string;
   hint: string;
   categoryId: string;
@@ -32,7 +32,7 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<QuestionFormValues>();
   const [answers, setAnswers] = useState<Answer[]>([]);
 
   useEffect(() => {
@@ -44,9 +44,13 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({
     }
   }, [question, setValue]);
 
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await updateQuestion(questionId, data);
-    alert('Question updated successfully');
+  const onSubmit: SubmitHandler<QuestionFormValues> = async (data) => {
+    try {
+      await updateQuestion(questionId, data);
+      alert('Question updated successfully');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // TODO: stop using `confirm`
@@ -145,6 +149,7 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({
                 href={`/answers/${answer.id}`}
                 className="text-blue-600 underline mb-2 block"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 {new Date(answer.createdAt).toLocaleString()}
               </Link>

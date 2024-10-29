@@ -10,8 +10,11 @@ import {
   questionsSchema,
   QuestionWithAnswers,
   questionWithAnswersSchema,
-  submittedAnswerIdSchema,
+  createdEntityIdSchema,
+  AddQuestion,
 } from './types';
+
+// Categories
 
 export const fetchCategories = (): Promise<Category[]> => {
   return fetchData('categories', categoriesSchema);
@@ -20,6 +23,8 @@ export const fetchCategories = (): Promise<Category[]> => {
 export const fetchCategory = (categoryId: string): Promise<Category> => {
   return fetchData(`categories/${categoryId}`, categorySchema);
 };
+
+// Questions
 
 export const fetchQuestions = (categoryId?: string): Promise<Question[]> => {
   const searchQuery = categoryId ? `?categoryId=${categoryId}` : '';
@@ -39,10 +44,6 @@ export const fetchRandomQuestion = (
   return fetchData(`questions/random${searchQuery}`, questionSchema);
 };
 
-export const submitAnswer = (data: FormData): Promise<string> => {
-  return postData('answers', submittedAnswerIdSchema, data);
-};
-
 export const updateQuestion = (
   questionId: string,
   data: Omit<Question, 'id'>
@@ -52,6 +53,16 @@ export const updateQuestion = (
 
 export const deleteQuestion = (questionId: string): Promise<void> => {
   return deleteData(`questions/${questionId}`);
+};
+
+export const addQuestion = (data: AddQuestion): Promise<string> => {
+  return postData('questions', createdEntityIdSchema, data);
+};
+
+// Answers
+
+export const submitAnswer = (data: FormData): Promise<string> => {
+  return postData('answers', createdEntityIdSchema, data);
 };
 
 export const fetchAnswerMetadata = (answerId: string): Promise<Answer> => {

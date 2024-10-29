@@ -3,6 +3,7 @@
 import { FC, useState } from 'react';
 import { DropdownOption } from '@/types';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface StartPracticeProps {
   categoriesOptions: DropdownOption[];
@@ -53,6 +54,12 @@ const StartPractice: FC<StartPracticeProps> = ({ categoriesOptions }) => {
       >
         Start Practice
       </button>
+
+      <Link href="/questions">
+        <button className="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition mt-4">
+          Edit Questions
+        </button>
+      </Link>
     </section>
   );
 };

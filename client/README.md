@@ -7,7 +7,7 @@ This project is a **Next.js** application that serves as the frontend for the in
     - [Homepage (`/`) ✅](#homepage--)
     - [Practice Session Page (`/practice`) ✅](#practice-session-page-practice-)
     - [Questions List Page (`/questions`)](#questions-list-page-questions)
-    - [Add Question Page (`/questions/add`)](#add-question-page-questionsadd)
+    - [Add Question Page (`/questions/add`) ✅](#add-question-page-questionsadd-)
     - [Question Detail Page (`/questions/{id}`) ✅](#question-detail-page-questionsid-)
     - [Answer Detail Page (`/answers/{id}`) ✅](#answer-detail-page-answersid-)
   - [Getting Started](#getting-started)
@@ -27,6 +27,8 @@ The homepage serves as the starting point for users to begin practicing intervie
 - **Start Button** ✅
   - Begins the practice session with questions from the selected category.
   - Redirects the user to the `/practice` route.
+- **Edit Questions Button** ✅
+  - Redirects the user to the `/questions` route.
 
 ### Practice Session Page (`/practice`) ✅
 
@@ -58,12 +60,14 @@ This page allows users to practice answering questions and record their response
     - Number of questions answered (with links to each Question)
     - Number of questions skipped (with links to each Question)
     - Total time spent (minutes, seconds)
-  - Provides buttons to start a new session or return to the homepage.
+  - Provides buttons to start a new session or return to the homepage. ✅
 
 ### Questions List Page (`/questions`)
 
 This page lists all available questions and allows for management actions.
 
+- **Add Question Button** ✅
+  - Redirects the user to the `/questions/add` route.
 - **Category Filter**
   - Users can filter the questions by category using a dropdown.
     - **Endpoint:** `GET /api/categories`
@@ -77,19 +81,20 @@ This page lists all available questions and allows for management actions.
       - Displays a confirmation modal before deletion.
       - **Endpoint:** `DELETE /api/questions/{id}`
 
-### Add Question Page (`/questions/add`)
+### Add Question Page (`/questions/add`) ✅
 
 Allows users to add new questions to the platform.
 
-- **Question Form**
-  - **Question Content:** A text area input for the question text.
-  - **Question Hint:** An optional text area input for a hint.
-  - **Category Selection:**
+- **Question Form** ✅
+  - **Question Content:** A text area input for the question text. ✅
+  - **Question Hint:** An optional text area input for a hint. ✅
+  - **Category Selection** ✅
     - Fetches categories from the backend to select the appropriate category.
     - **Endpoint:** `GET /api/categories`
-  - **Submit Button**
+  - **Submit Button** ✅
     - Adds the new question to the database.
     - **Endpoint:** `POST /api/questions`
+  - Provides buttons to edit the last question added or return to the homepage. ✅
 
 ### Question Detail Page (`/questions/{id}`) ✅
 
@@ -113,8 +118,9 @@ Provides detailed information about a specific question and its submitted answer
 - **Submitted Answers** ✅
   - Lists all video recordings submitted for this question, sorted by creation date.
   - Each answer includes:
-    - A link to play back the video. The text of the link displays the creation date.
+    - A link to display the answer metadata and play back the video. The text of the link displays the creation date.
       - **Endpoint:** `GET /api/answers/{id}`
+- Provides a button to return to the homepage. ✅
 
 ### Answer Detail Page (`/answers/{id}`) ✅
 
@@ -153,10 +159,11 @@ To set up and run the client application locally, follow these steps:
    Create a `.env.local` file in the root directory and add any necessary environment variables. For example:
 
    ```env
-   NEXT_PUBLIC_API_BASE_URL=http://localhost:5000
+   API_URL=https://localhost:7011/api
+   NEXT_PUBLIC_API_URL=https://localhost:7011/api
    ```
 
-   Replace `http://localhost:5000` with the URL where your backend API is running.
+   Replace `https://localhost:7011/api` with the URL where your backend API is running.
 
 5. **Run the Development Server**
 
