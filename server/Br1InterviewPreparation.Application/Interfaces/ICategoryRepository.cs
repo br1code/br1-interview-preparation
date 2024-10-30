@@ -8,4 +8,5 @@ public interface ICategoryRepository
     Task<List<Category>> GetDetailedCategoriesAsync(CancellationToken cancellationToken = default);
     Task<Category?> GetCategoryByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> CategoryExistsAsync(Guid id, CancellationToken cancellationToken = default);
+    Task AddCategoryAsync(Category category, CancellationToken cancellationToken = default);
 }

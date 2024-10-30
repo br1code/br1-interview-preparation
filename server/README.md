@@ -10,9 +10,9 @@ This project is a .NET 8 backend API that connects to a PostgreSQL database. It 
   - [API Endpoints](#api-endpoints)
     - [Categories](#categories)
       - [`GET /api/categories` ✅](#get-apicategories-)
-      - [`GET /api/categories/detailed`](#get-apicategoriesdetailed)
+      - [`GET /api/categories/detailed` ✅](#get-apicategoriesdetailed-)
       - [`GET /api/categories/{id}` ✅](#get-apicategoriesid-)
-      - [`POST /api/categories`](#post-apicategories)
+      - [`POST /api/categories` ✅](#post-apicategories-)
       - [`PUT /api/categories/{id}`](#put-apicategoriesid)
     - [Questions](#questions)
       - [`GET /api/questions?categoryId={Guid}` ✅](#get-apiquestionscategoryidguid-)
@@ -74,7 +74,7 @@ Retrieves all categories.
     ]
     ```
 
-#### `GET /api/categories/detailed`
+#### `GET /api/categories/detailed` ✅
 
 Retrieves all categories and the number of its submitted questions.
 
@@ -114,7 +114,7 @@ Retrieves a specific category.
     }
     ```
 
-#### `POST /api/categories`
+#### `POST /api/categories` ✅
 
 Adds a new category.
 

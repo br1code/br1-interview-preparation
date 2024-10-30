@@ -35,4 +35,10 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
             .AsNoTracking()
             .AnyAsync(c => c.Id == id, cancellationToken);
     }
+
+    public Task AddCategoryAsync(Category category, CancellationToken cancellationToken = default)
+    {
+        context.Categories.Add(category);
+        return context.SaveChangesAsync(cancellationToken);
+    }
 }
