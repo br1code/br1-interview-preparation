@@ -29,6 +29,15 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
             .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
     }
 
+    public Task<Category?> GetCategoryWithQuestionsByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return context.Categories
+            .Include(c => c.Questions)
+            .ThenInclude(q => q.Answers)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+    }
+
     public Task<bool> CategoryExistsAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return context.Categories
@@ -45,6 +54,12 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
     public Task UpdateCategoryAsync(Category category, CancellationToken cancellationToken = default)
     {
         context.Categories.Update(category);
+        return context.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task DeleteCategoryAsync(Category category, CancellationToken cancellationToken = default)
+    {
+        context.Categories.Remove(category);
         return context.SaveChangesAsync(cancellationToken);
     }
 }

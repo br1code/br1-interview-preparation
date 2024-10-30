@@ -5,6 +5,7 @@ using Br1InterviewPreparation.Domain.Entities;
 
 namespace Br1InterviewPreparation.Application.Features.Answers.Commands.DeleteAnswer;
 
+// TODO: add logging
 public class DeleteAnswerCommandHandler(IAnswerRepository answerRepository, IVideoStorageService videoStorageService) : IRequestHandler<DeleteAnswerCommand, Unit>
 {
     public async Task<Unit> Handle(DeleteAnswerCommand request, CancellationToken cancellationToken)

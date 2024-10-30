@@ -5,6 +5,7 @@ using Br1InterviewPreparation.Application.Features.Categories.Queries.GetCategor
 using Br1InterviewPreparation.Application.Features.Categories.Queries.GetCategoryById;
 using Br1InterviewPreparation.Application.Features.Categories.Queries.GetDetailedCategories;
 using Br1InterviewPreparation.Application.Features.Categories.Commands.AddCategory;
+using Br1InterviewPreparation.Application.Features.Categories.Commands.DeleteCategory;
 using Br1InterviewPreparation.Application.Features.Categories.Commands.UpdateCategory;
 
 namespace Br1InterviewPreparation.API.Controllers
@@ -82,7 +83,7 @@ namespace Br1InterviewPreparation.API.Controllers
         /// <returns>The updated category.</returns>
         /// <response code="200">Category updated successfully.</response>
         /// <response code="400">Validation error occurred.</response>
-        /// <response code="404">Question not found.</response>
+        /// <response code="404">Category not found.</response>
         [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -98,6 +99,23 @@ namespace Br1InterviewPreparation.API.Controllers
 
             var updatedCategory = await mediator.Send(command);
             return Ok(updatedCategory);
+        }
+        
+        /// <summary>
+        /// Deletes a category by ID, including its related questions and answers.
+        /// </summary>
+        /// <param name="id">The ID of the category to delete.</param>
+        /// <returns>No content.</returns>
+        /// <response code="204">Category deleted successfully.</response>
+        /// <response code="404">Category not found.</response>
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteCategory(Guid id)
+        {
+            var command = new DeleteCategoryCommand { Id = id };
+            await mediator.Send(command);
+            return NoContent();
         }
     }
 }

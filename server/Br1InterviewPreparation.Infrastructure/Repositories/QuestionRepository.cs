@@ -24,6 +24,13 @@ public class QuestionRepository(ApplicationDbContext context) : IQuestionReposit
     public Task<Question?> GetQuestionByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return context.Questions
+            .AsNoTracking()
+            .FirstOrDefaultAsync(q => q.Id == id, cancellationToken);
+    }
+
+    public Task<Question?> GetQuestionWithAnswersByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return context.Questions
             .Include(q => q.Answers)
             .AsNoTracking()
             .FirstOrDefaultAsync(q => q.Id == id, cancellationToken);

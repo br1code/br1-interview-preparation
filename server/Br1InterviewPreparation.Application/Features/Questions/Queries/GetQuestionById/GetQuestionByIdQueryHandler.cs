@@ -11,7 +11,7 @@ public class GetQuestionByIdQueryHandler(IQuestionRepository repository) : IRequ
 {
     public async Task<QuestionWithAnswersDto> Handle(GetQuestionByIdQuery request, CancellationToken cancellationToken)
     {
-        var question = await repository.GetQuestionByIdAsync(request.Id, cancellationToken);
+        var question = await repository.GetQuestionWithAnswersByIdAsync(request.Id, cancellationToken);
 
         if (question is null)
         {
