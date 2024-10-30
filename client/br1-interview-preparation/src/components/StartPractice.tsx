@@ -1,31 +1,29 @@
 'use client';
 
 import { FC, useState } from 'react';
+import Link from 'next/link';
 import { DropdownOption } from '@/types';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-
-interface StartPracticeProps {
-  categoriesOptions: DropdownOption[];
-}
+import CategoryDropdown from './categories/CategoryDropdown';
+import useFetchCategories from '@/hooks/useFetchCategories';
+import { toDropdownOptions } from '@/utils';
 
 const ALL_CATEGORIES_OPTION: DropdownOption = {
   label: 'All Categories',
   value: '',
 };
 
-const StartPractice: FC<StartPracticeProps> = ({ categoriesOptions }) => {
+const StartPractice: FC = () => {
   const [selectedCategory, setSelectedCategory] =
     useState<DropdownOption | null>(ALL_CATEGORIES_OPTION);
 
   const router = useRouter();
 
-  const onSelectCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedOption =
-      categoriesOptions.find((option) => option.value === e.target.value) ||
-      ALL_CATEGORIES_OPTION;
-    setSelectedCategory(selectedOption);
-  };
+  const {
+    categories,
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useFetchCategories();
 
   const onStartPractice = () => {
     const query = selectedCategory?.value
@@ -36,21 +34,29 @@ const StartPractice: FC<StartPracticeProps> = ({ categoriesOptions }) => {
 
   return (
     <section className="flex flex-col items-center">
-      <select
-        value={selectedCategory?.value}
-        onChange={onSelectCategory}
-        className="mb-6 px-4 py-2 border border-gray-300 rounded-md w-full"
-      >
-        <option value="">All Categories</option>
-        {categoriesOptions.map((category) => (
-          <option key={category.value} value={category.value}>
-            {category.label}
-          </option>
-        ))}
-      </select>
+      {categoriesError ? (
+        <p className="text-red-500 mb-4">
+          Error loading categories: {categoriesError}
+        </p>
+      ) : (
+        <CategoryDropdown
+          categories={toDropdownOptions(categories)}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+          includeAllOption={true}
+          loading={categoriesLoading}
+          className="mb-6 w-full"
+        />
+      )}
+
       <button
         onClick={onStartPractice}
-        className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition"
+        disabled={categoriesLoading || !!categoriesError}
+        className={`bg-blue-600 text-white px-6 py-3 rounded-md transition ${
+          categoriesLoading || categoriesError
+            ? 'opacity-50 cursor-not-allowed'
+            : 'hover:bg-blue-700'
+        }`}
       >
         Start Practice
       </button>

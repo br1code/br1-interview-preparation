@@ -5,35 +5,27 @@ import Link from 'next/link';
 import { deleteQuestion } from '@/api';
 import { DropdownOption } from '@/types';
 import useFetchQuestions from '@/hooks/useFetchQuestions';
+import CategoryDropdown from '../categories/CategoryDropdown';
+import useFetchCategories from '@/hooks/useFetchCategories';
+import { toDropdownOptions } from '@/utils';
 
-interface QuestionsListProps {
-  categoriesOptions: DropdownOption[];
-}
-
-const ALL_CATEGORIES_OPTION: DropdownOption = {
-  label: 'All Categories',
-  value: '',
-};
-
-// TODO: try to split into multiple components
-const QuestionsList: FC<QuestionsListProps> = ({ categoriesOptions }) => {
-  const [selectedCategory, setSelectedCategory] = useState<DropdownOption>(
-    ALL_CATEGORIES_OPTION
-  );
+const QuestionsList: FC = () => {
+  const [selectedCategory, setSelectedCategory] =
+    useState<DropdownOption | null>(null);
   const [searchCategoryId, setSearchCategoryId] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const { questions, loading, error } = useFetchQuestions(
-    searchCategoryId,
-    refreshKey
-  );
+  const {
+    questions,
+    loading: questionsLoading,
+    error: questionsError,
+  } = useFetchQuestions(searchCategoryId, refreshKey);
 
-  const onSelectCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedOption =
-      categoriesOptions.find((option) => option.value === e.target.value) ||
-      ALL_CATEGORIES_OPTION;
-    setSelectedCategory(selectedOption);
-  };
+  const {
+    categories,
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useFetchCategories();
 
   const onClickSearch = () => {
     setSearchCategoryId(selectedCategory?.value || null);
@@ -49,8 +41,8 @@ const QuestionsList: FC<QuestionsListProps> = ({ categoriesOptions }) => {
 
   const getCategoryName = (categoryId: string) => {
     return (
-      categoriesOptions.find((category) => category.value === categoryId)
-        ?.label || 'Unknown'
+      categories?.find((category) => category.id === categoryId)?.name ||
+      'Unknown'
     );
   };
 
@@ -58,24 +50,28 @@ const QuestionsList: FC<QuestionsListProps> = ({ categoriesOptions }) => {
     <div className="w-full max-w-3xl">
       {/* Category Dropdown and Search Button */}
       <div className="flex items-center justify-center mb-6 gap-4">
-        <select
-          value={selectedCategory?.value || ''}
-          onChange={onSelectCategory}
-          disabled={loading}
-          className="px-4 py-2 border border-gray-300 rounded-md w-full max-w-xs"
-        >
-          <option value="">All Categories</option>
-          {categoriesOptions.map((category) => (
-            <option key={category.value} value={category.value}>
-              {category.label}
-            </option>
-          ))}
-        </select>
+        {categoriesError ? (
+          <p className="text-red-500 mb-4">
+            Error loading categories: {categoriesError}
+          </p>
+        ) : (
+          <CategoryDropdown
+            categories={toDropdownOptions(categories)}
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+            loading={categoriesLoading}
+            includeAllOption={true}
+            className="w-full max-w-xs"
+          />
+        )}
+
         <button
           onClick={onClickSearch}
-          disabled={loading}
+          disabled={questionsLoading || categoriesLoading}
           className={`bg-blue-600 text-white px-6 py-2 rounded-md transition ${
-            loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'
+            questionsLoading
+              ? 'opacity-50 cursor-not-allowed'
+              : 'hover:bg-blue-700'
           }`}
         >
           Search
@@ -83,13 +79,13 @@ const QuestionsList: FC<QuestionsListProps> = ({ categoriesOptions }) => {
       </div>
 
       {/* Questions Table or Loading Spinner */}
-      {loading ? (
+      {questionsLoading ? (
         <div className="flex justify-center items-center py-10">
           <div className="loader border-t-4 border-blue-600 rounded-full w-8 h-8 animate-spin"></div>
         </div>
-      ) : error || !questions ? (
+      ) : questionsError || !questions || categoriesError ? (
         <p className="text-red-500 text-center">
-          Error loading questions: {error}
+          Error loading questions: {questionsError || categoriesError}
         </p>
       ) : questions.length > 0 ? (
         <table className="w-full border-collapse border border-gray-200">

@@ -7,10 +7,12 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { DropdownOption, Answer } from '@/types';
 import useFetchQuestion from '@/hooks/useFetchQuestion';
 import { updateQuestion, deleteQuestion } from '@/api';
+import CategoryDropdown from '../categories/CategoryDropdown';
+import useFetchCategories from '@/hooks/useFetchCategories';
+import { toDropdownOption, toDropdownOptions } from '@/utils';
 
 interface QuestionDetailsProps {
   questionId: string;
-  categoriesOptions: DropdownOption[];
 }
 
 interface QuestionFormValues {
@@ -20,13 +22,21 @@ interface QuestionFormValues {
 }
 
 // TODO: try to split into multiple components
-const QuestionDetails: FC<QuestionDetailsProps> = ({
-  questionId,
-  categoriesOptions,
-}) => {
+const QuestionDetails: FC<QuestionDetailsProps> = ({ questionId }) => {
   const router = useRouter();
 
-  const { question, loading, error } = useFetchQuestion(questionId);
+  const {
+    question,
+    loading: questionLoading,
+    error: questionError,
+  } = useFetchQuestion(questionId);
+
+  const {
+    categories,
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useFetchCategories();
+
   const {
     register,
     handleSubmit,
@@ -34,15 +44,25 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({
     formState: { errors },
   } = useForm<QuestionFormValues>();
   const [answers, setAnswers] = useState<Answer[]>([]);
+  const [selectedCategory, setSelectedCategory] =
+    useState<DropdownOption | null>(null);
 
   useEffect(() => {
-    if (question) {
+    if (question && categories && categories.length) {
       setValue('content', question.content);
       setValue('hint', question.hint || '');
       setValue('categoryId', question.categoryId);
       setAnswers(question.answers || []);
+
+      const initialCategory = categories.find(
+        (category) => category.id === question.categoryId
+      );
+
+      if (initialCategory) {
+        setSelectedCategory(toDropdownOption(initialCategory));
+      }
     }
-  }, [question, setValue]);
+  }, [question, categories, setValue]);
 
   const onSubmit: SubmitHandler<QuestionFormValues> = async (data) => {
     try {
@@ -62,12 +82,26 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({
     }
   };
 
-  if (loading) {
-    return <p>Loading question...</p>;
+  if (questionLoading) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <div className="loader border-t-4 border-blue-600 rounded-full w-8 h-8 animate-spin"></div>
+      </div>
+    );
   }
 
-  if (error) {
-    return <p className="text-red-500">Error loading question: {error}</p>;
+  if (questionError) {
+    return (
+      <p className="text-red-500">Error loading question: {questionError}</p>
+    );
+  }
+
+  if (categoriesError) {
+    return (
+      <p className="text-red-500">
+        Error loading categories: {categoriesError}
+      </p>
+    );
   }
 
   return (
@@ -101,22 +135,22 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({
         {/* Category Selection Dropdown */}
         <div className="mb-6">
           <label
-            htmlFor="category"
+            htmlFor="categoryId"
             className="block text-lg font-semibold mb-2"
           >
             Category
           </label>
-          <select
-            id="category"
-            {...register('categoryId', { required: 'Category is required' })}
-            className="w-full p-2 border border-gray-300 rounded-md"
-          >
-            {categoriesOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          <CategoryDropdown
+            categories={toDropdownOptions(categories)}
+            selectedCategory={selectedCategory}
+            onSelectCategory={(selectedOption: DropdownOption) => {
+              setValue('categoryId', selectedOption.value);
+              setSelectedCategory(selectedOption);
+            }}
+            includeAllOption={false}
+            loading={categoriesLoading}
+            className="w-full"
+          />
           {errors.categoryId && (
             <p className="text-red-500 mb-2">{errors.categoryId.message}</p>
           )}

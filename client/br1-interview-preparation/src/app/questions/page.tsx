@@ -1,12 +1,8 @@
 import { FC } from 'react';
 import Link from 'next/link';
-import { fetchCategories } from '@/api';
 import QuestionsList from '@/components/questions/QuestionsList';
-import { toDropdownOptions } from '@/utils';
 
-const Questions: FC = async () => {
-  const categories = await fetchCategories(); // TODO: stop fetching categories from the server
-
+const Questions: FC = () => {
   return (
     <main className="flex flex-col items-center p-8">
       <Link href="/questions/add">
@@ -15,7 +11,7 @@ const Questions: FC = async () => {
         </button>
       </Link>
 
-      <QuestionsList categoriesOptions={toDropdownOptions(categories)} />
+      <QuestionsList />
 
       <div className="text-center mt-4">
         <Link href="/" className="text-blue-600 underline hover:text-blue-800">

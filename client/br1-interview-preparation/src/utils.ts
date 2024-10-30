@@ -1,12 +1,16 @@
 import { DropdownOption } from './types';
 
+export const toDropdownOption = (item: {
+  id: string;
+  name: string;
+}): DropdownOption => {
+  return { label: item.name, value: item.id };
+};
+
 export const toDropdownOptions = (
-  source: { id: string; name: string }[]
+  source: { id: string; name: string }[] | null
 ): DropdownOption[] => {
-  return source.map((item) => ({
-    label: item.name,
-    value: item.id,
-  }));
+  return source ? source.map(toDropdownOption) : [];
 };
 
 export const getUniqueItemsWithCount = <T, K extends keyof T>(

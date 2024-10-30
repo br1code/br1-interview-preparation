@@ -21,6 +21,8 @@ export const fetchCategories = (): Promise<Category[]> => {
   return fetchData('categories', categoriesSchema);
 };
 
+// TODO: add fetch detailed categories method
+
 export const fetchCategory = (categoryId: string): Promise<Category> => {
   return fetchData(`categories/${categoryId}`, categorySchema);
 };

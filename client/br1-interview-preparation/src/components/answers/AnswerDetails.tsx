@@ -22,7 +22,11 @@ const AnswerDetails: FC<AnswerDetailsProps> = ({ answerId }) => {
   } = useFetchAnswer(answerId);
 
   if (loadingAnswer) {
-    return <p>Loading answer...</p>;
+    return (
+      <div className="flex justify-center items-center py-10">
+        <div className="loader border-t-4 border-blue-600 rounded-full w-8 h-8 animate-spin"></div>
+      </div>
+    );
   }
 
   if (answerError || !answer) {
