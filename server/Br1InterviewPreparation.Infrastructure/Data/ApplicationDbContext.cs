@@ -50,6 +50,11 @@ public class ApplicationDbContext : DbContext
 
             entity.Property(e => e.Name)
                 .IsRequired();
+            
+            entity.HasMany(e => e.Questions)
+                .WithOne(e => e.Category)
+                .HasForeignKey(e => e.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 
