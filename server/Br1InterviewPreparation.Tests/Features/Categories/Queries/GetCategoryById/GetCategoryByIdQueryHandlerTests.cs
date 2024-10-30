@@ -1,10 +1,10 @@
-﻿using Moq;
-using Br1InterviewPreparation.Application.Exceptions;
+﻿using Br1InterviewPreparation.Application.Exceptions;
 using Br1InterviewPreparation.Application.Features.Categories.Queries.GetCategoryById;
 using Br1InterviewPreparation.Application.Interfaces;
 using Br1InterviewPreparation.Domain.Entities;
+using Moq;
 
-namespace Br1InterviewPreparation.Tests.Features.Categories.Queries.GetCategories;
+namespace Br1InterviewPreparation.Tests.Features.Categories.Queries.GetCategoryById;
 
 public class GetCategoryByIdQueryHandlerTests
 {

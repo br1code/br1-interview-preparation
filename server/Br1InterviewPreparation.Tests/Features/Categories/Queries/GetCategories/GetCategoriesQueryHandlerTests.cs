@@ -1,7 +1,7 @@
-﻿using Br1InterviewPreparation.Application.Features.Categories.Queries.GetCategories;
+﻿using Moq;
+using Br1InterviewPreparation.Application.Features.Categories.Queries.GetCategories;
 using Br1InterviewPreparation.Application.Interfaces;
 using Br1InterviewPreparation.Domain.Entities;
-using Moq;
 
 namespace Br1InterviewPreparation.Tests.Features.Categories.Queries.GetCategories;
 
@@ -22,8 +22,8 @@ public class GetCategoriesQueryHandlerTests
         // Arrange
         var categories = new List<Category>
         {
-            new Category { Id = Guid.NewGuid(), Name = "Databases" },
-            new Category { Id = Guid.NewGuid(), Name = "Design Patterns" },
+            new() { Id = Guid.NewGuid(), Name = "Databases" },
+            new() { Id = Guid.NewGuid(), Name = "Design Patterns" },
         };
 
         _repositoryMock

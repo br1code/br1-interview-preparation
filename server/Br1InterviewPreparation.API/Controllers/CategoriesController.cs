@@ -3,6 +3,7 @@ using MediatR;
 using Br1InterviewPreparation.Application.Features.Categories.Dtos;
 using Br1InterviewPreparation.Application.Features.Categories.Queries.GetCategories;
 using Br1InterviewPreparation.Application.Features.Categories.Queries.GetCategoryById;
+using Br1InterviewPreparation.Application.Features.Categories.Queries.GetDetailedCategories;
 
 namespace Br1InterviewPreparation.API.Controllers
 {
@@ -20,6 +21,20 @@ namespace Br1InterviewPreparation.API.Controllers
         public async Task<IActionResult> GetCategories()
         {
             var query = new GetCategoriesQuery();
+            var categories = await mediator.Send(query);
+            return Ok(categories);
+        }
+
+        /// <summary>
+        /// Retrieves a list of categories, including some details.
+        /// </summary>
+        /// <returns>A list of categories.</returns>
+        /// <response code="200">Returns the list of categories</response>
+        [HttpGet("detailed")]
+        [ProducesResponseType(typeof(IEnumerable<CategoryDetailsDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetDetailedCategories()
+        {
+            var query = new GetDetailedCategoriesQuery();
             var categories = await mediator.Send(query);
             return Ok(categories);
         }

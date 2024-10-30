@@ -155,7 +155,7 @@ This page lists all available categories and allows for management actions.
   - Redirects the user to the `/categories/add` route.
 - **Categories List**
   - Displays all categories in a table.
-    - **Endpoint:** `GET /api/categories/summary`
+    - **Endpoint:** `GET /api/categories/detailed`
   - Each item in the table includes:
     - The name of the category.
     - The number of submitted questions for the category.

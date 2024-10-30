@@ -13,6 +13,15 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
         return query.ToListAsync(cancellationToken);
     }
 
+    public Task<List<Category>> GetDetailedCategoriesAsync(CancellationToken cancellationToken = default)
+    {
+        var query = context.Categories
+            .Include(c => c.Questions)
+            .AsNoTracking();
+        
+        return query.ToListAsync(cancellationToken);
+    }
+
     public Task<Category?> GetCategoryByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return context.Categories
