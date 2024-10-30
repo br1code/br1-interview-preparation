@@ -58,7 +58,7 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({
     if (confirm('Are you sure you want to delete this question?')) {
       await deleteQuestion(questionId);
       alert('Question deleted successfully');
-      router.push('/');
+      router.push('/questions');
     }
   };
 
@@ -72,6 +72,7 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({
 
   return (
     <div>
+      <h1 className="text-3xl font-bold mb-6 text-center">Question Details</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Question Content and Hint */}
         <div className="mb-6">

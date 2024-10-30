@@ -5,7 +5,7 @@ import QuestionsList from '@/components/questions/QuestionsList';
 import { toDropdownOptions } from '@/utils';
 
 const Questions: FC = async () => {
-  const categories = await fetchCategories();
+  const categories = await fetchCategories(); // TODO: stop fetching categories from the server
 
   return (
     <main className="flex flex-col items-center p-8">

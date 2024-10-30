@@ -10,6 +10,9 @@ This project is a **Next.js** application that serves as the frontend for the in
     - [Add Question Page (`/questions/add`) ✅](#add-question-page-questionsadd-)
     - [Question Detail Page (`/questions/{id}`) ✅](#question-detail-page-questionsid-)
     - [Answer Detail Page (`/answers/{id}`) ✅](#answer-detail-page-answersid-)
+    - [Add Category Page (`/categories/add`)](#add-category-page-categoriesadd)
+    - [Categories List Page (`/categories`)](#categories-list-page-categories)
+    - [Category Detail Page (`/categories/{id}`)](#category-detail-page-categoriesid)
   - [Getting Started](#getting-started)
   - [Contributing](#contributing)
   - [License](#license)
@@ -72,10 +75,11 @@ This page lists all available questions and allows for management actions.
   - Users can filter the questions by category using a dropdown.
     - **Endpoint:** `GET /api/categories`
 - **Question List** ✅
-  - Displays all questions (Content, Category), optionally filtered by the selected category.
+  - Displays all questions, optionally filtered by the selected category.
     - **Endpoint:** `GET /api/questions?categoryId={Guid}`
-  - Shows the number of submitted answers for each question. ✅
   - Each question includes:
+    - Content, Category ✅
+    - Number of submitted answers for the question. ✅
     - A link to its detail page. ✅
     - A "Delete" button to remove the question and its associated answers. ✅
       - Displays a confirmation modal before deletion.
@@ -113,7 +117,7 @@ Provides detailed information about a specific question and its submitted answer
   - Saves any changes made to the question content, hint, or category.
     - **Endpoint:** `PUT /api/questions/{id}`
 - **Delete Question Button** ✅
-  - Displays a confirmation modal before deleting the question. The users gets redirected to the homepage.
+  - Displays a confirmation modal before deleting the question. The users gets redirected to the Questions List page.
     - **Endpoint:** `DELETE /api/questions/{id}`
 - **Submitted Answers** ✅
   - Lists all video recordings submitted for this question, sorted by creation date.
@@ -131,6 +135,51 @@ Displays a video player with the recorded answer. Allows users to delete the ans
   - Displays a confirmation modal before deletion.
   - **Endpoint:** `DELETE /api/answers/{id}`
 - A link to the Question Details page. ✅
+
+### Add Category Page (`/categories/add`)
+
+Allows users to add new categories to the platform.
+
+- **Category Form**
+  - **Category Name:** A text area input for the category name.
+  - **Submit Button**
+    - Adds the new category to the database.
+    - **Endpoint:** `POST /api/categories`
+  - Provides buttons to edit the last category added or return to the homepage.
+
+### Categories List Page (`/categories`)
+
+This page lists all available categories and allows for management actions.
+
+- **Add Category Button**
+  - Redirects the user to the `/categories/add` route.
+- **Categories List**
+  - Displays all categories in a table.
+    - **Endpoint:** `GET /api/categories/summary`
+  - Each item in the table includes:
+    - The name of the category.
+    - The number of submitted questions for the category.
+    - A link to its detail page.
+    - A "Delete" button to remove the category and its associated question/answers.
+      - Displays a confirmation modal before deletion.
+      - **Endpoint:** `DELETE /api/categories/{id}`
+
+### Category Detail Page (`/categories/{id}`)
+
+Display information about a specific category.
+
+- **Fetch Category**
+  - Retrieves the category details.
+    - **Endpoint:** `GET /api/categories/{id}`
+- **Category Name**
+  - Displays the category name in a editable text area. Users can update this fields as needed.
+- **Update Category Button**
+  - Saves any changes made to the category name.
+    - **Endpoint:** `PUT /api/categories/{id}`
+- **Delete Category Button**
+  - Displays a confirmation modal before deleting the category. The users gets redirected to the Categories List page.
+    - **Endpoint:** `DELETE /api/categories/{id}`
+- Provides a button to return to the homepage.
 
 ## Getting Started
 

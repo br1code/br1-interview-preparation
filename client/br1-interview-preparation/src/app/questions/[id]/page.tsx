@@ -11,14 +11,11 @@ interface QuestionProps {
 
 const Question: FC<QuestionProps> = async ({ params }) => {
   const { id } = params;
-  const categories = await fetchCategories();
+  const categories = await fetchCategories(); // TODO: stop fetching categories from the server
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
       <div className="w-full max-w-3xl bg-white p-8 shadow-md rounded-lg">
-        <h1 className="text-3xl font-bold mb-6 text-center">
-          Question Details
-        </h1>
         <QuestionDetails
           questionId={id}
           categoriesOptions={toDropdownOptions(categories)}

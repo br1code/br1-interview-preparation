@@ -3,7 +3,7 @@ import { fetchCategories } from '@/api';
 import { toDropdownOptions } from '@/utils';
 
 export default async function Home() {
-  const categories = await fetchCategories();
+  const categories = await fetchCategories(); // TODO: stop fetching categories from the server
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100 p-4">

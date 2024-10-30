@@ -10,7 +10,10 @@ This project is a .NET 8 backend API that connects to a PostgreSQL database. It 
   - [API Endpoints](#api-endpoints)
     - [Categories](#categories)
       - [`GET /api/categories` ✅](#get-apicategories-)
+      - [`GET /api/categories/summary`](#get-apicategoriessummary)
       - [`GET /api/categories/{id}` ✅](#get-apicategoriesid-)
+      - [`POST /api/categories`](#post-apicategories)
+      - [`PUT /api/categories/{id}`](#put-apicategoriesid)
     - [Questions](#questions)
       - [`GET /api/questions?categoryId={Guid}` ✅](#get-apiquestionscategoryidguid-)
       - [`GET /api/questions/random?categoryId={Guid}` ✅](#get-apiquestionsrandomcategoryidguid-)
@@ -71,6 +74,30 @@ Retrieves all categories.
     ]
     ```
 
+#### `GET /api/categories/summary`
+
+Retrieves all categories and the number of its submitted questions.
+
+- **Response:**
+
+  - **Status:** `200 OK`
+  - **Body:**
+
+    ```json
+    [
+      {
+        "id": "uuid",
+        "name": "Databases",
+        "questionsCount": 1
+      },
+      {
+        "id": "uuid",
+        "name": "Design Patterns",
+        "questionsCount": 1
+      }
+    ]
+    ```
+
 #### `GET /api/categories/{id}` ✅
 
 Retrieves a specific category.
@@ -84,6 +111,67 @@ Retrieves a specific category.
     {
       "id": "uuid",
       "name": "Databases"
+    }
+    ```
+
+#### `POST /api/categories`
+
+Adds a new category.
+
+- **Request:**
+
+  - **Headers:**
+
+    - `Content-Type: application/json`
+
+  - **Body:**
+
+    ```json
+    {
+      "name": "Category Name"
+    }
+    ```
+
+- **Response:**
+
+  - **Status:** `201 Created`
+  - **Body:**
+
+    ```json
+    "uuid"
+    ```
+
+#### `PUT /api/categories/{id}`
+
+Updates an existing category.
+
+- **Parameters:**
+
+  - `id` (required): UUID of the category to update.
+
+- **Request:**
+
+  - **Headers:**
+
+    - `Content-Type: application/json`
+
+  - **Body:**
+
+    ```json
+    {
+      "name": "Category Name"
+    }
+    ```
+
+- **Response:**
+
+  - **Status:** `200 OK`
+  - **Body:**
+
+    ```json
+    {
+      "id": "uuid",
+      "name": "Category Name"
     }
     ```
 
@@ -110,7 +198,8 @@ Retrieves questions and its answers, optionally filtered by category.
         "id": "uuid",
         "categoryId": "uuid",
         "content": "Question content",
-        "hint": "Optional hint"
+        "hint": "Optional hint",
+        "answersCount": 5
       }
     ]
     ```
@@ -162,7 +251,8 @@ Gets a specific question and its answers.
         {
           "id": "uuid",
           "questionId": "uuid",
-          "videoFileName": "123.webm"
+          "videoFileName": "123.webm",
+          "createdAt": "Date"
         }
       ]
     }
