@@ -13,7 +13,8 @@ This project is a .NET 8 backend API that connects to a PostgreSQL database. It 
       - [`GET /api/categories/detailed` ✅](#get-apicategoriesdetailed-)
       - [`GET /api/categories/{id}` ✅](#get-apicategoriesid-)
       - [`POST /api/categories` ✅](#post-apicategories-)
-      - [`PUT /api/categories/{id}`](#put-apicategoriesid)
+      - [`PUT /api/categories/{id}` ✅](#put-apicategoriesid-)
+      - [`DELETE /api/categories/{id}`](#delete-apicategoriesid)
     - [Questions](#questions)
       - [`GET /api/questions?categoryId={Guid}` ✅](#get-apiquestionscategoryidguid-)
       - [`GET /api/questions/random?categoryId={Guid}` ✅](#get-apiquestionsrandomcategoryidguid-)
@@ -141,7 +142,7 @@ Adds a new category.
     "uuid"
     ```
 
-#### `PUT /api/categories/{id}`
+#### `PUT /api/categories/{id}` ✅
 
 Updates an existing category.
 
@@ -174,6 +175,18 @@ Updates an existing category.
       "name": "Category Name"
     }
     ```
+
+#### `DELETE /api/categories/{id}`
+
+Deletes a category and its associated questions/answers.
+
+- **Parameters:**
+
+  - `id` (required): UUID of the category to delete.
+
+- **Response:**
+
+  - **Status:** `204 No Content`
 
 ---
 

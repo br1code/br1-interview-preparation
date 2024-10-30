@@ -5,6 +5,7 @@ using Br1InterviewPreparation.Application.Features.Categories.Queries.GetCategor
 using Br1InterviewPreparation.Application.Features.Categories.Queries.GetCategoryById;
 using Br1InterviewPreparation.Application.Features.Categories.Queries.GetDetailedCategories;
 using Br1InterviewPreparation.Application.Features.Categories.Commands.AddCategory;
+using Br1InterviewPreparation.Application.Features.Categories.Commands.UpdateCategory;
 
 namespace Br1InterviewPreparation.API.Controllers
 {
@@ -71,6 +72,32 @@ namespace Br1InterviewPreparation.API.Controllers
         {
             var categoryId = await mediator.Send(command);
             return CreatedAtAction(nameof(GetCategoryById), new { id = categoryId }, categoryId);
+        }
+
+        /// <summary>
+        /// Updates a category.
+        /// </summary>
+        /// <param name="id">The ID of the category to update.</param>
+        /// <param name="command">The content of the category to update.</param>
+        /// <returns>The updated category.</returns>
+        /// <response code="200">Category updated successfully.</response>
+        /// <response code="400">Validation error occurred.</response>
+        /// <response code="404">Question not found.</response>
+        [HttpPut("{id:guid}")]
+        [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateCategory(Guid id, [FromBody] UpdateCategoryCommand command)
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest("Invalid category ID.");
+            }
+
+            command.Id = id;
+
+            var updatedCategory = await mediator.Send(command);
+            return Ok(updatedCategory);
         }
     }
 }

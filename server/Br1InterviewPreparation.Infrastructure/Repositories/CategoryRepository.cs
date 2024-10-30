@@ -41,4 +41,10 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
         context.Categories.Add(category);
         return context.SaveChangesAsync(cancellationToken);
     }
+
+    public Task UpdateCategoryAsync(Category category, CancellationToken cancellationToken = default)
+    {
+        context.Categories.Update(category);
+        return context.SaveChangesAsync(cancellationToken);
+    }
 }
