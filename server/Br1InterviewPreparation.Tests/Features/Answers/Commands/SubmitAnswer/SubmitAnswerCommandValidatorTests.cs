@@ -69,7 +69,7 @@ public class SubmitAnswerCommandValidatorTests
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x =>
             x.PropertyName == nameof(SubmitAnswerCommand.QuestionId) &&
-            x.ErrorMessage == SubmitAnswerCommandValidator.EMPTY_QUESTION_ID_ERROR_MESSAGE);
+            x.ErrorMessage == SubmitAnswerCommandValidator.EmptyQuestionIdErrorMessage);
     }
 
     [Fact]
@@ -99,7 +99,31 @@ public class SubmitAnswerCommandValidatorTests
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x =>
             x.PropertyName == nameof(SubmitAnswerCommand.QuestionId) &&
-            x.ErrorMessage == SubmitAnswerCommandValidator.QUESTION_NOT_FOUND_ERROR_MESSAGE);
+            x.ErrorMessage == SubmitAnswerCommandValidator.QuestionNotFoundErrorMessage);
+    }
+
+    [Fact]
+    public async Task Validate_NullVideoFile_ReturnsFailure()
+    {
+        // Arrange
+        _questionRepositoryMock
+            .Setup(r => r.QuestionExists(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
+        
+        var command = new SubmitAnswerCommand
+        {
+            QuestionId = Guid.NewGuid(),
+            VideoFile = null!
+        };
+        
+        // Act
+        var result = await _validator.ValidateAsync(command);
+        
+        // Assert
+        Assert.False(result.IsValid);
+        Assert.Contains(result.Errors, x =>
+            x.PropertyName == nameof(SubmitAnswerCommand.VideoFile) &&
+            x.ErrorMessage == SubmitAnswerCommandValidator.EmptyVideoFileErrorMessage);
     }
 
     [Theory]
@@ -130,7 +154,7 @@ public class SubmitAnswerCommandValidatorTests
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x =>
             x.PropertyName == $"{nameof(SubmitAnswerCommand.VideoFile)}.{nameof(FileUploadDto.FileName)}" &&
-            x.ErrorMessage == SubmitAnswerCommandValidator.EMPTY_FILE_NAME_ERROR_MESSAGE);
+            x.ErrorMessage == SubmitAnswerCommandValidator.EmptyFileNameErrorMessage);
     }
 
     [Fact]
@@ -147,7 +171,7 @@ public class SubmitAnswerCommandValidatorTests
             VideoFile = new FileUploadDto
             {
                 FileName = "123.webm",
-                ContentType = null,
+                ContentType = null!,
                 Content = [0x10, 0x10]
             }
         };
@@ -159,7 +183,7 @@ public class SubmitAnswerCommandValidatorTests
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x =>
             x.PropertyName == $"{nameof(SubmitAnswerCommand.VideoFile)}.{nameof(FileUploadDto.ContentType)}" &&
-            x.ErrorMessage == SubmitAnswerCommandValidator.EMPTY_CONTENT_TYPE_ERROR_MESSAGE);
+            x.ErrorMessage == SubmitAnswerCommandValidator.EmptyContentTypeErrorMessage);
     }
 
     [Theory]
@@ -191,7 +215,7 @@ public class SubmitAnswerCommandValidatorTests
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x =>
             x.PropertyName == $"{nameof(SubmitAnswerCommand.VideoFile)}.{nameof(FileUploadDto.ContentType)}" &&
-            x.ErrorMessage == SubmitAnswerCommandValidator.INVALID_CONTENT_TYPE_ERROR_MESSAGE);
+            x.ErrorMessage == SubmitAnswerCommandValidator.InvalidContentTypeErrorMessage);
     }
 
     [Fact]
@@ -220,6 +244,6 @@ public class SubmitAnswerCommandValidatorTests
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x =>
             x.PropertyName == $"{nameof(SubmitAnswerCommand.VideoFile)}.{nameof(FileUploadDto.Content)}" &&
-            x.ErrorMessage == SubmitAnswerCommandValidator.EMPTY_CONTENT_ERROR_MESSAGE);
+            x.ErrorMessage == SubmitAnswerCommandValidator.EmptyContentErrorMessage);
     }
 }

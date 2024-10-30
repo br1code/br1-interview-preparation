@@ -58,7 +58,7 @@ public class AddQuestionCommandValidatorTests
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x =>
             x.PropertyName == nameof(AddQuestionCommand.CategoryId) &&
-            x.ErrorMessage == AddQuestionCommandValidator.CATEGORY_EMPTY_ERROR_MESSAGE);
+            x.ErrorMessage == AddQuestionCommandValidator.CategoryEmptyErrorMessage);
     }
 
     [Fact]
@@ -83,7 +83,7 @@ public class AddQuestionCommandValidatorTests
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x =>
             x.PropertyName == nameof(AddQuestionCommand.CategoryId) &&
-            x.ErrorMessage == AddQuestionCommandValidator.CATEGORY_NOT_FOUND_ERROR_MESSAGE);
+            x.ErrorMessage == AddQuestionCommandValidator.CategoryNotFoundErrorMessage);
     }
 
     [Theory]
@@ -109,6 +109,6 @@ public class AddQuestionCommandValidatorTests
         Assert.False(result.IsValid);
         Assert.Contains(result.Errors, x =>
             x.PropertyName == nameof(AddQuestionCommand.Content)
-            && x.ErrorMessage == AddQuestionCommandValidator.CONTENT_EMPTY_ERROR_MESSAGE);
+            && x.ErrorMessage == AddQuestionCommandValidator.ContentEmptyErrorMessage);
     }
 }

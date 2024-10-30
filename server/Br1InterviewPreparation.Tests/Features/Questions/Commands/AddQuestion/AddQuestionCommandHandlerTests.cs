@@ -17,7 +17,7 @@ public class AddQuestionCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ValidCommand_AddsQuestion()
+    public async Task Handle_ValidCommand_AddQuestion()
     {
         // Arrange
         var newQuestionId = Guid.NewGuid();

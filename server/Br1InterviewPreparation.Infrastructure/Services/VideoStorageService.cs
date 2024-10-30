@@ -6,7 +6,7 @@ namespace Br1InterviewPreparation.Infrastructure.Services;
 // TODO: create new IVideoStorageService implementation using third-party service for file storage
 public class VideoStorageService : IVideoStorageService
 {
-    private readonly string _videoStorageFilePath;
+    private readonly string? _videoStorageFilePath;
 
     public VideoStorageService(IConfiguration configuration)
     {
@@ -33,7 +33,7 @@ public class VideoStorageService : IVideoStorageService
 
     public string GetVideoFilePath(string fileName)
     {
-        var filePath = Path.Combine(_videoStorageFilePath, fileName);
+        var filePath = Path.Combine(_videoStorageFilePath!, fileName);
 
         if (!File.Exists(filePath))
         {
@@ -45,7 +45,7 @@ public class VideoStorageService : IVideoStorageService
 
     public void DeleteVideoFile(string fileName)
     {
-        var filePath = Path.Combine(_videoStorageFilePath, fileName);
+        var filePath = Path.Combine(_videoStorageFilePath!, fileName);
 
         if (!File.Exists(filePath))
         {
@@ -63,7 +63,7 @@ public class VideoStorageService : IVideoStorageService
         }
 
         var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(fileName)}";
-        var filePath = Path.Combine(_videoStorageFilePath, uniqueFileName);
+        var filePath = Path.Combine(_videoStorageFilePath!, uniqueFileName);
 
         await File.WriteAllBytesAsync(filePath, content, cancellationToken);
 

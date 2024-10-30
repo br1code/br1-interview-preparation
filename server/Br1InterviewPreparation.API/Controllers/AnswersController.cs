@@ -19,7 +19,7 @@ namespace Br1InterviewPreparation.API.Controllers
         /// <returns>The answer video.</returns>
         /// <response code="200">The answer video</response>
         /// <response code="404">Answer not found.</response>
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(PhysicalFileResult), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAnswerVideo(Guid id)
@@ -37,7 +37,7 @@ namespace Br1InterviewPreparation.API.Controllers
         /// <returns>The answer metadata.</returns>
         /// <response code="200">The answer metadata..</response>
         /// <response code="404">Answer not found.</response>
-        [HttpGet("{id}/metadata")]
+        [HttpGet("{id:guid}/metadata")]
         [ProducesResponseType(typeof(AnswerDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAnswerMetadata(Guid id)
@@ -54,7 +54,7 @@ namespace Br1InterviewPreparation.API.Controllers
         /// <returns>No content.</returns>
         /// <response code="204">Answer deleted successfully.</response>
         /// <response code="404">Answer not found.</response>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteAnswer(Guid id)

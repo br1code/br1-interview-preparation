@@ -5,9 +5,9 @@ namespace Br1InterviewPreparation.Application.Features.Questions.Commands.AddQue
 
 public class AddQuestionCommandValidator : AbstractValidator<AddQuestionCommand>
 {
-    public const string CATEGORY_EMPTY_ERROR_MESSAGE = "Category is required.";
-    public const string CATEGORY_NOT_FOUND_ERROR_MESSAGE = "Category does not exist.";
-    public const string CONTENT_EMPTY_ERROR_MESSAGE = "Content is required.";
+    public const string CategoryEmptyErrorMessage = "Category is required.";
+    public const string CategoryNotFoundErrorMessage = "Category does not exist.";
+    public const string ContentEmptyErrorMessage = "Content is required.";
 
     private readonly ICategoryRepository _categoryRepository;
 
@@ -17,15 +17,15 @@ public class AddQuestionCommandValidator : AbstractValidator<AddQuestionCommand>
 
         RuleFor(x => x.CategoryId)
             .NotEmpty()
-            .WithMessage(CATEGORY_EMPTY_ERROR_MESSAGE);
+            .WithMessage(CategoryEmptyErrorMessage);
 
         RuleFor(x => x.CategoryId)
             .MustAsync(CategoryExists)
-            .WithMessage(CATEGORY_NOT_FOUND_ERROR_MESSAGE);
+            .WithMessage(CategoryNotFoundErrorMessage);
 
         RuleFor(x => x.Content)
             .NotEmpty()
-            .WithMessage(CONTENT_EMPTY_ERROR_MESSAGE);
+            .WithMessage(ContentEmptyErrorMessage);
     }
 
     private async Task<bool> CategoryExists(Guid categoryId, CancellationToken cancellationToken)
