@@ -67,14 +67,5 @@ public static class DatabaseInitializer
 
         context.Questions.AddRange(question1, question2);
         await context.SaveChangesAsync();
-
-        // Answers
-        logger.LogInformation("Seeding the database with Answers ...");
-
-        var answer1 = new Answer { VideoFilename = "1849385.webm", QuestionId = question1.Id };
-        var answer2 = new Answer { VideoFilename = "1937423.webm", QuestionId = question2.Id };
-
-        context.Answers.AddRange(answer1, answer2);
-        await context.SaveChangesAsync();
     }
 }
