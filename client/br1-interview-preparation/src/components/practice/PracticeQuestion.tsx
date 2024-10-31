@@ -32,9 +32,13 @@ const PracticeQuestion: FC = () => {
     }
 
     return () => {
-      cleanupVideoPreview();
+      stopMediaRecording()
+        .then(() => cleanupVideoPreview())
+        .catch((error) =>
+          console.error('Error stopping media recording:', error)
+        );
     };
-  }, [state.isRecording, startMediaRecording]);
+  }, [state.isRecording, startMediaRecording, stopMediaRecording]);
 
   const cleanupVideoPreview = () => {
     if (videoRef.current) {
