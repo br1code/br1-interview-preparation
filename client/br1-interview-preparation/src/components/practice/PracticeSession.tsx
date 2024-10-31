@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, Suspense } from 'react';
 import { usePracticeSession } from '@/contexts/PracticeSessionContext';
 import SessionSummary from '@/components/practice/SessionSummary';
 import SessionStart from '@/components/practice/SessionStart';
@@ -15,7 +15,9 @@ const PracticeSession: FC = () => {
         {!state.sessionStarted && state.sessionEndTime ? (
           <SessionSummary />
         ) : !state.sessionStarted ? (
-          <SessionStart />
+          <Suspense fallback={<div>Loading...</div>}>
+            <SessionStart />
+          </Suspense>
         ) : (
           <PracticeQuestion />
         )}
