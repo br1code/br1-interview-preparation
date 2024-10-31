@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import QuestionsList from '@/components/questions/QuestionsList';
 
-export default function Questions() {
+export default function QuestionsPage() {
   return (
     <main className="flex flex-col items-center p-8">
       <h1 className="text-3xl font-bold mb-6">Questions</h1>

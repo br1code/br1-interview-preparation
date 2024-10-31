@@ -1,16 +1,20 @@
 import { FC } from 'react';
 import AnswerDetails from '@/components/answers/AnswerDetails';
 
-interface AnswerProps {
+interface AnswerPageProps {
   params: {
     id: string;
   };
 }
 
-const Answer: FC<AnswerProps> = ({ params }) => {
+const AnswerPage: FC<AnswerPageProps> = ({ params }) => {
   const { id } = params;
 
-  return <AnswerDetails answerId={id} />;
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+      <AnswerDetails answerId={id} />
+    </main>
+  );
 };
 
-export default Answer;
+export default AnswerPage;

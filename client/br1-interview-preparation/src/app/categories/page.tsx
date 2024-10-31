@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Link from 'next/link';
 import CategoriesList from '@/components/categories/CategoriesList';
 
-const Categories: FC = () => {
+const CategoriesPage: FC = () => {
   return (
     <main className="flex flex-col items-center p-8">
       <h1 className="text-3xl font-bold mb-6">Categories</h1>
@@ -23,4 +23,4 @@ const Categories: FC = () => {
   );
 };
 
-export default Categories;
+export default CategoriesPage;

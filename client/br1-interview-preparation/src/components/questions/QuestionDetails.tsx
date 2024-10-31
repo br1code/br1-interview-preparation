@@ -4,11 +4,11 @@ import { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { DropdownOption, Answer } from '@/types';
-import useFetchQuestion from '@/hooks/useFetchQuestion';
-import { updateQuestion, deleteQuestion } from '@/api';
 import CategoryDropdown from '../categories/CategoryDropdown';
 import useFetchCategories from '@/hooks/useFetchCategories';
+import useFetchQuestion from '@/hooks/useFetchQuestion';
+import { DropdownOption, Answer } from '@/types';
+import { updateQuestion, deleteQuestion } from '@/api';
 import { toDropdownOption, toDropdownOptions } from '@/utils';
 
 interface QuestionDetailsProps {
@@ -70,6 +70,7 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({ questionId }) => {
       alert('Question updated successfully');
     } catch (error) {
       console.log(error);
+      alert('Failed to update question.');
     }
   };
 
@@ -105,7 +106,7 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({ questionId }) => {
   }
 
   return (
-    <div>
+    <div className="w-full max-w-3xl bg-white p-8 shadow-md rounded-lg">
       <h1 className="text-3xl font-bold mb-6 text-center">Question Details</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Question Content and Hint */}
@@ -156,22 +157,24 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({ questionId }) => {
           )}
         </div>
 
-        {/* Update Question Button */}
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition mb-8"
-        >
-          Update Question
-        </button>
+        <div className="text-center">
+          {/* Update Question Button */}
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition mb-8"
+          >
+            Update Question
+          </button>
 
-        {/* Delete Question Button*/}
-        <button
-          type="button"
-          onClick={handleDeleteQuestion}
-          className="bg-red-600 text-white px-6 py-3 rounded-md hover:bg-red-700 transition mb-8 ml-4"
-        >
-          Delete Question
-        </button>
+          {/* Delete Question Button*/}
+          <button
+            type="button"
+            onClick={handleDeleteQuestion}
+            className="bg-red-600 text-white px-6 py-3 rounded-md hover:bg-red-700 transition mb-8 ml-4"
+          >
+            Delete Question
+          </button>
+        </div>
       </form>
 
       {/* Submitted Answers */}

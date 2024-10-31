@@ -3,12 +3,10 @@
 import PracticeSession from '@/components/practice/PracticeSession';
 import { PracticeSessionProvider } from '@/contexts/PracticeSessionContext';
 
-export default function Practice() {
+export default function PracticePage() {
   return (
-    <main>
-      <PracticeSessionProvider>
-        <PracticeSession />
-      </PracticeSessionProvider>
-    </main>
+    <PracticeSessionProvider>
+      <PracticeSession />
+    </PracticeSessionProvider>
   );
 }

@@ -1,22 +1,20 @@
 import { FC } from 'react';
 import QuestionDetails from '@/components/questions/QuestionDetails';
 
-interface QuestionProps {
+interface QuestionPageProps {
   params: {
     id: string;
   };
 }
 
-const Question: FC<QuestionProps> = ({ params }) => {
+const QuestionPage: FC<QuestionPageProps> = ({ params }) => {
   const { id } = params;
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-3xl bg-white p-8 shadow-md rounded-lg">
-        <QuestionDetails questionId={id} />
-      </div>
+      <QuestionDetails questionId={id} />
     </main>
   );
 };
 
-export default Question;
+export default QuestionPage;

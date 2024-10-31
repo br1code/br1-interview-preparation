@@ -12,7 +12,7 @@ This project is a **Next.js** application that serves as the frontend for the in
     - [Answer Detail Page (`/answers/{id}`) ✅](#answer-detail-page-answersid-)
     - [Add Category Page (`/categories/add`) ✅](#add-category-page-categoriesadd-)
     - [Categories List Page (`/categories`) ✅](#categories-list-page-categories-)
-    - [Category Detail Page (`/categories/{id}`)](#category-detail-page-categoriesid)
+    - [Category Detail Page (`/categories/{id}`) ✅](#category-detail-page-categoriesid-)
   - [Getting Started](#getting-started)
   - [Contributing](#contributing)
   - [License](#license)
@@ -168,22 +168,22 @@ This page lists all available categories and allows for management actions.
       - Displays a confirmation modal before deletion.
       - **Endpoint:** `DELETE /api/categories/{id}`
 
-### Category Detail Page (`/categories/{id}`)
+### Category Detail Page (`/categories/{id}`) ✅
 
 Display information about a specific category.
 
-- **Fetch Category**
+- **Fetch Category** ✅
   - Retrieves the category details.
     - **Endpoint:** `GET /api/categories/{id}`
-- **Category Name**
+- **Category Name** ✅
   - Displays the category name in a editable text area. Users can update this fields as needed.
-- **Update Category Button**
+- **Update Category Button** ✅
   - Saves any changes made to the category name.
     - **Endpoint:** `PUT /api/categories/{id}`
-- **Delete Category Button**
+- **Delete Category Button** ✅
   - Displays a confirmation modal before deleting the category. The users gets redirected to the Categories List page.
     - **Endpoint:** `DELETE /api/categories/{id}`
-- Provides a button to return to the homepage.
+- Provides a button to return to the homepage. ✅
 
 ## Getting Started
 

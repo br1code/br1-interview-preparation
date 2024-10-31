@@ -40,6 +40,13 @@ export const addCategory = (data: AddCategory): Promise<string> => {
   return postData('categories', createdEntityIdSchema, data);
 };
 
+export const updateCategory = (
+  categoryId: string,
+  data: Omit<Category, 'id'>
+): Promise<Category> => {
+  return putData(`categories/${categoryId}`, data);
+};
+
 // Questions
 
 export const fetchQuestions = (
