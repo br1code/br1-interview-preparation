@@ -195,13 +195,6 @@ const QuestionDetails: FC<QuestionDetailsProps> = ({ questionId }) => {
       ) : (
         <p className="mb-6">No answers submitted yet.</p>
       )}
-
-      {/* Return to Homepage */}
-      <div className="text-center">
-        <Link href="/" className="text-blue-600 underline hover:text-blue-800">
-          Return to Homepage
-        </Link>
-      </div>
     </div>
   );
 };

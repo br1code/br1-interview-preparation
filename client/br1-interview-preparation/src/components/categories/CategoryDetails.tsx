@@ -5,7 +5,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { deleteCategory, updateCategory } from '@/api';
 import useFetchCategory from '@/hooks/useFetchCategory';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 interface CategoryDetailsProps {
   categoryId: string;
@@ -103,12 +102,6 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ categoryId }) => {
           </button>
         </div>
       </form>
-
-      <div className="text-center">
-        <Link href="/" className="text-blue-600 underline hover:text-blue-800">
-          Return to Homepage
-        </Link>
-      </div>
     </div>
   );
 };

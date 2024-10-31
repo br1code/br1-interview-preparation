@@ -12,12 +12,6 @@ export default function QuestionsPage() {
       </Link>
 
       <QuestionsList />
-
-      <div className="text-center mt-4">
-        <Link href="/" className="text-blue-600 underline hover:text-blue-800">
-          Return to Homepage
-        </Link>
-      </div>
     </main>
   );
 }

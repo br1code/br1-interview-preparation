@@ -1,7 +1,6 @@
 'use client';
 
 import { FC, useState } from 'react';
-import Link from 'next/link';
 import { DropdownOption } from '@/types';
 import { useRouter } from 'next/navigation';
 import CategoryDropdown from './categories/CategoryDropdown';
@@ -60,19 +59,6 @@ const StartPractice: FC = () => {
       >
         Start Practice
       </button>
-
-      {/* TODO: create navbar for these links */}
-      <Link href="/categories">
-        <button className="bg-violet-600 text-white px-6 py-3 rounded-md hover:bg-violet-700 transition mt-4">
-          Edit Categories
-        </button>
-      </Link>
-
-      <Link href="/questions">
-        <button className="bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition mt-4">
-          Edit Questions
-        </button>
-      </Link>
     </section>
   );
 };
