@@ -10,8 +10,8 @@ This project is a **Next.js** application that serves as the frontend for the in
     - [Add Question Page (`/questions/add`) ✅](#add-question-page-questionsadd-)
     - [Question Detail Page (`/questions/{id}`) ✅](#question-detail-page-questionsid-)
     - [Answer Detail Page (`/answers/{id}`) ✅](#answer-detail-page-answersid-)
-    - [Add Category Page (`/categories/add`)](#add-category-page-categoriesadd)
-    - [Categories List Page (`/categories`)](#categories-list-page-categories)
+    - [Add Category Page (`/categories/add`) ✅](#add-category-page-categoriesadd-)
+    - [Categories List Page (`/categories`) ✅](#categories-list-page-categories-)
     - [Category Detail Page (`/categories/{id}`)](#category-detail-page-categoriesid)
   - [Getting Started](#getting-started)
   - [Contributing](#contributing)
@@ -140,18 +140,18 @@ Displays a video player with the recorded answer. Allows users to delete the ans
   - **Endpoint:** `DELETE /api/answers/{id}`
 - A link to the Question Details page. ✅
 
-### Add Category Page (`/categories/add`)
+### Add Category Page (`/categories/add`) ✅
 
 Allows users to add new categories to the platform.
 
-- **Category Form**
-  - **Category Name:** A text area input for the category name.
-  - **Submit Button**
+- **Category Form** ✅
+  - **Category Name:** A text area input for the category name. ✅
+  - **Submit Button** ✅
     - Adds the new category to the database.
     - **Endpoint:** `POST /api/categories`
-  - Provides buttons to edit the last category added or return to the homepage.
+  - Provides buttons to edit the last category added or return to the homepage. ✅
 
-### Categories List Page (`/categories`)
+### Categories List Page (`/categories`) ✅
 
 This page lists all available categories and allows for management actions.
 

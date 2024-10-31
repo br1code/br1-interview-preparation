@@ -59,6 +59,7 @@ const AddQuestionForm: FC = () => {
       });
     } catch (error) {
       console.log(error);
+      alert('Failed to create question.');
     }
   };
 

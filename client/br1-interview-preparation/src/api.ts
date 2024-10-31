@@ -15,6 +15,7 @@ import {
   questionSummariesSchema,
   detailedCategoriesSchema,
   CategoryDetails,
+  AddCategory,
 } from './types';
 
 // Categories
@@ -33,6 +34,10 @@ export const deleteCategory = (categoryId: string): Promise<void> => {
 
 export const fetchCategory = (categoryId: string): Promise<Category> => {
   return fetchData(`categories/${categoryId}`, categorySchema);
+};
+
+export const addCategory = (data: AddCategory): Promise<string> => {
+  return postData('categories', createdEntityIdSchema, data);
 };
 
 // Questions

@@ -1,8 +1,7 @@
-import { FC } from 'react';
 import Link from 'next/link';
 import QuestionsList from '@/components/questions/QuestionsList';
 
-const Questions: FC = () => {
+export default function Questions() {
   return (
     <main className="flex flex-col items-center p-8">
       <h1 className="text-3xl font-bold mb-6">Questions</h1>
@@ -21,6 +20,4 @@ const Questions: FC = () => {
       </div>
     </main>
   );
-};
-
-export default Questions;
+}
