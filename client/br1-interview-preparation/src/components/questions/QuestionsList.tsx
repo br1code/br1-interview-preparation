@@ -21,6 +21,10 @@ const QuestionsList: FC = () => {
     error: questionsError,
   } = useFetchQuestions(searchCategoryId, refreshKey);
 
+  const sortedQuestions = questions
+    ? questions.slice().sort((a, b) => b.answersCount - a.answersCount)
+    : [];
+
   const {
     categories,
     loading: categoriesLoading,
@@ -89,7 +93,7 @@ const QuestionsList: FC = () => {
         <p className="text-red-500 text-center">
           Error loading questions: {questionsError || categoriesError}
         </p>
-      ) : questions && questions.length > 0 ? (
+      ) : sortedQuestions.length > 0 ? (
         <table className="w-full border-collapse border border-gray-200">
           <thead>
             <tr>
@@ -106,7 +110,7 @@ const QuestionsList: FC = () => {
             </tr>
           </thead>
           <tbody>
-            {questions.map((question) => (
+            {sortedQuestions.map((question) => (
               <tr key={question.id} className="text-center">
                 <td className="border border-gray-200 p-3 text-left">
                   {question.content}
