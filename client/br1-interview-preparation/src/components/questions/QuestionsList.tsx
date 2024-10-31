@@ -33,7 +33,9 @@ const QuestionsList: FC = () => {
 
   // TODO: stop using `confirm`
   const handleDelete = async (questionId: string) => {
-    if (confirm('Are you sure you want to delete this question?')) {
+    if (
+      confirm('Are you sure you want to delete this question and its answers?')
+    ) {
       await deleteQuestion(questionId);
       setRefreshKey((prevKey) => prevKey + 1);
     }
@@ -83,11 +85,11 @@ const QuestionsList: FC = () => {
         <div className="flex justify-center items-center py-10">
           <div className="loader border-t-4 border-blue-600 rounded-full w-8 h-8 animate-spin"></div>
         </div>
-      ) : questionsError || !questions || categoriesError ? (
+      ) : questionsError || categoriesError ? (
         <p className="text-red-500 text-center">
           Error loading questions: {questionsError || categoriesError}
         </p>
-      ) : questions.length > 0 ? (
+      ) : questions && questions.length > 0 ? (
         <table className="w-full border-collapse border border-gray-200">
           <thead>
             <tr>

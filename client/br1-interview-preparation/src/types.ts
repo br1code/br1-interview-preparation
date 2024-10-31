@@ -13,6 +13,13 @@ export const categorySchema = z.object({
 });
 export const categoriesSchema = z.array(categorySchema);
 
+export const categoryDetailsSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  questionsCount: z.number(),
+});
+export const detailedCategoriesSchema = z.array(categoryDetailsSchema);
+
 export const questionSchema = z.object({
   id: z.string(),
   categoryId: z.string(),
@@ -55,6 +62,7 @@ export const createdEntityIdSchema = z.string();
 
 // Types
 export type Category = z.infer<typeof categorySchema>;
+export type CategoryDetails = z.infer<typeof categoryDetailsSchema>;
 export type Question = z.infer<typeof questionSchema>;
 export type QuestionSummary = z.infer<typeof questionSummarySchema>;
 export type AddQuestion = z.infer<typeof addQuestionSchema>;

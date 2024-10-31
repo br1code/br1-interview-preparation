@@ -30,8 +30,12 @@ The homepage serves as the starting point for users to begin practicing intervie
 - **Start Button** ✅
   - Begins the practice session with questions from the selected category.
   - Redirects the user to the `/practice` route.
-- **Edit Questions Button** ✅
-  - Redirects the user to the `/questions` route.
+- **Edit Categories Button**
+  - Redirects the user to the `/categories` route. ✅
+  - **TODO**: place this button in a navbar.
+- **Edit Questions Button**
+  - Redirects the user to the `/questions` route. ✅
+  - **TODO**: place this button in a navbar.
 
 ### Practice Session Page (`/practice`) ✅
 
@@ -151,16 +155,16 @@ Allows users to add new categories to the platform.
 
 This page lists all available categories and allows for management actions.
 
-- **Add Category Button**
+- **Add Category Button** ✅
   - Redirects the user to the `/categories/add` route.
-- **Categories List**
+- **Categories List** ✅
   - Displays all categories in a table.
     - **Endpoint:** `GET /api/categories/detailed`
   - Each item in the table includes:
-    - The name of the category.
-    - The number of submitted questions for the category.
-    - A link to its detail page.
-    - A "Delete" button to remove the category and its associated question/answers.
+    - The name of the category. ✅
+    - The number of submitted questions for the category. ✅
+    - A link to its detail page. ✅
+    - A "Delete" button to remove the category and its associated question/answers. ✅
       - Displays a confirmation modal before deletion.
       - **Endpoint:** `DELETE /api/categories/{id}`
 

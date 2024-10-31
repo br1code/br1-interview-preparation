@@ -13,6 +13,8 @@ import {
   AddQuestion,
   QuestionSummary,
   questionSummariesSchema,
+  detailedCategoriesSchema,
+  CategoryDetails,
 } from './types';
 
 // Categories
@@ -21,7 +23,13 @@ export const fetchCategories = (): Promise<Category[]> => {
   return fetchData('categories', categoriesSchema);
 };
 
-// TODO: add fetch detailed categories method
+export const fetchDetailedCategories = (): Promise<CategoryDetails[]> => {
+  return fetchData('categories/detailed', detailedCategoriesSchema);
+};
+
+export const deleteCategory = (categoryId: string): Promise<void> => {
+  return deleteData(`categories/${categoryId}`);
+};
 
 export const fetchCategory = (categoryId: string): Promise<Category> => {
   return fetchData(`categories/${categoryId}`, categorySchema);
