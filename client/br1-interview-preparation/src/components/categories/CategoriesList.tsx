@@ -9,6 +9,10 @@ const CategoriesList: FC = () => {
   const [refreshKey, setRefreshKey] = useState<number>(0);
   const { categories, loading, error } = useFetchDetailedCategories(refreshKey);
 
+  const sortedCategories = categories
+    ? categories.slice().sort((a, b) => b.questionsCount - a.questionsCount)
+    : [];
+
   // TODO: stop using `confirm`
   const handleDelete = async (categoryId: string) => {
     if (
@@ -31,7 +35,7 @@ const CategoriesList: FC = () => {
         <p className="text-red-500 text-center">
           Error loading categories: {error}
         </p>
-      ) : categories && categories.length > 0 ? (
+      ) : sortedCategories.length > 0 ? (
         <table className="w-full border-collapse border border-gray-200">
           <thead>
             <tr>
@@ -45,7 +49,7 @@ const CategoriesList: FC = () => {
             </tr>
           </thead>
           <tbody>
-            {categories.map((category) => (
+            {sortedCategories.map((category) => (
               <tr key={category.id} className="text-center">
                 <td className="border border-gray-200 p-3 text-left">
                   {category.name}
