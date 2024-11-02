@@ -13,7 +13,7 @@ const QuestionsList: FC = () => {
   const [selectedCategory, setSelectedCategory] =
     useState<DropdownOption | null>(null);
   const [searchCategoryId, setSearchCategoryId] = useState<string | null>(null);
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshKey, setRefreshKey] = useState<number>(0);
 
   const {
     questions,

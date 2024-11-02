@@ -1,12 +1,13 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Link from 'next/link';
 import useFetchDetailedCategories from '@/hooks/useFetchDetailedCategories';
 import { deleteCategory } from '@/api';
 
 const CategoriesList: FC = () => {
-  const { categories, loading, error } = useFetchDetailedCategories();
+  const [refreshKey, setRefreshKey] = useState<number>(0);
+  const { categories, loading, error } = useFetchDetailedCategories(refreshKey);
 
   // TODO: stop using `confirm`
   const handleDelete = async (categoryId: string) => {
@@ -16,6 +17,7 @@ const CategoriesList: FC = () => {
       )
     ) {
       await deleteCategory(categoryId);
+      setRefreshKey((prevKey) => prevKey + 1);
     }
   };
 

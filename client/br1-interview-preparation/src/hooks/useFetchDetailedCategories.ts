@@ -8,7 +8,9 @@ interface UseFetchDetailedCategoriesResult {
   error: string | null;
 }
 
-const useFetchDetailedCategories = (): UseFetchDetailedCategoriesResult => {
+const useFetchDetailedCategories = (
+  refreshKey?: number
+): UseFetchDetailedCategoriesResult => {
   const [categories, setCategories] = useState<CategoryDetails[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true); // initialized to true on purpose
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +32,7 @@ const useFetchDetailedCategories = (): UseFetchDetailedCategoriesResult => {
     };
 
     fetchAndSetCategories();
-  }, []);
+  }, [refreshKey]);
 
   return { categories, loading, error };
 };
