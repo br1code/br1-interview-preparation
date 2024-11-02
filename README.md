@@ -17,7 +17,9 @@ touch .env
 2. Update the content of the `.env` file:
 
 ```env
-TODO
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=password
+POSTGRES_DB=br1interviewpreparation
 ```
 
 3. Important: Ensure that the `.env` file is saved in the same directory as the `docker-compose.yml` file.
