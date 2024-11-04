@@ -164,6 +164,7 @@ const QuestionsList: FC = () => {
                   <td className="border border-gray-200 p-3">
                     {question.answersCount}
                   </td>
+                  {/* FIX STYLES FOR THIS "Actions" COLUMN */}
                   <td className="border border-gray-200 p-3 flex justify-center gap-4">
                     <Link
                       href={`/questions/${question.id}`}

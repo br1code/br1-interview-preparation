@@ -5,6 +5,7 @@ import Link from 'next/link';
 import useFetchDetailedCategories from '@/hooks/useFetchDetailedCategories';
 import { deleteCategory } from '@/api';
 
+// TODO: create reusable Table component (the one from QuestionsList) and use it here.
 const CategoriesList: FC = () => {
   const [refreshKey, setRefreshKey] = useState<number>(0);
   const { categories, loading, error } = useFetchDetailedCategories(refreshKey);

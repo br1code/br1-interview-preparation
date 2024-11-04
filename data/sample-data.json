@@ -1,101 +1,20 @@
 {
   "categories": [
     {
-      "category": "C#",
+      "category": "Design Patterns",
       "questions": [
         {
-          "content": "",
-          "hint": ""
+          "content": "Which design patterns do you use the most?",
+          "hint": "Singleton, Factory, Strategy, Mediator, etc."
         }
       ]
     },
     {
-      "category": "Javascript/Typescript",
+      "category": "Databases",
       "questions": [
         {
-          "content": "",
-          "hint": ""
-        }
-      ]
-    },
-    {
-      "category": "C#",
-      "questions": [
-        {
-          "content": "",
-          "hint": ""
-        }
-      ]
-    },
-    {
-      "category": "C#",
-      "questions": [
-        {
-          "content": "",
-          "hint": ""
-        }
-      ]
-    },
-    {
-      "category": "C#",
-      "questions": [
-        {
-          "content": "",
-          "hint": ""
-        }
-      ]
-    },
-    {
-      "category": "C#",
-      "questions": [
-        {
-          "content": "",
-          "hint": ""
-        }
-      ]
-    },
-    {
-      "category": "C#",
-      "questions": [
-        {
-          "content": "",
-          "hint": ""
-        }
-      ]
-    },
-    {
-      "category": "C#",
-      "questions": [
-        {
-          "content": "",
-          "hint": ""
-        }
-      ]
-    },
-    {
-      "category": "C#",
-      "questions": [
-        {
-          "content": "",
-          "hint": ""
-        }
-      ]
-    },
-    {
-      "category": "C#",
-      "questions": [
-        {
-          "content": "",
-          "hint": ""
-        }
-      ]
-    },
-    {
-      "category": "C#",
-      "questions": [
-        {
-          "content": "",
-          "hint": ""
+          "content": "What is an index?",
+          "hint": "A tree?"
         }
       ]
     }
