@@ -24,11 +24,28 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("DefaultConnection"));
 
+// TODO: put this logic somewhere else
+var allowedOriginsString = builder.Configuration["CorsSettings:AllowedOrigins"];
+
+if (string.IsNullOrWhiteSpace(allowedOriginsString))
+{
+    throw new InvalidOperationException("CorsSettings:AllowedOrigins configuration is missing or empty.");
+}
+
+var allowedOrigins = allowedOriginsString
+    .Split([',', ';'], StringSplitOptions.RemoveEmptyEntries)
+    .Select(origin => origin.Trim())
+    .ToArray();
+
+if (allowedOrigins.Length == 0)
+{
+    throw new InvalidOperationException("No valid origins found in CorsSettings:AllowedOrigins configuration.");
+}
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policyBuilder =>
     {
-        var allowedOrigins = builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>();
         policyBuilder.WithOrigins(allowedOrigins)
                      .AllowAnyHeader()
                      .AllowAnyMethod();
