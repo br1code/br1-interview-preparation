@@ -9,16 +9,21 @@ public class CategoryRepository(ApplicationDbContext context) : ICategoryReposit
 {
     public Task<List<Category>> GetCategoriesAsync(CancellationToken cancellationToken = default)
     {
-        var query = context.Categories.AsNoTracking();
+        var query = context.Categories
+            .AsNoTracking()
+            .OrderBy(c => c.Name);
+
         return query.ToListAsync(cancellationToken);
     }
+
 
     public Task<List<Category>> GetDetailedCategoriesAsync(CancellationToken cancellationToken = default)
     {
         var query = context.Categories
             .Include(c => c.Questions)
-            .AsNoTracking();
-        
+            .AsNoTracking()
+            .OrderBy(c => c.Name);
+
         return query.ToListAsync(cancellationToken);
     }
 
