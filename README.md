@@ -20,6 +20,16 @@ touch .env
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=password
 POSTGRES_DB=br1interviewpreparation
+
+# For local development
+ALLOWED_ORIGINS=http://localhost:3000
+API_URL=http://localhost:5000/api
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+
+# For local network (ex: to use the app from my phone)
+#ALLOWED_ORIGINS=http://WIFI_IP:3000
+#API_URL=http://WIFI_IP:5000/api
+#NEXT_PUBLIC_API_URL=http://WIFI_IP:5000/api
 ```
 
 3. Important: Ensure that the `.env` file is saved in the same directory as the `docker-compose.yml` file.
