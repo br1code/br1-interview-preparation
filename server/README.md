@@ -16,7 +16,7 @@ This project is a .NET 8 backend API that connects to a PostgreSQL database. It 
       - [`PUT /api/categories/{id}` ✅](#put-apicategoriesid-)
       - [`DELETE /api/categories/{id}` ✅](#delete-apicategoriesid-)
     - [Questions](#questions)
-      - [`GET /api/questions?categoryId={Guid}` ✅](#get-apiquestionscategoryidguid-)
+      - [`GET /api/questions??categoryId={Guid}&content={string}&pageNumber={number}&pageSize={number}'` ✅](#get-apiquestionscategoryidguidcontentstringpagenumbernumberpagesizenumber-)
       - [`GET /api/questions/random?categoryId={Guid}` ✅](#get-apiquestionsrandomcategoryidguid-)
       - [`GET /api/questions/{id}` ✅](#get-apiquestionsid-)
       - [`POST /api/questions` ✅](#post-apiquestions-)
@@ -192,13 +192,16 @@ Deletes a category and its associated questions/answers.
 
 ### Questions
 
-#### `GET /api/questions?categoryId={Guid}` ✅
+#### `GET /api/questions??categoryId={Guid}&content={string}&pageNumber={number}&pageSize={number}'` ✅
 
 Retrieves questions and its answers, optionally filtered by category.
 
 - **Parameters:**
 
-  - `categoryId` (optional): UUID of the category to filter questions.
+  - `categoryId` (optional): Optional category to filter questions by.
+  - `content` (optional): Optional content to filter questions by (case-insensitive).
+  - `pageNumber`: Optional page number for pagination. Defaults to 1.
+  - `pageSize`: Optional page size for pagination. If not provided, all matching questions are returned.
 
 - **Response:**
 

@@ -8,12 +8,24 @@ interface UseFetchQuestionsResult {
   error: string | null;
 }
 
+interface FetchQuestionsParams {
+  categoryId?: string | null;
+  pageNumber?: number;
+  pageSize?: number;
+  content?: string;
+}
+
 const useFetchQuestions = (
-  categoryId?: string | null,
+  {
+    categoryId = null,
+    pageNumber = 1,
+    pageSize = 10,
+    content = '',
+  }: FetchQuestionsParams,
   refreshKey?: number
 ): UseFetchQuestionsResult => {
   const [questions, setQuestions] = useState<QuestionSummary[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(true); // initialized to true on purpose
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -22,7 +34,14 @@ const useFetchQuestions = (
         setLoading(true);
         setError(null);
         setQuestions(null);
-        const fetchedQuestions = await fetchQuestions(categoryId);
+
+        const fetchedQuestions = await fetchQuestions({
+          categoryId,
+          pageNumber,
+          pageSize,
+          content,
+        });
+
         setQuestions(fetchedQuestions);
       } catch (error) {
         console.error('Error fetching questions:', error);
@@ -34,7 +53,7 @@ const useFetchQuestions = (
     };
 
     fetchAndSetQuestions();
-  }, [categoryId, refreshKey]);
+  }, [categoryId, pageNumber, pageSize, content, refreshKey]);
 
   return { questions, loading, error };
 };

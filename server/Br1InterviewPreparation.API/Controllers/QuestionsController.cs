@@ -14,18 +14,27 @@ namespace Br1InterviewPreparation.API.Controllers
     [ApiController]
     public class QuestionsController(IMediator mediator) : ControllerBase
     {
-
         /// <summary>
         /// Retrieves a list of questions. Optionally filters by category.
         /// </summary>
         /// <param name="categoryId">Optional category to filter questions by.</param>
+        /// <param name="content">Optional content to filter questions by (case-insensitive).</param>
+        /// <param name="pageNumber">Optional page number for pagination. Defaults to 1.</param>
+        /// <param name="pageSize">Optional page size for pagination. If not provided, all matching questions are returned.</param>
         /// <returns>A list of questions.</returns>
         /// <response code="200">Returns the list of questions</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<QuestionSummaryDto>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetQuestions([FromQuery] Guid? categoryId = null)
+        public async Task<IActionResult> GetQuestions([FromQuery] Guid? categoryId = null,
+            [FromQuery] string? content = null, [FromQuery] int pageNumber = 1, [FromQuery] int? pageSize = null)
         {
-            var query = new GetQuestionsQuery { CategoryId = categoryId };
+            var query = new GetQuestionsQuery
+            {
+                CategoryId = categoryId,
+                Content = content,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
             var questions = await mediator.Send(query);
             return Ok(questions);
         }

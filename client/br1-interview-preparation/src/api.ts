@@ -49,10 +49,33 @@ export const updateCategory = (
 
 // Questions
 
-export const fetchQuestions = (
-  categoryId?: string | null
-): Promise<QuestionSummary[]> => {
-  const searchQuery = categoryId ? `?categoryId=${categoryId}` : '';
+export const fetchQuestions = (params: {
+  categoryId?: string | null;
+  pageNumber?: number;
+  pageSize?: number;
+  content?: string;
+}): Promise<QuestionSummary[]> => {
+  const { categoryId, pageNumber = 1, pageSize = 10, content = '' } = params;
+
+  const searchParams = new URLSearchParams();
+
+  if (categoryId) {
+    searchParams.append('categoryId', categoryId);
+  }
+  if (pageNumber) {
+    searchParams.append('pageNumber', pageNumber.toString());
+  }
+  if (pageSize) {
+    searchParams.append('pageSize', pageSize.toString());
+  }
+  if (content) {
+    searchParams.append('content', content);
+  }
+
+  const searchQuery = searchParams.toString()
+    ? `?${searchParams.toString()}`
+    : '';
+
   return fetchData(`questions${searchQuery}`, questionSummariesSchema);
 };
 

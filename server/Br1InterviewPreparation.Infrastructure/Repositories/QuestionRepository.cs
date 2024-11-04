@@ -7,7 +7,8 @@ namespace Br1InterviewPreparation.Infrastructure.Repositories;
 
 public class QuestionRepository(ApplicationDbContext context) : IQuestionRepository
 {
-    public Task<List<Question>> GetQuestionsAsync(Guid? categoryId = null, CancellationToken cancellationToken = default)
+    public Task<List<Question>> GetQuestionsWithAnswersAsync(Guid? categoryId = null, string? content = null,
+        int pageNumber = 1, int? pageSize = null, CancellationToken cancellationToken = default)
     {
         var query = context.Questions
             .Include(q => q.Answers)
@@ -18,8 +19,21 @@ public class QuestionRepository(ApplicationDbContext context) : IQuestionReposit
             query = query.Where(c => c.CategoryId == categoryId);
         }
 
+        if (!string.IsNullOrWhiteSpace(content))
+        {
+            query = query.Where(q => q.Content.ToLower().Contains(content.ToLower()));
+        }
+
+        if (pageSize.HasValue)
+        {
+            query = query
+                .Skip((pageNumber - 1) * pageSize.Value)
+                .Take(pageSize.Value);
+        }
+
         return query.ToListAsync(cancellationToken);
     }
+
 
     public Task<Question?> GetQuestionByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
@@ -36,7 +50,8 @@ public class QuestionRepository(ApplicationDbContext context) : IQuestionReposit
             .FirstOrDefaultAsync(q => q.Id == id, cancellationToken);
     }
 
-    public Task<Question?> GetRandomQuestionAsync(Guid? categoryId = null, CancellationToken cancellationToken = default)
+    public Task<Question?> GetRandomQuestionAsync(Guid? categoryId = null,
+        CancellationToken cancellationToken = default)
     {
         var query = context.Questions.AsNoTracking();
 
