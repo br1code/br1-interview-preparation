@@ -2,6 +2,10 @@
 
 This is a full-stack application consisting of a .NET 8 backend API, a Next.js frontend, and a PostgreSQL database. The application allows users to prepare for interviews by answering questions using the microphone + camera. The recordings with the answers will be stored as video files so they can be reviewed later. The questions must be submitted by the users.
 
+## Disclaimer
+
+This was created as a personal project for learning and experimentation, with the primary goal of finishing a first version as quickly as possible (so I can start using it and prepare for job interviews). **The initial version was completed in just one month**. As such, the code quality and structure may not reflect best practices or production-ready standards. Feedback and suggestions for improvement are welcome!
+
 ## Prerequisites
 
 - [Docker](https://www.docker.com/get-started) installed on your machine.
