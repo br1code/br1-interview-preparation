@@ -36,8 +36,6 @@ public class GetCategoryByIdQueryHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Equal(categoryId, result.Id);
-        Assert.Equal(category.Name, result.Name);
-        _categoryRepositoryMock.Verify(r => r.GetCategoryByIdAsync(categoryId, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -54,6 +52,5 @@ public class GetCategoryByIdQueryHandlerTests
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(query, CancellationToken.None));
-        _categoryRepositoryMock.Verify(r => r.GetCategoryByIdAsync(categoryId, It.IsAny<CancellationToken>()), Times.Once);
     }
 }

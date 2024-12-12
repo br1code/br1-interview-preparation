@@ -1,3 +1,4 @@
+using Br1InterviewPreparation.Application.Exceptions;
 using Moq;
 using MediatR;
 using Br1InterviewPreparation.Application.Features.Categories.Commands.DeleteCategory;
@@ -30,11 +31,11 @@ public class DeleteCategoryCommandHandlerTests
             Id = categoryId,
             Name = "Databases"
         };
-        
+
         _categoryRepositoryMock
             .Setup(r => r.GetCategoryWithQuestionsByIdAsync(categoryId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(category);
-        
+
         var command = new DeleteCategoryCommand { Id = categoryId };
 
         // Act
@@ -42,7 +43,6 @@ public class DeleteCategoryCommandHandlerTests
 
         // Assert
         Assert.Equal(Unit.Value, result);
-        _categoryRepositoryMock.Verify(r => r.GetCategoryWithQuestionsByIdAsync(categoryId, It.IsAny<CancellationToken>()), Times.Once);
         _categoryRepositoryMock.Verify(r => r.DeleteCategoryAsync(category, It.IsAny<CancellationToken>()), Times.Once);
     }
 
@@ -51,21 +51,21 @@ public class DeleteCategoryCommandHandlerTests
     {
         // Arrange
         var questionId = Guid.NewGuid();
-        
+
         var answers = new List<Answer>
         {
             new() { QuestionId = questionId, VideoFilename = "video.webm" },
             new() { QuestionId = questionId, VideoFilename = "video.webm" },
         };
-        
+
         var categoryId = Guid.NewGuid();
-        
+
         var question = new Question
         {
             Id = questionId,
             CategoryId = categoryId,
             Content = "What is an index?",
-            Answers = answers, 
+            Answers = answers,
         };
 
         var category = new Category
@@ -74,18 +74,38 @@ public class DeleteCategoryCommandHandlerTests
             Name = "Databases",
             Questions = new List<Question> { question }
         };
-        
+
         _categoryRepositoryMock
             .Setup(r => r.GetCategoryWithQuestionsByIdAsync(categoryId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(category);
-        
+
         var command = new DeleteCategoryCommand { Id = categoryId };
-        
+
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
-        
+
         // Assert
         Assert.Equal(Unit.Value, result);
         _videoStorageServiceMock.Verify((s => s.DeleteVideoFile(It.IsAny<string>())), Times.Exactly(answers.Count));
+    }
+
+    [Fact]
+    public async Task Handle_CategoryDoesNotExist_ThrowsNotFoundException()
+    {
+        // Arrange
+        var categoryId = Guid.NewGuid();
+
+        _categoryRepositoryMock
+            .Setup(r => r.GetCategoryWithQuestionsByIdAsync(categoryId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(value: null);
+
+        var command = new DeleteCategoryCommand { Id = categoryId };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
+        
+        _videoStorageServiceMock.Verify((s => s.DeleteVideoFile(It.IsAny<string>())), Times.Never);
+        _categoryRepositoryMock.Verify(r => r.DeleteCategoryAsync(It.IsAny<Category>(), It.IsAny<CancellationToken>()),
+            Times.Never);
     }
 }

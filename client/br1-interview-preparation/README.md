@@ -32,10 +32,8 @@ The homepage serves as the starting point for users to begin practicing intervie
   - Redirects the user to the `/practice` route.
 - **Edit Categories Button**
   - Redirects the user to the `/categories` route. ✅
-  - **TODO**: place this button in a navbar.
 - **Edit Questions Button**
   - Redirects the user to the `/questions` route. ✅
-  - **TODO**: place this button in a navbar.
 
 ### Practice Session Page (`/practice`) ✅
 

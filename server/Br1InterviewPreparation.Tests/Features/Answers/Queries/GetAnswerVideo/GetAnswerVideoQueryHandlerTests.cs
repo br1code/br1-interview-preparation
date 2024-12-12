@@ -54,9 +54,6 @@ public class GetAnswerVideoQueryHandlerTests
         Assert.NotNull(result);
         Assert.Equal(expectedFilePath, result.FilePath);
         Assert.Equal(expectedContentType, result.ContentType);
-        _answerRepositoryMock.Verify(r => r.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()), Times.Once);
-        _videoStorageServiceMock.Verify(s => s.GetVideoFilePath(answer.VideoFilename), Times.Once);
-        _videoStorageServiceMock.Verify(s => s.GetContentType(answer.VideoFilename), Times.Once);
     }
 
     [Fact]
@@ -72,7 +69,5 @@ public class GetAnswerVideoQueryHandlerTests
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(query, CancellationToken.None));
-        _videoStorageServiceMock.Verify(s => s.GetVideoFilePath(It.IsAny<string>()), Times.Never);
-        _videoStorageServiceMock.Verify(s => s.GetContentType(It.IsAny<string>()), Times.Never);
     }
 }

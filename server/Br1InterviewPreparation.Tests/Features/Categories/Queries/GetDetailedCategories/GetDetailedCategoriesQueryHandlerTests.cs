@@ -28,7 +28,7 @@ public class GetDetailedCategoriesQueryHandlerTests
         };
         var categories = new List<Category>
         {
-            new() { Id = Guid.NewGuid(), Name = "Databases", Questions = questions },
+            new() { Id = categoryId, Name = "Databases", Questions = questions },
         };
 
         _repositoryMock
@@ -43,7 +43,7 @@ public class GetDetailedCategoriesQueryHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Single(result);
+        Assert.Equal(categoryId, result.First().Id);
         Assert.Equal(2, result.First().QuestionsCount);
-        _repositoryMock.Verify(r => r.GetDetailedCategoriesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 }

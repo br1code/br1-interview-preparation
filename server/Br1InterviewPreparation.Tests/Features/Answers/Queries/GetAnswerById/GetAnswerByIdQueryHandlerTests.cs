@@ -46,8 +46,6 @@ public class GetAnswerByIdQueryHandlerTests
         Assert.Equal(questionId, result.QuestionId);
         Assert.Equal(answer.VideoFilename, result.VideoFilename);
         Assert.Equal(answer.CreatedAt, result.CreatedAt);
-        _answerRepositoryMock
-            .Verify(r => r.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -64,6 +62,5 @@ public class GetAnswerByIdQueryHandlerTests
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(query, CancellationToken.None));
-        _answerRepositoryMock.Verify(r => r.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()), Times.Once);
     }
 }

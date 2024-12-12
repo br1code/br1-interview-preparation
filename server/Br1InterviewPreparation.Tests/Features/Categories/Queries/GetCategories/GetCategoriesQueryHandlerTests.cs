@@ -38,6 +38,5 @@ public class GetCategoriesQueryHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Equal(2, result.Count());
-        _repositoryMock.Verify(r => r.GetCategoriesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 }

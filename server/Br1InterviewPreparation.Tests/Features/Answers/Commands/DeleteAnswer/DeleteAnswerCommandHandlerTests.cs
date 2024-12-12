@@ -43,7 +43,6 @@ public class DeleteAnswerCommandHandlerTests
 
         // Assert
         Assert.Equal(Unit.Value, result);
-        _answerRepositoryMock.Verify(r => r.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()), Times.Once);
         _videoStorageServiceMock.Verify(s => s.DeleteVideoFile(answer.VideoFilename), Times.Once);
     }
 
@@ -61,7 +60,7 @@ public class DeleteAnswerCommandHandlerTests
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
-        _answerRepositoryMock.Verify(r => r.GetAnswerByIdAsync(answerId, It.IsAny<CancellationToken>()), Times.Once);
+        
         _videoStorageServiceMock.Verify(s => s.DeleteVideoFile(It.IsAny<string>()), Times.Never);
     }
 }

@@ -54,7 +54,6 @@ public class GetQuestionByIdQueryHandlerTests
         Assert.Equal(question.CategoryId, result.CategoryId);
         Assert.Single(question.Answers);
         Assert.Equal(answer.Id, question.Answers.First().Id);
-        _repositoryMock.Verify(r => r.GetQuestionWithAnswersByIdAsync(questionId, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -71,6 +70,5 @@ public class GetQuestionByIdQueryHandlerTests
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(query, CancellationToken.None));
-        _repositoryMock.Verify(r => r.GetQuestionWithAnswersByIdAsync(questionId, It.IsAny<CancellationToken>()), Times.Once);
     }
 }

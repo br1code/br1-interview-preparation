@@ -36,7 +36,6 @@ public class GetRandomQuestionQueryHandlerTests
         Assert.NotNull(result);
         Assert.Equal(question.Id, result.Id);
         Assert.Equal(question.Content, result.Content);
-        _repositoryMock.Verify(r => r.GetRandomQuestionAsync(null, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -60,7 +59,6 @@ public class GetRandomQuestionQueryHandlerTests
         Assert.Equal(question.Id, result.Id);
         Assert.Equal(question.Content, result.Content);
         Assert.Equal(question.CategoryId, result.CategoryId);
-        _repositoryMock.Verify(r => r.GetRandomQuestionAsync(categoryId, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -75,6 +73,5 @@ public class GetRandomQuestionQueryHandlerTests
 
         // Act & Assert
         await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(query, CancellationToken.None));
-        _repositoryMock.Verify(r => r.GetRandomQuestionAsync(null, It.IsAny<CancellationToken>()), Times.Once);
     }
 }

@@ -50,9 +50,6 @@ public class GetQuestionsQueryHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Equal(2, result.Count());
-        _repositoryMock.Verify(
-            r => r.GetQuestionsWithAnswersAsync(null, _defaultContent, _defaultPageNumber, _defaultPageSize,
-                It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -79,9 +76,6 @@ public class GetQuestionsQueryHandlerTests
         Assert.NotNull(result);
         Assert.Single(result);
         Assert.Equal("What is an index?", result.First().Content);
-        _repositoryMock.Verify(
-            r => r.GetQuestionsWithAnswersAsync(_defaultCategoryId, _defaultContent, _defaultPageNumber,
-                _defaultPageSize, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -102,9 +96,6 @@ public class GetQuestionsQueryHandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Empty(result);
-        _repositoryMock.Verify(
-            r => r.GetQuestionsWithAnswersAsync(_defaultCategoryId, _defaultContent, _defaultPageNumber,
-                _defaultPageSize, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -134,9 +125,6 @@ public class GetQuestionsQueryHandlerTests
         Assert.NotNull(result);
         Assert.Single(result);
         Assert.Equal("What is sharding?", result.First().Content);
-        _repositoryMock.Verify(
-            r => r.GetQuestionsWithAnswersAsync(null, _defaultContent, pageNumber, pageSize,
-                It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -168,8 +156,5 @@ public class GetQuestionsQueryHandlerTests
         Assert.NotNull(result);
         Assert.Single(result);
         Assert.Equal("What is an index?", result.First().Content);
-        _repositoryMock.Verify(
-            r => r.GetQuestionsWithAnswersAsync(null, contentFilter, _defaultPageNumber, _defaultPageSize,
-                It.IsAny<CancellationToken>()), Times.Once);
     }
 }

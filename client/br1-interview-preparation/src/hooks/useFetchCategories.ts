@@ -8,7 +8,6 @@ interface UseFetchCategoriesResult {
   error: string | null;
 }
 
-// TODO: sort categories alphabetically (from server?)
 const useFetchCategories = (): UseFetchCategoriesResult => {
   const [categories, setCategories] = useState<Category[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true); // initialized to true on purpose
